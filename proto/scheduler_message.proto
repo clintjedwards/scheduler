@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package proto;
+
+// Employee
+message Employee {
+  string id = 1;
+  string name = 2;
+  string notes = 3;
+  string experience = 4;
+  map<string, bool> unavailable_dates = 5;
+  // positions that the employee is eligible for
+  map<string, bool> positions = 6;
+  // preferences can be used to weight employees in scheduling
+  // the key of the dictionary is the preference type (e.g POSITION) and the
+  // value can be the current setting (e.g key: preferred_position -> value:
+  // baker)
+  map<string, string> preferences = 7;
+}
+
+message Schedule {
+  string start_date = 1;
+  string end_date = 2;
+  enum Status {
+    UNKNOWN = 0;
+    PENDING = 1;
+    FINAL = 2;
+  }
+  Status status = 3;
+}
+
+message SchedulerSettings { repeated Position positions = 1; }
+
+message WorkWeekSettings {
+  // each work week will have 7 days and schedules are generated using monday as
+  // the first day. each day will have multiple positions, each position might
+  // have one or more shifts
+  PositionShiftMap positionShiftMap = 1;
+  // preferences can be used to weight employees in scheduling
+  // the key of the dictionary is the preference type (e.g POSITION) and the
+  // value can be the current setting (e.g key: prefer_more_experience -> value:
+  // true)
+  map<string, string> preferences = 2;
+}
+
+message Position {
+  string id = 1;
+  string primary_name = 2;
+  string secondary_name = 3;
+  string description = 4;
+}
+
+message PositionShiftMap {
+  // a mapping of a position id to an arbitrary number of shifts it may
+  // contain in a single day. We must contain the data for shifts for
+  // each day as shift times and shift numbers per day are subject to change on
+  // a per day basis
+  map<string, Shifts> monday = 1;
+  map<string, Shifts> tuesday = 2;
+  map<string, Shifts> wednesday = 3;
+  map<string, Shifts> thursday = 4;
+  map<string, Shifts> friday = 5;
+  map<string, Shifts> saturday = 6;
+  map<string, Shifts> sunday = 7;
+}
+
+message Shifts { repeated Shift shifts = 1; }
+
+message Shift {
+  string start_time = 1;
+  string end_time = 2;
+}

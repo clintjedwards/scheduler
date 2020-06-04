@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto;
+
+import "scheduler_transport.proto";
+
+service SchedulerAPI {
+  // System routes
+  rpc GetSystemInfo(GetSystemInfoRequest) returns (GetSystemInfoResponse);
+
+  // Scheduler settings
+  rpc SetSchedulerSettings(SetSchedulerSettingsRequest)
+      returns (SetSchedulerSettingsResponse);
+
+  // Schedule manipulation
+  rpc GenerateSchedule(GenerateScheduleRequest)
+      returns (GenerateScheduleResponse);
+  rpc CommitSchedule(CommitScheduleRequest) returns (CommitScheduleResponse);
+
+  // Employee manipulation
+  rpc AddEmployee(AddEmployeeRequest) returns (AddEmployeeResponse);
+}
