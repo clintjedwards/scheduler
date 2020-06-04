@@ -24,7 +24,6 @@ type API struct {
 
 // NewAPI inits a grpc api service
 func NewAPI(config *config.Config, storage storage.Engine) *API {
-
 	return &API{
 		config:  config,
 		storage: storage,

@@ -12,13 +12,32 @@ message GetSystemInfoResponse {
   string database_engine = 4;
 }
 
-message SetSchedulerSettingsRequest {}
+message GetSchedulerSettingsRequest {}
+message GetSchedulerSettingsResponse {}
+
+message SetSchedulerSettingsRequest { repeated Position positions = 1; }
 message SetSchedulerSettingsResponse {}
 
-message AddEmployeeRequest {}
+message AddEmployeeRequest {
+  string name = 1;
+  string notes = 2;
+  string start_date = 3;
+  map<string, bool> unavailable_dates = 4;
+  // a map of position ids that the employee is eligible for
+  map<string, bool> positions = 5;
+  // preferences can be used to weight employees in scheduling
+  // the key of the dictionary is the preference type (e.g POSITION) and the
+  // value can be the current setting (e.g key: preferred_position -> value:
+  // baker)
+  map<string, string> preferences = 6;
+}
 message AddEmployeeResponse {}
 
-message GenerateScheduleRequest {}
+message GenerateScheduleRequest {
+  // the positions to include in the generated schedule, if this is empty, all
+  // positions in scheduler settings will be included
+  repeated string positions = 1;
+}
 message GenerateScheduleResponse {}
 
 message CommitScheduleRequest {}

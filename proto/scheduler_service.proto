@@ -9,6 +9,9 @@ service SchedulerAPI {
   rpc GetSystemInfo(GetSystemInfoRequest) returns (GetSystemInfoResponse);
 
   // Scheduler settings
+  rpc GetSchedulerSettings(GetSchedulerSettingsRequest)
+      returns (GetSchedulerSettingsResponse);
+
   rpc SetSchedulerSettings(SetSchedulerSettingsRequest)
       returns (SetSchedulerSettingsResponse);
 

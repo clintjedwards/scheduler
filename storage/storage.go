@@ -14,6 +14,13 @@ const (
 	EmployeesBucket Bucket = "employees"
 	// SchedulesBucket represents the container in which schedules are managed
 	SchedulesBucket Bucket = "schedules"
+	// SchedulerSettingsBucket represents the container in which scheduler settings are managed
+	SchedulerSettingsBucket Bucket = "schedulersettings"
+)
+
+const (
+	// SettingsKey is a root database key that stores app settings in the SchedulerSettings bucket
+	SettingsKey = "settings"
 )
 
 // EngineType represents the different possible storage engines available
@@ -32,6 +39,8 @@ type Engine interface {
 	AddEmployee(id string, employee *proto.Employee) error
 	UpdateEmployee(id string, employee *proto.Employee) error
 	DeleteEmployee(id string) error
+	GetSchedulerSettings() (*proto.SchedulerSettings, error)
+	UpdateSchedulerSettings(settings proto.SchedulerSettings) error
 	GetSchedule(id string) (*proto.Schedule, error)
 	AddSchedule(id string, schedule *proto.Schedule) error
 	UpdateSchedule(id string, schedule *proto.Schedule) error

@@ -7,7 +7,7 @@ message Employee {
   string id = 1;
   string name = 2;
   string notes = 3;
-  string experience = 4;
+  string start_date = 4;
   map<string, bool> unavailable_dates = 5;
   // positions that the employee is eligible for
   map<string, bool> positions = 6;
