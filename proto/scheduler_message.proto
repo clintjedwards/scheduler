@@ -8,7 +8,10 @@ message Employee {
   string name = 2;
   string notes = 3;
   string start_date = 4;
-  map<string, bool> unavailable_dates = 5;
+  // a mapping of date in format mm-dd-yyyy with time range as the value
+  // in format 00:00-00:00 when the employee will not be able to be scheduled
+  // example key: 06-05-2020 -> value: 10:00-14:00
+  map<string, string> unavailability = 5;
   // positions that the employee is eligible for
   map<string, bool> positions = 6;
   // preferences can be used to weight employees in scheduling
@@ -16,6 +19,10 @@ message Employee {
   // value can be the current setting (e.g key: preferred_position -> value:
   // baker)
   map<string, string> preferences = 7;
+  // Time created in epoch
+  int64 created = 8;
+  // Time modified in epoch
+  int64 modified = 9;
 }
 
 message Schedule {

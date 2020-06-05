@@ -13,16 +13,19 @@ message GetSystemInfoResponse {
 }
 
 message GetSchedulerSettingsRequest {}
-message GetSchedulerSettingsResponse {}
+message GetSchedulerSettingsResponse { SchedulerSettings settings = 1; }
 
 message SetSchedulerSettingsRequest { repeated Position positions = 1; }
-message SetSchedulerSettingsResponse {}
+message SetSchedulerSettingsResponse { SchedulerSettings settings = 1; }
 
 message AddEmployeeRequest {
   string name = 1;
   string notes = 2;
   string start_date = 3;
-  map<string, bool> unavailable_dates = 4;
+  // a mapping of date in format mm-dd-yyyy with time range as the value
+  // in format 00:00-00:00 when the employee will not be able to be scheduled
+  // example key: 06-05-2020 -> value: 10:00-14:00
+  map<string, string> unavailability = 4;
   // a map of position ids that the employee is eligible for
   map<string, bool> positions = 5;
   // preferences can be used to weight employees in scheduling
@@ -31,7 +34,10 @@ message AddEmployeeRequest {
   // baker)
   map<string, string> preferences = 6;
 }
-message AddEmployeeResponse {}
+message AddEmployeeResponse { Employee employee = 1; }
+
+message GetEmployeeRequest { string id = 1; }
+message GetEmployeeResponse { Employee employee = 1; }
 
 message GenerateScheduleRequest {
   // the positions to include in the generated schedule, if this is empty, all

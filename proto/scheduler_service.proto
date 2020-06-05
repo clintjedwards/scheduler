@@ -22,4 +22,5 @@ service SchedulerAPI {
 
   // Employee manipulation
   rpc AddEmployee(AddEmployeeRequest) returns (AddEmployeeResponse);
+  rpc GetEmployee(GetEmployeeRequest) returns (GetEmployeeResponse);
 }

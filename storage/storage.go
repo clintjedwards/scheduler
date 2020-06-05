@@ -40,7 +40,7 @@ type Engine interface {
 	UpdateEmployee(id string, employee *proto.Employee) error
 	DeleteEmployee(id string) error
 	GetSchedulerSettings() (*proto.SchedulerSettings, error)
-	UpdateSchedulerSettings(settings proto.SchedulerSettings) error
+	UpdateSchedulerSettings(settings *proto.SchedulerSettings) error
 	GetSchedule(id string) (*proto.Schedule, error)
 	AddSchedule(id string, schedule *proto.Schedule) error
 	UpdateSchedule(id string, schedule *proto.Schedule) error

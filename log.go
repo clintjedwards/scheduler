@@ -30,7 +30,7 @@ func parseLogLevel(loglevel string) zerolog.Level {
 	case "panic":
 		return zerolog.PanicLevel
 	default:
-		log.Error().Msgf("loglevel %s not recognized; defaulting to debug")
+		log.Error().Msgf("loglevel %s not recognized; defaulting to debug", loglevel)
 		return zerolog.DebugLevel
 	}
 }

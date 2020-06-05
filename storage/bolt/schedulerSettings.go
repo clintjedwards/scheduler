@@ -12,7 +12,7 @@ import (
 //UpdateSchedulerSettings(settings proto.SchedulerSettings) error
 
 // GetSchedulerSettings returns a single schedulersettings by id
-func (db *Bolt) GetSchedulerSettings(id string) (*proto.SchedulerSettings, error) {
+func (db *Bolt) GetSchedulerSettings() (*proto.SchedulerSettings, error) {
 
 	var storedSchedulerSettings proto.SchedulerSettings
 
@@ -39,22 +39,16 @@ func (db *Bolt) GetSchedulerSettings(id string) (*proto.SchedulerSettings, error
 }
 
 // UpdateSchedulerSettings stores a new settings
-func (db *Bolt) UpdateSchedulerSettings(id string, schedulersettings *proto.SchedulerSettings) error {
+func (db *Bolt) UpdateSchedulerSettings(schedulersettings *proto.SchedulerSettings) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulerSettingsBucket))
-
-		// First check if key exists
-		exists := bucket.Get([]byte(storage.SettingsKey))
-		if exists != nil {
-			return utils.ErrEntityExists
-		}
 
 		schedulersettingsRaw, err := go_proto.Marshal(schedulersettings)
 		if err != nil {
 			return err
 		}
 
-		err = bucket.Put([]byte(id), schedulersettingsRaw)
+		err = bucket.Put([]byte(storage.SettingsKey), schedulersettingsRaw)
 		if err != nil {
 			return err
 		}

@@ -39,6 +39,11 @@ func Init(configuration interface{}) (Bolt, error) {
 			return err
 		}
 
+		_, err = tx.CreateBucketIfNotExists([]byte(storage.SchedulerSettingsBucket))
+		if err != nil {
+			return err
+		}
+
 		return nil
 	})
 	if err != nil {
