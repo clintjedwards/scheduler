@@ -30,6 +30,10 @@ const (
 	// BoltEngine represents a bolt storage engine.
 	// A file based key-value store.(https://github.com/boltdb/bolt)
 	BoltEngine EngineType = "bolt"
+
+	// MemoryEngine represents an in-memory storage engine
+	// Used mostly for dev work
+	MemoryEngine EngineType = "memory"
 )
 
 // Engine represents backend storage implementations where items can be persisted

@@ -12,8 +12,8 @@ type BoltConfig struct {
 // DatabaseConfig defines config settings for database
 type DatabaseConfig struct {
 	// The database engine used by the backend
-	// possible values are: bolt
-	Engine string `envconfig:"database_engine" default:"bolt"`
+	// possible values are: bolt, memory
+	Engine string `envconfig:"database_engine" default:"memory"`
 	Bolt   *BoltConfig
 }
 

@@ -11,3 +11,9 @@
 - employees should have preferred roles
 - employees can have a limited amount of positions
 - need team leader feature that must be assigned every day
+
+* should display employee metrics
+* needs alertings rules like employees shouldn't have back to back shifts and etc
+  - This can be presented as generation options
+* Eventually we should also make it so that it's easy to place new employees in shifts via the return schedule
+  so commit schedule could actully just take an updated schedule

@@ -51,5 +51,8 @@ func TestFullApplication(t *testing.T) {
 	info.TestSetSchedulerSettings(t)
 	info.TestGetSchedulerSettings(t)
 
+	info.TestAddEmployee(t)
+	info.TestGetEmployee(t)
+
 	info.cleanup()
 }

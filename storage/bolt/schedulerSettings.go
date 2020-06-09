@@ -8,9 +8,6 @@ import (
 	go_proto "github.com/golang/protobuf/proto"
 )
 
-//GetSchedulerSettings() (*proto.SchedulerSettings, error)
-//UpdateSchedulerSettings(settings proto.SchedulerSettings) error
-
 // GetSchedulerSettings returns a single schedulersettings by id
 func (db *Bolt) GetSchedulerSettings() (*proto.SchedulerSettings, error) {
 

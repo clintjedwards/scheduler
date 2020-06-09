@@ -40,11 +40,13 @@ message GetEmployeeRequest { string id = 1; }
 message GetEmployeeResponse { Employee employee = 1; }
 
 message GenerateScheduleRequest {
-  // the positions to include in the generated schedule, if this is empty, all
-  // positions in scheduler settings will be included
-  repeated string positions = 1;
+  // format is mm-dd-yyyy
+  string start_date = 1;
+  // how many days from the start date to generate
+  string length = 2;
+  GenerateScheduleSettings settings = 3;
 }
-message GenerateScheduleResponse {}
+message GenerateScheduleResponse { Schedule schedule = 1; }
 
 message CommitScheduleRequest {}
 message CommitScheduleResponse {}

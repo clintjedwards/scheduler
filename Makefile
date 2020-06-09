@@ -22,7 +22,6 @@ build: check-path-included
 ## run: build application and run server
 run:
 	protoc --proto_path=proto --go_out=plugins=grpc:proto proto/*.proto
-	protoc --go_out=plugins=grpc:. backend/proto/*.proto
 	go mod tidy
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 

@@ -1,0 +1,69 @@
+package tests
+
+import (
+	"context"
+	"testing"
+
+	"github.com/clintjedwards/scheduler/proto"
+	"github.com/stretchr/testify/require"
+)
+
+func (info *testHarness) TestAddEmployee(t *testing.T) {
+	t.Run("AddEmployee", func(t *testing.T) {
+
+		settings, err := info.client.GetSchedulerSettings(context.Background(), &proto.GetSchedulerSettingsRequest{})
+
+		request := proto.AddEmployeeRequest{
+			Name:      "obama",
+			Positions: map[string]bool{},
+		}
+
+		for _, position := range settings.Settings.Positions {
+			request.Positions[position.Id] = true
+		}
+
+		response, err := info.client.AddEmployee(context.Background(), &request)
+		require.NoError(t, err)
+		require.NotNil(t, response)
+		require.NotEmpty(t, response)
+		require.NotEmpty(t, response.Employee.Positions)
+	})
+}
+
+func (info *testHarness) TestGetEmployee(t *testing.T) {
+	t.Run("GetEmployee", func(t *testing.T) {
+
+		settings, err := info.client.GetSchedulerSettings(context.Background(), &proto.GetSchedulerSettingsRequest{})
+
+		request := proto.AddEmployeeRequest{
+			Name:      "michelle",
+			Positions: map[string]bool{},
+		}
+
+		for _, position := range settings.Settings.Positions {
+			request.Positions[position.Id] = true
+		}
+
+		response, err := info.client.AddEmployee(context.Background(), &request)
+		if err != nil {
+			require.NoError(t, err)
+		}
+
+		expectedResponse := proto.GetEmployeeResponse{
+			Employee: &proto.Employee{
+				Id:        response.Employee.Id,
+				Name:      "michelle",
+				Positions: request.Positions,
+				Created:   response.Employee.Created,
+				Modified:  response.Employee.Modified,
+			},
+		}
+
+		getResponse, err := info.client.GetEmployee(context.Background(), &proto.GetEmployeeRequest{
+			Id: response.Employee.Id,
+		})
+		require.NoError(t, err)
+		require.NotNil(t, getResponse)
+		require.Equal(t, expectedResponse.Employee, getResponse.Employee)
+	})
+}

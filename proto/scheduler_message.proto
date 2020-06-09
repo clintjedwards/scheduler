@@ -34,11 +34,13 @@ message Schedule {
     FINAL = 2;
   }
   Status status = 3;
+  GenerateScheduleSettings settings = 4;
 }
 
 message SchedulerSettings { repeated Position positions = 1; }
 
-message WorkWeekSettings {
+// GenerateScheduleSettings contains per schedule settings
+message GenerateScheduleSettings {
   // each work week will have 7 days and schedules are generated using monday as
   // the first day. each day will have multiple positions, each position might
   // have one or more shifts
@@ -48,6 +50,9 @@ message WorkWeekSettings {
   // value can be the current setting (e.g key: prefer_more_experience -> value:
   // true)
   map<string, string> preferences = 2;
+  // the employees to include in the generated schedule, if this is empty, all
+  // employees in scheduler settings will be included
+  repeated string employeeFilter = 3;
 }
 
 message Position {

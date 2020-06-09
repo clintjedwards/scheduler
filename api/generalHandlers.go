@@ -10,7 +10,7 @@ import (
 var appVersion = "v0.0.dev <commit>"
 
 // GetSystemInfo returns system information and health
-func (api *API) GetSystemInfo(context context.Context, request *proto.GetSystemInfoRequest) (*proto.GetSystemInfoResponse, error) {
+func (api *API) GetSystemInfo(ctx context.Context, request *proto.GetSystemInfoRequest) (*proto.GetSystemInfoResponse, error) {
 
 	versionTuple := strings.Split(appVersion, " ")
 

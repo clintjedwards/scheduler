@@ -22,6 +22,7 @@ func (db *Bolt) GetAllEmployees() (map[string]*proto.Employee, error) {
 			err := go_proto.Unmarshal(value, &employee)
 			if err != nil {
 				log.Error().Err(err).Str("id", string(key)).Msg("could not unmarshal database object")
+				// We don't return an error here so that we can at least return a partial list
 				return nil
 			}
 

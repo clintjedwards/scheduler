@@ -14,16 +14,20 @@ func (info *testHarness) TestSetSchedulerSettings(t *testing.T) {
 		setSettingsRequest := &proto.SetSchedulerSettingsRequest{
 			Positions: []*proto.Position{
 				{
-					PrimaryName:   "baker 1",
-					SecondaryName: "shaper",
+					PrimaryName:   "main baker",
+					SecondaryName: "",
 				},
 				{
-					PrimaryName:   "baker 2",
-					SecondaryName: "mixer",
+					PrimaryName:   "secondary baker",
+					SecondaryName: "shaping",
 				},
 				{
-					PrimaryName:   "baker 3",
-					SecondaryName: "cookies",
+					PrimaryName:   "tertiary baker",
+					SecondaryName: "mixing",
+				},
+				{
+					PrimaryName:   "cookie baker",
+					SecondaryName: "retail",
 				},
 				{
 					PrimaryName:   "line",
@@ -34,7 +38,7 @@ func (info *testHarness) TestSetSchedulerSettings(t *testing.T) {
 					SecondaryName: "retail",
 				},
 				{
-					PrimaryName:   "retail",
+					PrimaryName:   "general retail",
 					SecondaryName: "",
 				},
 				{

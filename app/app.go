@@ -9,6 +9,7 @@ import (
 	"github.com/clintjedwards/scheduler/config"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/storage/bolt"
+	"github.com/clintjedwards/scheduler/storage/memory"
 )
 
 // StartServices initializes all required services,the raw GRPC service, and the metrics endpoint
@@ -22,6 +23,8 @@ func StartServices() {
 	if err != nil {
 		log.Panic().Err(err).Msg("could not init storage")
 	}
+
+	log.Info().Str("engine", config.Database.Engine).Msg("storage engine initialized")
 
 	schedulerAPI := api.NewAPI(config, storage)
 	grpcServer := api.CreateGRPCServer(schedulerAPI)
@@ -46,6 +49,14 @@ func InitStorage(engineType storage.EngineType) (storage.Engine, error) {
 		}
 
 		return &boltStorageEngine, nil
+	case storage.MemoryEngine:
+
+		memoryStorageEngine, err := memory.Init()
+		if err != nil {
+			return nil, err
+		}
+
+		return &memoryStorageEngine, nil
 	default:
 		return nil, fmt.Errorf("storage backend \"%s\" not implemented", engineType)
 	}
