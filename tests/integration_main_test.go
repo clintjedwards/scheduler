@@ -8,19 +8,15 @@ import (
 
 	"github.com/clintjedwards/scheduler/app"
 	"github.com/clintjedwards/scheduler/proto"
-	"github.com/clintjedwards/toolkit/random"
 	"github.com/rs/zerolog/log"
 	"google.golang.org/grpc"
 )
 
 type testHarness struct {
-	client       proto.SchedulerAPIClient
-	databasePath string
+	client proto.SchedulerAPIClient
 }
 
 func (info *testHarness) setup() {
-	databasePath := fmt.Sprintf("/tmp/scheduler%s.db", random.GenerateRandString(4))
-	os.Setenv("SCHEDULER_DATABASE_PATH", databasePath)
 	os.Setenv("SCHEDULER_LOGLEVEL", "error")
 
 	go app.StartServices()
@@ -33,15 +29,10 @@ func (info *testHarness) setup() {
 
 	client := proto.NewSchedulerAPIClient(conn)
 	info.client = client
-	info.databasePath = databasePath
 }
 
 func (info *testHarness) cleanup() {
-	os.Unsetenv("TLS_CERT_PATH")
-	os.Unsetenv("TLS_KEY_PATH")
-	os.Unsetenv("SCHEDULER_DATABASE_PATH")
 	os.Unsetenv("SCHEDULER_LOGLEVEL")
-	os.Remove(info.databasePath)
 }
 
 func TestFullApplication(t *testing.T) {

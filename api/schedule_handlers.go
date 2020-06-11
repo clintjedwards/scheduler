@@ -10,10 +10,6 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func isMonday() {
-
-}
-
 type shiftEmployeeMap struct {
 	shift    proto.Shift
 	employee string // employee id
@@ -23,9 +19,6 @@ type shiftEmployeeMap struct {
 // 		schedule[currentDate.Format("01-02-2006")] = day
 // 		currentDate = currentDate.AddDate(0, 0, 1)
 
-// We should then setup the employee pool with default weights attached
-// We need to then iterate over the dates we can do this by just setting a counter to 7 and iterating until we hit that
-// remembering to increment the date at the end
 // As we iterate over the dates we should loop through the positions
 // As we loop through the positions we should loop through the shifts
 // As we loop through the shifts for each position we should choose employees with the highest weight number
@@ -36,7 +29,7 @@ type shiftEmployeeMap struct {
 // We should document all of this above the function
 func (api *API) generateSchedule(startDate time.Time, length int, settings proto.GenerateScheduleSettings) error {
 
-	employees, err := api.getEligibleEmployees(settings.EmployeeFilter)
+	_, err := api.getEligibleEmployees(settings.EmployeeFilter)
 	if err != nil {
 		return err
 	}
@@ -48,11 +41,22 @@ func (api *API) generateSchedule(startDate time.Time, length int, settings proto
 
 	// We start from the start date and then iterate through each day until we hit the desired length
 	for i := 0; i < length; i++ {
-		fmt.Println(startDate)
+		switch startDate.Weekday() {
+		case time.Monday:
+			for positionID, shifts := range settings.PositionShiftMap.Monday {
+				fmt.Println(positionID)
+				fmt.Println(shifts)
+			}
+		case time.Tuesday:
+		case time.Wednesday:
+		case time.Thursday:
+		case time.Friday:
+		case time.Saturday:
+		case time.Sunday:
+		}
 		startDate = startDate.AddDate(0, 0, 1)
 	}
 
-	fmt.Println(employees)
 	return nil
 }
 
@@ -83,7 +87,7 @@ func (api *API) getEligibleEmployees(employeeFilter []string) (map[string]*proto
 func generateDay() {
 
 	// a list of employees that have already been scheduled for this day
-	//alreadyScheduled := map[string]bool{}
+	//alreadyScheduled := map[string]bool{
 
 }
 
