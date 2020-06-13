@@ -26,8 +26,8 @@ type Config struct {
 	TLSKeyPath  string `envconfig:"tls_key_path" default:"./localhost.key"`
 	// the length of all randomly generated ids
 	IDLength int    `envconfig:"id_length" default:"5"`
-	HTTPURL  string `envconfig:"http_url" default:"localhost:8080"`
-	GRPCURL  string `envconfig:"grpc_url" default:"localhost:8081"`
+	URL      string `envconfig:"url" default:"localhost:8080"`
+	Frontend bool   `envconfig:"frontend" default:"true"`
 	Database *DatabaseConfig
 }
 

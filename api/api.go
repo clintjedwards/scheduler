@@ -1,16 +1,12 @@
 package api
 
 import (
-	"net"
-
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/clintjedwards/scheduler/config"
 	"github.com/clintjedwards/scheduler/proto"
 	"github.com/clintjedwards/scheduler/storage"
-
-	"github.com/rs/zerolog/log"
 )
 
 // API represents the grpc backend service
@@ -39,17 +35,4 @@ func CreateGRPCServer(api *API) *grpc.Server {
 	proto.RegisterSchedulerAPIServer(grpcServer, api)
 
 	return grpcServer
-}
-
-// InitGRPCService starts a GPRC server
-func InitGRPCService(config *config.Config, server *grpc.Server) {
-
-	listen, err := net.Listen("tcp", config.GRPCURL)
-	if err != nil {
-		log.Panic().Err(err).Msg("could not init tcp listener")
-	}
-
-	log.Info().Str("url", config.GRPCURL).Msg("starting grpc service")
-
-	log.Fatal().Err(server.Serve(listen)).Msg("server exited abnormally")
 }

@@ -36,6 +36,7 @@ func (info *testHarness) cleanup() {
 }
 
 func TestFullApplication(t *testing.T) {
+
 	info := testHarness{}
 	info.setup()
 
