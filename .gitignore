@@ -23,3 +23,6 @@ main.js
 #localhost cert files
 *.crt
 *.key
+
+#ignore frontend static import
+frontend/assets.go
