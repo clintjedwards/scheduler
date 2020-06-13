@@ -83,4 +83,5 @@ message Shift {
   string start_time = 1;
   string end_time = 2;
   string description = 3;
+  string employee = 4; // id
 }
