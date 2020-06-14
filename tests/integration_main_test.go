@@ -22,7 +22,7 @@ func (info *testHarness) setup() {
 	go app.StartServices()
 	time.Sleep(time.Second)
 
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", "localhost", "8081"), grpc.WithInsecure())
+	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", "localhost", "8080"), grpc.WithInsecure())
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not connect to server")
 	}
@@ -39,9 +39,6 @@ func TestFullApplication(t *testing.T) {
 
 	info := testHarness{}
 	info.setup()
-
-	info.TestSetSchedulerSettings(t)
-	info.TestGetSchedulerSettings(t)
 
 	info.TestAddEmployee(t)
 	info.TestGetEmployee(t)

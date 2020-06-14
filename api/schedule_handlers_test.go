@@ -57,22 +57,6 @@ func (info *testHarness) setup() {
 			"3": true,
 		},
 	})
-	mockAPI.storage.UpdateSchedulerSettings(&proto.SchedulerSettings{
-		Positions: []*proto.Position{
-			{
-				Id:          "1",
-				PrimaryName: "Baker",
-			},
-			{
-				Id:          "2",
-				PrimaryName: "Porter",
-			},
-			{
-				Id:          "3",
-				PrimaryName: "Retail",
-			},
-		},
-	})
 
 	info.mockAPI = mockAPI
 

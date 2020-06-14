@@ -8,19 +8,18 @@ service SchedulerAPI {
   // System routes
   rpc GetSystemInfo(GetSystemInfoRequest) returns (GetSystemInfoResponse);
 
-  // Scheduler settings
-  rpc GetSchedulerSettings(GetSchedulerSettingsRequest)
-      returns (GetSchedulerSettingsResponse);
-
-  rpc SetSchedulerSettings(SetSchedulerSettingsRequest)
-      returns (SetSchedulerSettingsResponse);
-
   // Schedule manipulation
   rpc GenerateSchedule(GenerateScheduleRequest)
       returns (GenerateScheduleResponse);
   rpc CommitSchedule(CommitScheduleRequest) returns (CommitScheduleResponse);
 
   // Employee manipulation
-  rpc AddEmployee(AddEmployeeRequest) returns (AddEmployeeResponse);
+  rpc GetAllEmployees(ListEmployeesRequest) returns (ListEmployeesResponse);
   rpc GetEmployee(GetEmployeeRequest) returns (GetEmployeeResponse);
+  rpc AddEmployee(AddEmployeeRequest) returns (AddEmployeeResponse);
+
+  // Position manipulation
+  rpc ListPositions(ListPositionsRequest) returns (ListPositionsResponse);
+  rpc AddPosition(AddPositionRequest) returns (AddPositionResponse);
+  rpc GetPosition(GetPositionRequest) returns (GetPositionResponse);
 }

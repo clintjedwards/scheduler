@@ -14,8 +14,8 @@ const (
 	EmployeesBucket Bucket = "employees"
 	// SchedulesBucket represents the container in which schedules are managed
 	SchedulesBucket Bucket = "schedules"
-	// SchedulerSettingsBucket represents the container in which scheduler settings are managed
-	SchedulerSettingsBucket Bucket = "schedulersettings"
+	// PositionsBucket represents the container that holds employment positions
+	PositionsBucket Bucket = "positions"
 )
 
 const (
@@ -43,8 +43,13 @@ type Engine interface {
 	AddEmployee(id string, employee *proto.Employee) error
 	UpdateEmployee(id string, employee *proto.Employee) error
 	DeleteEmployee(id string) error
-	GetSchedulerSettings() (*proto.SchedulerSettings, error)
-	UpdateSchedulerSettings(settings *proto.SchedulerSettings) error
+
+	GetAllPositions() (map[string]*proto.Position, error)
+	GetPosition(id string) (*proto.Position, error)
+	AddPosition(id string, Position *proto.Position) error
+	UpdatePosition(id string, Position *proto.Position) error
+	DeletePosition(id string) error
+
 	GetSchedule(id string) (*proto.Schedule, error)
 	AddSchedule(id string, schedule *proto.Schedule) error
 	UpdateSchedule(id string, schedule *proto.Schedule) error

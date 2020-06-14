@@ -12,11 +12,8 @@ message GetSystemInfoResponse {
   string database_engine = 4;
 }
 
-message GetSchedulerSettingsRequest {}
-message GetSchedulerSettingsResponse { SchedulerSettings settings = 1; }
-
-message SetSchedulerSettingsRequest { repeated Position positions = 1; }
-message SetSchedulerSettingsResponse { SchedulerSettings settings = 1; }
+message ListEmployeesRequest {}
+message ListEmployeesResponse { map<string, Employee> employees = 1; }
 
 message AddEmployeeRequest {
   string name = 1;
@@ -32,12 +29,26 @@ message AddEmployeeRequest {
   // the key of the dictionary is the preference type (e.g POSITION) and the
   // value can be the current setting (e.g key: preferred_position -> value:
   // baker)
+  // TODO(clintjedwards): Create enum values for preferences type
   map<string, string> preferences = 6;
 }
 message AddEmployeeResponse { Employee employee = 1; }
 
 message GetEmployeeRequest { string id = 1; }
 message GetEmployeeResponse { Employee employee = 1; }
+
+message ListPositionsRequest {}
+message ListPositionsResponse { map<string, Position> positions = 1; }
+
+message AddPositionRequest {
+  string primary_name = 1;
+  string secondary_name = 2;
+  string description = 3;
+}
+message AddPositionResponse { Position Position = 1; }
+
+message GetPositionRequest { string id = 1; }
+message GetPositionResponse { Position Position = 1; }
 
 message GenerateScheduleRequest {
   // format is mm-dd-yyyy

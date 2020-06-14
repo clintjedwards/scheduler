@@ -13,9 +13,7 @@ func Init() (Memory, error) {
 		store: map[storage.Bucket]map[string][]byte{
 			storage.EmployeesBucket: {},
 			storage.SchedulesBucket: {},
-			storage.SchedulerSettingsBucket: {
-				storage.SettingsKey: {},
-			},
+			storage.PositionsBucket: {},
 		},
 	}
 

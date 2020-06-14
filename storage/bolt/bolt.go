@@ -9,6 +9,8 @@ import (
 	"github.com/clintjedwards/scheduler/storage"
 )
 
+//TODO(clintjedwards): make sure bolt is 1-1 with memory package
+
 // Bolt is a representation of the bolt datastore
 type Bolt struct {
 	store *bolt.DB
@@ -39,11 +41,10 @@ func Init(configuration interface{}) (Bolt, error) {
 			return err
 		}
 
-		_, err = tx.CreateBucketIfNotExists([]byte(storage.SchedulerSettingsBucket))
+		_, err = tx.CreateBucketIfNotExists([]byte(storage.PositionsBucket))
 		if err != nil {
 			return err
 		}
-
 		return nil
 	})
 	if err != nil {

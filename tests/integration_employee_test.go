@@ -11,15 +11,9 @@ import (
 func (info *testHarness) TestAddEmployee(t *testing.T) {
 	t.Run("AddEmployee", func(t *testing.T) {
 
-		settings, err := info.client.GetSchedulerSettings(context.Background(), &proto.GetSchedulerSettingsRequest{})
-
 		request := proto.AddEmployeeRequest{
 			Name:      "obama",
 			Positions: map[string]bool{},
-		}
-
-		for _, position := range settings.Settings.Positions {
-			request.Positions[position.Id] = true
 		}
 
 		response, err := info.client.AddEmployee(context.Background(), &request)
@@ -33,15 +27,9 @@ func (info *testHarness) TestAddEmployee(t *testing.T) {
 func (info *testHarness) TestGetEmployee(t *testing.T) {
 	t.Run("GetEmployee", func(t *testing.T) {
 
-		settings, err := info.client.GetSchedulerSettings(context.Background(), &proto.GetSchedulerSettingsRequest{})
-
 		request := proto.AddEmployeeRequest{
 			Name:      "michelle",
 			Positions: map[string]bool{},
-		}
-
-		for _, position := range settings.Settings.Positions {
-			request.Positions[position.Id] = true
 		}
 
 		response, err := info.client.AddEmployee(context.Background(), &request)
@@ -53,7 +41,7 @@ func (info *testHarness) TestGetEmployee(t *testing.T) {
 			Employee: &proto.Employee{
 				Id:        response.Employee.Id,
 				Name:      "michelle",
-				Positions: request.Positions,
+				Positions: map[string]bool{},
 				Created:   response.Employee.Created,
 				Modified:  response.Employee.Modified,
 			},

@@ -14,6 +14,8 @@ import (
 // AddEmployee adds a new employee to the scheduler service
 func (api *API) AddEmployee(ctx context.Context, request *proto.AddEmployeeRequest) (*proto.AddEmployeeResponse, error) {
 
+	//TODO(clintjedwards): validate params
+
 	newEmployee := proto.Employee{
 		Id:             string(utils.GenerateRandString(api.config.IDLength)),
 		Name:           request.Name,
