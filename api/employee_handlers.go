@@ -11,10 +11,21 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// ListEmployees adds a new employee to the scheduler service
+func (api *API) ListEmployees(ctx context.Context, request *proto.ListEmployeesRequest) (*proto.ListEmployeesResponse, error) {
+
+	employees, err := api.storage.GetAllEmployees()
+	if err != nil {
+		return &proto.ListEmployeesResponse{}, status.Error(codes.Internal, "failed to retrieve employees from database")
+	}
+
+	return &proto.ListEmployeesResponse{
+		Employees: employees,
+	}, nil
+}
+
 // AddEmployee adds a new employee to the scheduler service
 func (api *API) AddEmployee(ctx context.Context, request *proto.AddEmployeeRequest) (*proto.AddEmployeeResponse, error) {
-
-	//TODO(clintjedwards): validate params
 
 	newEmployee := proto.Employee{
 		Id:             string(utils.GenerateRandString(api.config.IDLength)),

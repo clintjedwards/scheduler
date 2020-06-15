@@ -13,69 +13,17 @@
       href="/images/schedule_icon.ico"
       type="image/x-icon"
     />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
-    />
-    <link rel="stylesheet" href="/css/main.css" />
+
+    <script src="/javascript/main.js" defer></script>
   </head>
   <body>
-    <nav class="site-header bg-dark sticky-top py-1">
-      <div
-        class="container d-flex flex-column flex-md-row justify-content-between"
-      >
-        <a class="py-2 navbar-text" href="#">
-          <img
-            src="/images/schedule_icon_light.svg"
-            width="24"
-            height="24"
-            alt=""
-            loading="lazy"
-          />
-        </a>
-        <a class="py-2 d-none d-md-inline-block navbar-text" href="#"
-          >Employees</a
-        >
-        <a class="py-2 d-none d-md-inline-block navbar-text" href="#"
-          >Positions</a
-        >
-        <a class="py-2 d-none d-md-inline-block navbar-text" href="#"
-          >Schedules</a
-        >
-        <a class="py-2 d-none d-md-inline-block navbar-text" href="#"
-          >Placeholder</a
-        >
-        <a class="py-2 d-none d-md-inline-block navbar-text" href="#"
-          >Placeholder</a
-        >
-        <a class="py-2 d-none d-md-inline-block navbar-text" href="#"
-          >Placeholder</a
-        >
-      </div>
-    </nav>
+    <div id="app">
+      <page-header></page-header>
 
-    <!-- TODO(clintjedwards): Pad this space inbetween -->
-    <div>
-      <h4 class="text-secondary">
-        Define employee descriptors, unavailablity, position eligibility, and other employee specific settings.
-      </h2>
+      <router-view></router-view>
+
+      <br /><br /><br />
+      <page-footer></page-footer>
     </div>
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-      integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-      crossorigin="anonymous"
-    ></script>
   </body>
 </html>

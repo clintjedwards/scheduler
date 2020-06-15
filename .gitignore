@@ -12,7 +12,7 @@
 node_modules/
 dist/*
 -dist/.gitkeep
-main.js
+*.js
 
 #protobuf
 *.pb.go

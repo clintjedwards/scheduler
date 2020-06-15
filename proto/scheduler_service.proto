@@ -14,7 +14,7 @@ service SchedulerAPI {
   rpc CommitSchedule(CommitScheduleRequest) returns (CommitScheduleResponse);
 
   // Employee manipulation
-  rpc GetAllEmployees(ListEmployeesRequest) returns (ListEmployeesResponse);
+  rpc ListEmployees(ListEmployeesRequest) returns (ListEmployeesResponse);
   rpc GetEmployee(GetEmployeeRequest) returns (GetEmployeeResponse);
   rpc AddEmployee(AddEmployeeRequest) returns (AddEmployeeResponse);
 

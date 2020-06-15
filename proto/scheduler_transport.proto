@@ -6,10 +6,11 @@ import "scheduler_message.proto";
 
 message GetSystemInfoRequest {}
 message GetSystemInfoResponse {
-  bool debug_enabled = 1;
+  string build_time = 1;
   string commit = 2;
-  string version = 3;
-  string database_engine = 4;
+  bool debug_enabled = 3;
+  bool frontend_enabled = 4;
+  string semver = 5;
 }
 
 message ListEmployeesRequest {}
