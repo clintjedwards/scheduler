@@ -10,10 +10,24 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+//TODO(clintjedwards): validate params of all handlers
+
+// ListPositions returns all positions unpaginated
+func (api *API) ListPositions(ctx context.Context, request *proto.ListPositionsRequest) (*proto.ListPositionsResponse, error) {
+
+	positions, err := api.storage.GetAllPositions()
+	if err != nil {
+		return &proto.ListPositionsResponse{}, status.Error(codes.Internal, "failed to retrieve positions from database")
+	}
+
+	return &proto.ListPositionsResponse{
+		Positions: positions,
+	}, nil
+}
+
 // AddPosition adds a new position to the scheduler service
 func (api *API) AddPosition(ctx context.Context, request *proto.AddPositionRequest) (*proto.AddPositionResponse, error) {
 
-	//TODO(clintjedwards): validate params
 	newPosition := proto.Position{
 		Id:            string(utils.GenerateRandString(api.config.IDLength)),
 		PrimaryName:   request.PrimaryName,

@@ -1,14 +1,20 @@
 import { Promise } from "es6-promise";
-import { Employee } from "./scheduler_message_pb";
+import { Employee, Position } from "./scheduler_message_pb";
 import { SchedulerAPIClient } from "./Scheduler_serviceServiceClientPb";
 import {
   AddEmployeeRequest,
+  AddPositionRequest,
   GetSystemInfoRequest,
   ListEmployeesRequest,
+  ListPositionsRequest,
 } from "./scheduler_transport_pb";
 
 export interface Employees {
   [key: string]: Employee;
+}
+
+export interface Positions {
+  [key: string]: Position;
 }
 
 export interface SystemInfo {
@@ -75,6 +81,50 @@ export class SchedulerClientWrapper {
       });
 
       this.client.addEmployee(addEmployeeRequest, null, function(
+        err,
+        response
+      ) {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+  }
+
+  listPositions(): Promise<Positions | undefined> {
+    let listPositionsRequest = new ListPositionsRequest();
+
+    return new Promise((resolve, reject) => {
+      this.client.listPositions(listPositionsRequest, null, function(
+        err,
+        response
+      ) {
+        if (err) {
+          reject(err);
+        }
+
+        let positions: Positions = {};
+
+        response
+          .getPositionsMap()
+          .forEach(function(value: Position, key: string | number) {
+            positions[key] = value;
+          });
+
+        resolve(positions);
+      });
+    });
+  }
+
+  addPosition(positionData: AddPositionRequest.AsObject): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let addPositionRequest = new AddPositionRequest();
+      addPositionRequest.setPrimaryName(positionData.primaryName);
+      addPositionRequest.setSecondaryName(positionData.secondaryName);
+      addPositionRequest.setDescription(positionData.description);
+
+      this.client.addPosition(addPositionRequest, null, function(
         err,
         response
       ) {

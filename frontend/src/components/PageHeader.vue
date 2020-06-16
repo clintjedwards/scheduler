@@ -6,7 +6,7 @@
           <img src="/images/schedule_icon_light.svg" width="24" height="24" />
         </b-navbar-brand>
         <b-nav-item href="/employees">Employees</b-nav-item>
-        <b-nav-item href="#">Positions</b-nav-item>
+        <b-nav-item href="/positions">Positions</b-nav-item>
         <b-nav-item href="#">Schedules</b-nav-item>
         <b-nav-item href="#">Placeholder</b-nav-item>
         <b-nav-item href="#">Placeholder</b-nav-item>
@@ -23,7 +23,7 @@ let client: SchedulerClientWrapper;
 client = new SchedulerClientWrapper();
 
 export default Vue.extend({
-  methods: {},
+  methods: {}
 });
 </script>
 

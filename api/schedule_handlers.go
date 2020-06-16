@@ -89,7 +89,6 @@ func (sch schedule) scheduleDay(date time.Time, positionShiftMap *map[string]*pr
 	testmapping := map[string]proto.Shifts{}
 
 	availableEmployees := map[string]proto.Employee{}
-	// a list of already scheduled employees so that they aren't scheduled for multiple positions per day
 	for id, employee := range sch.employees {
 		availableEmployees[id] = *employee
 	}

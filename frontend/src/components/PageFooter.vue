@@ -2,11 +2,11 @@
   <footer class="footer">
     <div class="page-footer-text fluid-container bg-dark text-secondary">
       Version v{{ $store.state.appInfo.semver }} | {{ humanizedBuildTime }} ({{
-        humanizedRelativeBuildTime
+      humanizedRelativeBuildTime
       }}) | {{ $store.state.appInfo.commit }}
-      <template v-if="$store.state.appInfo.debug_enabled">
-        | Debug Enabled
-      </template>
+      <template
+        v-if="$store.state.appInfo.debug_enabled"
+      >| Debug Enabled</template>
     </div>
   </footer>
 </template>
@@ -33,18 +33,17 @@ export default Vue.extend({
       ).fromNow();
 
       return build_time;
-    },
-  },
+    }
+  }
 });
 </script>
 
 <style scoped>
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   height: 20px;
-  line-height: 20px;
 }
 
 .page-footer-text {

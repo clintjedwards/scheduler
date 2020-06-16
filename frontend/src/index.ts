@@ -7,6 +7,7 @@ import PageHeader from "./components/PageHeader.vue";
 import router from "./router";
 import {
   Employees,
+  Positions,
   SchedulerClientWrapper,
   SystemInfo,
 } from "./scheduler_client_wrapper";
@@ -25,9 +26,11 @@ router.beforeEach((to, from, next) => {
   }
 
   var employeesPromise = client.listEmployees();
+  var positionsPromise = client.listPositions();
 
-  Promise.all([employeesPromise]).then((values) => {
+  Promise.all([employeesPromise, positionsPromise]).then((values) => {
     store.commit("setEmployees", values[0]);
+    store.commit("setPositions", values[1]);
     store.commit("setIsInitialized");
     next();
     return;
@@ -50,6 +53,9 @@ const app = new Vue({
     setInterval(() => {
       client.listEmployees().then((employees: Employees | undefined) => {
         store.commit("setEmployees", employees);
+      });
+      client.listPositions().then((positions: Positions | undefined) => {
+        store.commit("setPositions", positions);
       });
     }, 180000); //3mins
   },

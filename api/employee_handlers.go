@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// ListEmployees adds a new employee to the scheduler service
+// ListEmployees returns all employees unpaginated
 func (api *API) ListEmployees(ctx context.Context, request *proto.ListEmployeesRequest) (*proto.ListEmployeesResponse, error) {
 
 	employees, err := api.storage.GetAllEmployees()

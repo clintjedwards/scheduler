@@ -62,17 +62,78 @@ func (h *harness) createEmployees(num int) {
 	}
 }
 
+func (h *harness) createPositions() {
+	positions := []proto.Position{
+		{
+			PrimaryName:   "Baking",
+			SecondaryName: "Shaping",
+			Description:   "Shaping is harder than mixing.",
+		},
+		{
+			PrimaryName:   "Baking",
+			SecondaryName: "Mixing",
+			Description:   "Nobody with any self respect wants to work in mixing.",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Line/Greeter",
+			Description:   "Usually our most cheerful and useless employee.",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Deliveries",
+			Description:   "Pleasing tastebuds one ubereats pickup at a time.",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "General",
+			Description:   "For the non-specialist types",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Barista",
+			Description:   "Who unironically comes to a bakery for coffee? Just go to starbucks like a real person",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Cookie Baking",
+			Description:   "Demoted from being an actual baker",
+		},
+		{
+			PrimaryName: "Porter",
+			Description: "Demoted from being an actual employee",
+		},
+	}
+
+	for _, position := range positions {
+		newPosition := &proto.AddPositionRequest{
+			PrimaryName:   position.PrimaryName,
+			SecondaryName: position.SecondaryName,
+			Description:   position.Description,
+		}
+
+		client := proto.NewSchedulerAPIClient(h.conn)
+		response, err := client.AddPosition(context.Background(), newPosition)
+		if err != nil {
+			log.Fatalf("could not create position: %v", err)
+		}
+		h.positionsList = append(h.positionsList, response.Position.Id)
+		log.Printf("created position %s", newPosition.PrimaryName)
+	}
+}
+
 func main() {
 
 	h := harness{}
 	h.setup()
 
 	if len(os.Args) < 3 {
-		fmt.Println("Usage: go run populateDB.go <numEmployees> <numPositions>")
+		fmt.Println("Usage: go run populateDB.go <numEmployees>")
 		os.Exit(1)
 	}
 	numEmployees, _ := strconv.Atoi(os.Args[1])
 	h.createEmployees(numEmployees)
+	h.createPositions()
 
 	h.cleanup()
 }

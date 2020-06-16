@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Employees from "./components/Employees.vue";
 import NotFound from "./components/NotFound.vue";
+import Positions from "./components/Positions.vue";
 
 Vue.use(VueRouter);
 
@@ -11,6 +12,23 @@ const routes = [
     path: "/employees",
     name: "employees",
     component: Employees,
+    // children: [
+    //   {
+    //     path: "add",
+    //     name: "addEmployeeModal",
+    //     component: AddEmployeeModal,
+    //   },
+    //   {
+    //     path: ":id",
+    //     name: "updateEmployeeModal",
+    //     component: UpdateEmployeeModal,
+    //   },
+    // ],
+  },
+  {
+    path: "/positions",
+    name: "positions",
+    component: Positions,
     // children: [
     //   {
     //     path: "add",
