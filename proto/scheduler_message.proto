@@ -34,24 +34,19 @@ message Schedule {
     FINAL = 2;
   }
   Status status = 3;
-  GenerateScheduleSettings settings = 4;
-}
-
-message SchedulerSettings { repeated Position positions = 1; }
-
-// GenerateScheduleSettings contains per schedule settings
-message GenerateScheduleSettings {
   // each day will have multiple positions, each position might have one or more
   // shifts
-  PositionShiftMap position_shift_map = 1;
+  DayToPositionShiftMapping day_to_position_shift_mapping = 4;
   // preferences can be used to weight employees in scheduling
   // the key of the dictionary is the preference type (e.g POSITION) and the
   // value can be the current setting (e.g key: prefer_more_experience -> value:
   // true)
-  map<string, string> preferences = 2;
+  map<string, string> preferences = 5;
   // the employees to include in the generated schedule, if this is empty, all
   // employees in scheduler settings will be included
-  repeated string employee_filter = 3;
+  repeated string employee_filter = 6;
+
+  map<string, PositionShiftMap> timetable = 7;
 }
 
 message Position {
@@ -61,16 +56,18 @@ message Position {
   string description = 4;
 }
 
-message PositionShiftMap {
+message PositionShiftMap { map<string, Shifts> position_shift_map = 1; }
+
+message DayToPositionShiftMapping {
   // A mapping of a position id to an arbitrary number of shifts. This allows
   // for positions and shifts to be variable depending on the day of the week
-  map<string, Shifts> monday = 1;
-  map<string, Shifts> tuesday = 2;
-  map<string, Shifts> wednesday = 3;
-  map<string, Shifts> thursday = 4;
-  map<string, Shifts> friday = 5;
-  map<string, Shifts> saturday = 6;
-  map<string, Shifts> sunday = 7;
+  PositionShiftMap monday = 1;
+  PositionShiftMap tuesday = 2;
+  PositionShiftMap wednesday = 3;
+  PositionShiftMap thursday = 4;
+  PositionShiftMap friday = 5;
+  PositionShiftMap saturday = 6;
+  PositionShiftMap sunday = 7;
 }
 
 message Shifts { repeated Shift shifts = 1; }

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -57,6 +58,18 @@ func (info *testHarness) setup() {
 			"3": true,
 		},
 	})
+	mockAPI.storage.AddPosition("4", &proto.Position{
+		Id:          "1",
+		PrimaryName: "baker",
+	})
+	mockAPI.storage.AddPosition("4", &proto.Position{
+		Id:          "2",
+		PrimaryName: "porter",
+	})
+	mockAPI.storage.AddPosition("4", &proto.Position{
+		Id:          "3",
+		PrimaryName: "second base",
+	})
 
 	info.mockAPI = mockAPI
 
@@ -65,193 +78,164 @@ func (info *testHarness) setup() {
 
 func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 	t.Run("GenerateSchedule", func(t *testing.T) {
-		info.mockAPI.generateSchedule(time.Now(), 5, proto.GenerateScheduleSettings{
+		schedule, _ := info.mockAPI.generateSchedule(time.Now(), proto.GenerateScheduleRequest{
+			StartDate:      "01-01-2001",
+			Length:         5,
 			EmployeeFilter: []string{},
-			PositionShiftMap: &proto.PositionShiftMap{
-				Monday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+			DayToPositionShiftMapping: &proto.DayToPositionShiftMapping{
+				Monday: &proto.PositionShiftMap{
+					PositionShiftMap: map[string]*proto.Shifts{
+						"1": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"2": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-				},
-				Tuesday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"3": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
 					},
 				},
-				Wednesday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+				Tuesday: &proto.PositionShiftMap{
+					PositionShiftMap: map[string]*proto.Shifts{
+						"1": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"2": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-				},
-				Thursday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"3": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
 					},
 				},
-				Friday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+				Wednesday: &proto.PositionShiftMap{
+					PositionShiftMap: map[string]*proto.Shifts{
+						"1": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"2": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-				},
-				Saturday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
-							},
-						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"3": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
 					},
 				},
-				Sunday: map[string]*proto.Shifts{
-					"1": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+				Thursday: &proto.PositionShiftMap{
+					PositionShiftMap: map[string]*proto.Shifts{
+						"1": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
+							},
+						},
+						"2": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
+							},
+						},
+						"3": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
 					},
-					"2": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+				},
+				Friday: &proto.PositionShiftMap{
+					PositionShiftMap: map[string]*proto.Shifts{
+						"1": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
-					},
-					"3": {
-						Shifts: []*proto.Shift{
-							{
-								StartTime: "0800",
-								EndTime:   "1300",
+						"2": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
+							},
+						},
+						"3": {
+							Shifts: []*proto.Shift{
+								{
+									StartTime: "0800",
+									EndTime:   "1300",
+								},
 							},
 						},
 					},
 				},
 			},
 		})
+
+		for time, positionMap := range schedule.Timetable {
+			fmt.Println(time)
+			for positionID, shifts := range positionMap.PositionShiftMap {
+				fmt.Printf("\tposition %s:\n", positionID)
+				for _, shift := range shifts.Shifts {
+					fmt.Printf("\t\tshift: %s-%s\n", shift.StartTime, shift.EndTime)
+					fmt.Printf("\t\t\temployee: %s\n", shift.Employee)
+				}
+			}
+		}
 	})
 }
 
