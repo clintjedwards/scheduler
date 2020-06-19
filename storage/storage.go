@@ -19,8 +19,8 @@ const (
 )
 
 const (
-	// SettingsKey is a root database key that stores app settings in the SchedulerSettings bucket
-	SettingsKey = "settings"
+	// SchedulesOrderKey is a schedules bucket key that stores the order
+	SchedulesOrderKey = "_order"
 )
 
 // EngineType represents the different possible storage engines available
@@ -50,6 +50,8 @@ type Engine interface {
 	UpdatePosition(id string, Position *proto.Position) error
 	DeletePosition(id string) error
 
+	// GetAllSchedules returns an unpagined map of all schedules with the order they were added
+	GetAllSchedules() (schedules *ScheduleMap, err error)
 	GetSchedule(id string) (*proto.Schedule, error)
 	AddSchedule(id string, schedule *proto.Schedule) error
 	UpdateSchedule(id string, schedule *proto.Schedule) error

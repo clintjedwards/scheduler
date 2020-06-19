@@ -9,6 +9,7 @@ service SchedulerAPI {
   rpc GetSystemInfo(GetSystemInfoRequest) returns (GetSystemInfoResponse);
 
   // Schedule manipulation
+  rpc ListSchedules(ListSchedulesRequest) returns (ListSchedulesResponse);
   rpc GenerateSchedule(GenerateScheduleRequest)
       returns (GenerateScheduleResponse);
   rpc CommitSchedule(CommitScheduleRequest) returns (CommitScheduleResponse);

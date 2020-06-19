@@ -14,6 +14,7 @@ require (
 	github.com/icrowley/fake v0.0.0-20180203215853-4178557ae428
 	github.com/improbable-eng/grpc-web v0.12.0
 	github.com/kelseyhightower/envconfig v1.4.0
+	github.com/mitchellh/copystructure v1.0.0
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
 	github.com/rs/cors v1.7.0 // indirect
 	github.com/rs/zerolog v1.19.0

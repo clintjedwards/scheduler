@@ -3,7 +3,6 @@ package api
 import (
 	"fmt"
 	"testing"
-	"time"
 
 	"github.com/clintjedwards/scheduler/proto"
 	"github.com/clintjedwards/scheduler/storage/memory"
@@ -78,11 +77,11 @@ func (info *testHarness) setup() {
 
 func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 	t.Run("GenerateSchedule", func(t *testing.T) {
-		schedule, _ := info.mockAPI.generateSchedule(time.Now(), proto.GenerateScheduleRequest{
-			StartDate:      "01-01-2001",
-			Length:         5,
+		schedule, _ := info.mockAPI.generateSchedule(proto.GenerateScheduleRequest{
+			Start:          "06-19-1990",
+			Length:         7,
 			EmployeeFilter: []string{},
-			DayToPositionShiftMapping: &proto.DayToPositionShiftMapping{
+			Program: &proto.Program{
 				Monday: &proto.PositionShiftMap{
 					PositionShiftMap: map[string]*proto.Shifts{
 						"1": {

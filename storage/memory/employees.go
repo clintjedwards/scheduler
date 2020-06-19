@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// GetAllEmployees returns an unpaginated list of current links
+// GetAllEmployees returns an unpaginated list of current employees
 func (db *Memory) GetAllEmployees() (map[string]*proto.Employee, error) {
 	results := map[string]*proto.Employee{}
 

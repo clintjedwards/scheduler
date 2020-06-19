@@ -12,7 +12,9 @@ func Init() (Memory, error) {
 	db := Memory{
 		store: map[storage.Bucket]map[string][]byte{
 			storage.EmployeesBucket: {},
-			storage.SchedulesBucket: {},
+			storage.SchedulesBucket: {
+				storage.SchedulesOrderKey: []byte{},
+			},
 			storage.PositionsBucket: {},
 		},
 	}

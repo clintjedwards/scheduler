@@ -13,6 +13,12 @@ message GetSystemInfoResponse {
   string semver = 5;
 }
 
+message ListSchedulesRequest {}
+message ListSchedulesResponse {
+  map<string, Schedule> schedules = 1;
+  repeated string order = 2;
+}
+
 message ListEmployeesRequest {}
 message ListEmployeesResponse { map<string, Employee> employees = 1; }
 
@@ -53,12 +59,13 @@ message GetPositionResponse { Position Position = 1; }
 
 message GenerateScheduleRequest {
   // format is mm-dd-yyyy
-  string start_date = 1;
+  string start = 1;
   // how many days from the start date to generate
   uint32 length = 2;
-  // each day will have multiple positions, each position might have one or more
-  // shifts
-  DayToPositionShiftMapping day_to_position_shift_mapping = 3;
+  // Program is a mapping which allows users to set which positions and which
+  // shifts are available for scheduling on certain days. Days left empty will
+  // not be scheduled.
+  Program program = 3;
   // preferences can be used to weight employees in scheduling
   // the key of the dictionary is the preference type (e.g POSITION) and the
   // value can be the current setting (e.g key: prefer_more_experience -> value:

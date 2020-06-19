@@ -44,10 +44,17 @@ func (h *harness) cleanup() {
 }
 
 func (h *harness) createEmployees(num int) {
+
+	positions := map[string]bool{}
+	for _, id := range h.positionsList {
+		positions[id] = true
+	}
+
 	for i := 0; i < num; i++ {
 		newEmployee := &proto.AddEmployeeRequest{
-			Name:  fake.FullName(),
-			Notes: fake.WordsN(30),
+			Name:      fake.FullName(),
+			Notes:     fake.WordsN(30),
+			Positions: positions,
 		}
 
 		client := proto.NewSchedulerAPIClient(h.conn)
@@ -122,6 +129,168 @@ func (h *harness) createPositions() {
 	}
 }
 
+func (h *harness) createSchedule() {
+
+	position1 := h.positionsList[0]
+	position2 := h.positionsList[1]
+	position3 := h.positionsList[2]
+
+	scheduleSettings := &proto.GenerateScheduleRequest{
+		Start:          "06-19-1990",
+		Length:         7,
+		EmployeeFilter: []string{},
+		Program: &proto.Program{
+			Monday: &proto.PositionShiftMap{
+				PositionShiftMap: map[string]*proto.Shifts{
+					position1: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position2: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position3: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+				},
+			},
+			Tuesday: &proto.PositionShiftMap{
+				PositionShiftMap: map[string]*proto.Shifts{
+					position1: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position2: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position3: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+				},
+			},
+			Wednesday: &proto.PositionShiftMap{
+				PositionShiftMap: map[string]*proto.Shifts{
+					position1: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position2: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position3: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+				},
+			},
+			Thursday: &proto.PositionShiftMap{
+				PositionShiftMap: map[string]*proto.Shifts{
+					position1: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position2: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position3: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+				},
+			},
+			Friday: &proto.PositionShiftMap{
+				PositionShiftMap: map[string]*proto.Shifts{
+					position1: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position2: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+					position3: {
+						Shifts: []*proto.Shift{
+							{
+								StartTime: "0800",
+								EndTime:   "1300",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	client := proto.NewSchedulerAPIClient(h.conn)
+	_, err := client.GenerateSchedule(context.Background(), scheduleSettings)
+	if err != nil {
+		log.Fatalf("could not create schedule: %v", err)
+	}
+	log.Println("created schedule")
+}
+
 func main() {
 
 	h := harness{}
@@ -132,8 +301,9 @@ func main() {
 		os.Exit(1)
 	}
 	numEmployees, _ := strconv.Atoi(os.Args[1])
-	h.createEmployees(numEmployees)
 	h.createPositions()
+	h.createEmployees(numEmployees)
+	h.createSchedule()
 
 	h.cleanup()
 }

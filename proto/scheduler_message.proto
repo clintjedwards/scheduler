@@ -26,27 +26,28 @@ message Employee {
 }
 
 message Schedule {
-  string start_date = 1;
-  string end_date = 2;
+  string id = 1;
+  string start = 2;
+  string end = 3;
   enum Status {
     UNKNOWN = 0;
     PENDING = 1;
     FINAL = 2;
   }
-  Status status = 3;
+  Status status = 4;
   // each day will have multiple positions, each position might have one or more
   // shifts
-  DayToPositionShiftMapping day_to_position_shift_mapping = 4;
+  Program program = 5;
   // preferences can be used to weight employees in scheduling
   // the key of the dictionary is the preference type (e.g POSITION) and the
   // value can be the current setting (e.g key: prefer_more_experience -> value:
   // true)
-  map<string, string> preferences = 5;
+  map<string, string> preferences = 6;
   // the employees to include in the generated schedule, if this is empty, all
   // employees in scheduler settings will be included
-  repeated string employee_filter = 6;
+  repeated string employee_filter = 7;
 
-  map<string, PositionShiftMap> timetable = 7;
+  map<string, PositionShiftMap> timetable = 8;
 }
 
 message Position {
@@ -58,9 +59,10 @@ message Position {
 
 message PositionShiftMap { map<string, Shifts> position_shift_map = 1; }
 
-message DayToPositionShiftMapping {
-  // A mapping of a position id to an arbitrary number of shifts. This allows
-  // for positions and shifts to be variable depending on the day of the week
+// Program is a mapping which allows users to set which positions and which
+// shifts are available for scheduling on certain days. Days left empty will not
+// be scheduled
+message Program {
   PositionShiftMap monday = 1;
   PositionShiftMap tuesday = 2;
   PositionShiftMap wednesday = 3;

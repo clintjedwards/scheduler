@@ -34,6 +34,15 @@ run:
 	go generate
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 
+## run: build application and run server
+run-backend: export DEBUG=true
+run-backend:
+	protoc --proto_path=proto --go_out=plugins=grpc:proto proto/*.proto
+	protoc --js_out=import_style=commonjs,binary:./frontend/src/ --grpc-web_out=import_style=typescript,mode=grpcwebtext:./frontend/src/ -I ./proto/ proto/*.proto
+	go mod tidy
+	go generate
+	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
+
 ## install: build application and install on system
 install:
 	protoc --proto_path=proto --go_out=plugins=grpc:proto proto/*.proto

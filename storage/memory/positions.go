@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// GetAllPositions returns an unpaginated list of current links
+// GetAllPositions returns an unpaginated list of current positions
 func (db *Memory) GetAllPositions() (map[string]*proto.Position, error) {
 	results := map[string]*proto.Position{}
 
