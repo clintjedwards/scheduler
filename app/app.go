@@ -1,9 +1,11 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -95,5 +97,25 @@ func startHTTPService(config *config.Config, storage storage.Engine) {
 	}
 
 	log.Info().Str("url", config.URL).Msg("starting http service")
-	log.Fatal().Err(server.ListenAndServe())
+
+	// Run our server in a goroutine and listen for signals
+	// that indicate graceful shutdown
+	go func() {
+		if err := server.ListenAndServe(); err != nil {
+			log.Fatal().Err(err).Msg("server exited abnormally")
+
+		}
+	}()
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+
+	// shutdown gracefully with a timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	// Doesn't block if no connections, but will otherwise wait
+	// until the timeout deadline.
+	server.Shutdown(ctx)
+	os.Exit(0)
 }
