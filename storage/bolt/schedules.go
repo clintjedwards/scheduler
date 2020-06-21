@@ -1,17 +1,18 @@
 package bolt
 
 import (
+	"encoding/json"
+
 	"github.com/boltdb/bolt"
-	"github.com/clintjedwards/scheduler/proto"
+	"github.com/clintjedwards/scheduler/models"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
-	go_proto "github.com/golang/protobuf/proto"
 )
 
 // GetSchedule returns a single schedule by id
-func (db *Bolt) GetSchedule(id string) (*proto.Schedule, error) {
+func (db *Bolt) GetSchedule(id string) (*models.Schedule, error) {
 
-	var storedSchedule proto.Schedule
+	var storedSchedule models.Schedule
 
 	err := db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulesBucket))
@@ -21,7 +22,7 @@ func (db *Bolt) GetSchedule(id string) (*proto.Schedule, error) {
 			return utils.ErrEntityNotFound
 		}
 
-		err := go_proto.Unmarshal(scheduleRaw, &storedSchedule)
+		err := json.Unmarshal(scheduleRaw, &storedSchedule)
 		if err != nil {
 			return err
 		}
@@ -36,7 +37,7 @@ func (db *Bolt) GetSchedule(id string) (*proto.Schedule, error) {
 }
 
 // AddSchedule stores a new schedule
-func (db *Bolt) AddSchedule(id string, schedule *proto.Schedule) error {
+func (db *Bolt) AddSchedule(id string, schedule *models.Schedule) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulesBucket))
 
@@ -46,7 +47,7 @@ func (db *Bolt) AddSchedule(id string, schedule *proto.Schedule) error {
 			return utils.ErrEntityExists
 		}
 
-		scheduleRaw, err := go_proto.Marshal(schedule)
+		scheduleRaw, err := json.Marshal(schedule)
 		if err != nil {
 			return err
 		}
@@ -64,7 +65,7 @@ func (db *Bolt) AddSchedule(id string, schedule *proto.Schedule) error {
 }
 
 // UpdateSchedule alters schedule infromation
-func (db *Bolt) UpdateSchedule(id string, schedule *proto.Schedule) error {
+func (db *Bolt) UpdateSchedule(id string, schedule *models.Schedule) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulesBucket))
 
@@ -74,7 +75,7 @@ func (db *Bolt) UpdateSchedule(id string, schedule *proto.Schedule) error {
 			return utils.ErrEntityNotFound
 		}
 
-		scheduleRaw, err := go_proto.Marshal(schedule)
+		scheduleRaw, err := json.Marshal(schedule)
 		if err != nil {
 			return err
 		}

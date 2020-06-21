@@ -1,73 +1,76 @@
 package api
 
 import (
-	"context"
+	"errors"
+	"fmt"
+	"net/http"
 
-	"github.com/clintjedwards/scheduler/proto"
+	"github.com/clintjedwards/scheduler/models"
 	"github.com/clintjedwards/scheduler/utils"
+	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 //TODO(clintjedwards): validate params of all handlers
 
-// ListPositions returns all positions unpaginated
-func (api *API) ListPositions(ctx context.Context, request *proto.ListPositionsRequest) (*proto.ListPositionsResponse, error) {
+// ListPositionsHandler returns all positions unpaginated
+func (api *API) ListPositionsHandler(w http.ResponseWriter, r *http.Request) {
 
 	positions, err := api.storage.GetAllPositions()
 	if err != nil {
-		return &proto.ListPositionsResponse{}, status.Error(codes.Internal, "failed to retrieve positions from database")
+		log.Error().Err(err).Msg("failed to retrieve positions")
+		sendResponse(w, http.StatusBadGateway, nil, fmt.Errorf("failed to retrieve positions"))
+		return
 	}
 
-	return &proto.ListPositionsResponse{
-		Positions: positions,
-	}, nil
+	sendResponse(w, http.StatusOK, positions, nil)
 }
 
 // AddPosition adds a new position to the scheduler service
-func (api *API) AddPosition(ctx context.Context, request *proto.AddPositionRequest) (*proto.AddPositionResponse, error) {
+func (api *API) AddPosition(w http.ResponseWriter, r *http.Request) {
 
-	newPosition := proto.Position{
-		Id:            string(utils.GenerateRandString(api.config.IDLength)),
-		PrimaryName:   request.PrimaryName,
-		SecondaryName: request.SecondaryName,
-		Description:   request.Description,
-	}
+	newPosition := models.Position{}
 
-	err := api.storage.AddPosition(newPosition.Id, &newPosition)
+	err := parseJSON(r.Body, &newPosition)
 	if err != nil {
-		if err == utils.ErrEntityExists {
-			return &proto.AddPositionResponse{}, status.Error(codes.AlreadyExists, "could not add position; position exists")
+		log.Warn().Err(err).Msg("could not parse json request")
+		sendResponse(w, http.StatusBadRequest, nil, fmt.Errorf("could not parse json request: %v", err))
+		return
+	}
+	defer r.Body.Close()
+
+	newPosition.ID = string(utils.GenerateRandString(api.config.IDLength))
+
+	err = api.storage.AddPosition(newPosition.ID, &newPosition)
+	if err != nil {
+		if errors.Is(err, utils.ErrEntityExists) {
+			sendResponse(w, http.StatusConflict, nil, utils.ErrEntityExists)
+			return
 		}
 		log.Error().Err(err).Msg("could not add position")
-		return &proto.AddPositionResponse{}, status.Error(codes.Internal, "could not add position")
+		sendResponse(w, http.StatusBadGateway, nil, fmt.Errorf("could not add position"))
+		return
 	}
 
-	return &proto.AddPositionResponse{
-		Position: &newPosition,
-	}, nil
+	log.Info().Interface("position", newPosition).Msg("created new position")
+	sendResponse(w, http.StatusOK, newPosition, nil)
 }
 
 // GetPosition returns a single position by id
-func (api *API) GetPosition(ctx context.Context, request *proto.GetPositionRequest) (*proto.GetPositionResponse, error) {
+func (api *API) GetPosition(w http.ResponseWriter, r *http.Request) {
 
-	// Validate user input
-	if request.Id == "" {
-		return &proto.GetPositionResponse{},
-			status.Error(codes.FailedPrecondition, "id required")
-	}
+	vars := mux.Vars(r)
 
-	position, err := api.storage.GetPosition(request.Id)
+	position, err := api.storage.GetPosition(vars["id"])
 	if err != nil {
-		if err == utils.ErrEntityNotFound {
-			return &proto.GetPositionResponse{}, status.Error(codes.NotFound, "could not find position")
+		if errors.Is(err, utils.ErrEntityNotFound) {
+			sendResponse(w, http.StatusNotFound, nil, utils.ErrEntityNotFound)
+			return
 		}
 		log.Error().Err(err).Msg("could not get position")
-		return &proto.GetPositionResponse{}, status.Error(codes.Internal, "could not get position")
+		sendResponse(w, http.StatusBadGateway, nil, utils.ErrEntityNotFound)
+		return
 	}
 
-	return &proto.GetPositionResponse{
-		Position: position,
-	}, nil
+	sendResponse(w, http.StatusOK, position, nil)
 }

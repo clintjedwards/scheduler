@@ -3,11 +3,10 @@ package memory
 import (
 	"encoding/json"
 
-	"github.com/clintjedwards/scheduler/proto"
+	"github.com/clintjedwards/scheduler/models"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/clintjedwards/toolkit/listutil"
-	go_proto "github.com/golang/protobuf/proto"
 	"github.com/rs/zerolog/log"
 )
 
@@ -15,7 +14,7 @@ import (
 func (db *Memory) GetAllSchedules() (schedules *storage.ScheduleMap, err error) {
 
 	schedules = &storage.ScheduleMap{
-		Schedules: map[string]*proto.Schedule{},
+		Schedules: map[string]*models.Schedule{},
 		Order:     []string{},
 	}
 
@@ -36,9 +35,9 @@ func (db *Memory) GetAllSchedules() (schedules *storage.ScheduleMap, err error) 
 			continue
 		}
 
-		var schedule proto.Schedule
+		var schedule models.Schedule
 
-		err := go_proto.Unmarshal(rawSchedule, &schedule)
+		err := json.Unmarshal(rawSchedule, &schedule)
 		if err != nil {
 			log.Error().Err(err).Str("id", string(id)).Msg("could not unmarshal database object")
 			return nil, err
@@ -51,16 +50,16 @@ func (db *Memory) GetAllSchedules() (schedules *storage.ScheduleMap, err error) 
 }
 
 // GetSchedule returns a single schedule by id
-func (db *Memory) GetSchedule(id string) (*proto.Schedule, error) {
+func (db *Memory) GetSchedule(id string) (*models.Schedule, error) {
 
-	var storedSchedule proto.Schedule
+	var storedSchedule models.Schedule
 
 	rawSchedule, ok := db.store[storage.SchedulesBucket][id]
 	if !ok {
 		return nil, utils.ErrEntityNotFound
 	}
 
-	err := go_proto.Unmarshal(rawSchedule, &storedSchedule)
+	err := json.Unmarshal(rawSchedule, &storedSchedule)
 	if err != nil {
 		return nil, err
 	}
@@ -69,12 +68,12 @@ func (db *Memory) GetSchedule(id string) (*proto.Schedule, error) {
 }
 
 // AddSchedule stores a new schedule
-func (db *Memory) AddSchedule(id string, schedule *proto.Schedule) error {
+func (db *Memory) AddSchedule(id string, schedule *models.Schedule) error {
 	if _, ok := db.store[storage.SchedulesBucket][id]; ok {
 		return utils.ErrEntityExists
 	}
 
-	scheduleRaw, err := go_proto.Marshal(schedule)
+	scheduleRaw, err := json.Marshal(schedule)
 	if err != nil {
 		return err
 	}
@@ -102,13 +101,13 @@ func (db *Memory) AddSchedule(id string, schedule *proto.Schedule) error {
 }
 
 // UpdateSchedule alters schedule infromation
-func (db *Memory) UpdateSchedule(id string, schedule *proto.Schedule) error {
+func (db *Memory) UpdateSchedule(id string, schedule *models.Schedule) error {
 	_, ok := db.store[storage.SchedulesBucket][id]
 	if !ok {
 		return utils.ErrEntityNotFound
 	}
 
-	scheduleRaw, err := go_proto.Marshal(schedule)
+	scheduleRaw, err := json.Marshal(schedule)
 	if err != nil {
 		return err
 	}

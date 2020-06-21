@@ -1,21 +1,22 @@
 package memory
 
 import (
-	"github.com/clintjedwards/scheduler/proto"
+	"encoding/json"
+
+	"github.com/clintjedwards/scheduler/models"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
-	go_proto "github.com/golang/protobuf/proto"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllPositions returns an unpaginated list of current positions
-func (db *Memory) GetAllPositions() (map[string]*proto.Position, error) {
-	results := map[string]*proto.Position{}
+func (db *Memory) GetAllPositions() (map[string]*models.Position, error) {
+	results := map[string]*models.Position{}
 
 	for id, rawPosition := range db.store[storage.PositionsBucket] {
-		var position proto.Position
+		var position models.Position
 
-		err := go_proto.Unmarshal(rawPosition, &position)
+		err := json.Unmarshal(rawPosition, &position)
 		if err != nil {
 			log.Error().Err(err).Str("id", string(id)).Msg("could not unmarshal database object")
 			return nil, err
@@ -28,15 +29,15 @@ func (db *Memory) GetAllPositions() (map[string]*proto.Position, error) {
 }
 
 // GetPosition returns a single position by id
-func (db *Memory) GetPosition(id string) (*proto.Position, error) {
-	var storedPosition proto.Position
+func (db *Memory) GetPosition(id string) (*models.Position, error) {
+	var storedPosition models.Position
 
 	rawPosition, ok := db.store[storage.PositionsBucket][id]
 	if !ok {
 		return nil, utils.ErrEntityNotFound
 	}
 
-	err := go_proto.Unmarshal(rawPosition, &storedPosition)
+	err := json.Unmarshal(rawPosition, &storedPosition)
 	if err != nil {
 		return nil, err
 	}
@@ -45,13 +46,13 @@ func (db *Memory) GetPosition(id string) (*proto.Position, error) {
 }
 
 // AddPosition stores a new position
-func (db *Memory) AddPosition(id string, position *proto.Position) error {
+func (db *Memory) AddPosition(id string, position *models.Position) error {
 	_, ok := db.store[storage.PositionsBucket][id]
 	if ok {
 		return utils.ErrEntityExists
 	}
 
-	positionRaw, err := go_proto.Marshal(position)
+	positionRaw, err := json.Marshal(position)
 	if err != nil {
 		return err
 	}
@@ -61,13 +62,13 @@ func (db *Memory) AddPosition(id string, position *proto.Position) error {
 }
 
 // UpdatePosition alters position information
-func (db *Memory) UpdatePosition(id string, position *proto.Position) error {
+func (db *Memory) UpdatePosition(id string, position *models.Position) error {
 	_, ok := db.store[storage.PositionsBucket][id]
 	if !ok {
 		return utils.ErrEntityNotFound
 	}
 
-	positionRaw, err := go_proto.Marshal(position)
+	positionRaw, err := json.Marshal(position)
 	if err != nil {
 		return err
 	}

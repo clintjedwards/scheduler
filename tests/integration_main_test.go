@@ -1,47 +1,35 @@
 package tests
 
-import (
-	"fmt"
-	"os"
-	"testing"
-	"time"
+// type testHarness struct {
+// 	client proto.SchedulerAPIClient
+// }
 
-	"github.com/clintjedwards/scheduler/app"
-	"github.com/clintjedwards/scheduler/proto"
-	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
-)
+// func (info *testHarness) setup() {
+// 	os.Setenv("SCHEDULER_LOGLEVEL", "error")
 
-type testHarness struct {
-	client proto.SchedulerAPIClient
-}
+// 	go app.StartServices()
+// 	time.Sleep(time.Second)
 
-func (info *testHarness) setup() {
-	os.Setenv("SCHEDULER_LOGLEVEL", "error")
+// 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", "localhost", "8080"), grpc.WithInsecure())
+// 	if err != nil {
+// 		log.Fatal().Err(err).Msg("could not connect to server")
+// 	}
 
-	go app.StartServices()
-	time.Sleep(time.Second)
+// 	client := proto.NewSchedulerAPIClient(conn)
+// 	info.client = client
+// }
 
-	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", "localhost", "8080"), grpc.WithInsecure())
-	if err != nil {
-		log.Fatal().Err(err).Msg("could not connect to server")
-	}
+// func (info *testHarness) cleanup() {
+// 	os.Unsetenv("SCHEDULER_LOGLEVEL")
+// }
 
-	client := proto.NewSchedulerAPIClient(conn)
-	info.client = client
-}
+// func TestFullApplication(t *testing.T) {
 
-func (info *testHarness) cleanup() {
-	os.Unsetenv("SCHEDULER_LOGLEVEL")
-}
+// 	info := testHarness{}
+// 	info.setup()
 
-func TestFullApplication(t *testing.T) {
+// 	info.TestAddEmployee(t)
+// 	info.TestGetEmployee(t)
 
-	info := testHarness{}
-	info.setup()
-
-	info.TestAddEmployee(t)
-	info.TestGetEmployee(t)
-
-	info.cleanup()
-}
+// 	info.cleanup()
+// }

@@ -1,21 +1,22 @@
 package memory
 
 import (
-	"github.com/clintjedwards/scheduler/proto"
+	"encoding/json"
+
+	"github.com/clintjedwards/scheduler/models"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
-	go_proto "github.com/golang/protobuf/proto"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllEmployees returns an unpaginated list of current employees
-func (db *Memory) GetAllEmployees() (map[string]*proto.Employee, error) {
-	results := map[string]*proto.Employee{}
+func (db *Memory) GetAllEmployees() (map[string]*models.Employee, error) {
+	results := map[string]*models.Employee{}
 
 	for id, rawEmployee := range db.store[storage.EmployeesBucket] {
-		var employee proto.Employee
+		var employee models.Employee
 
-		err := go_proto.Unmarshal(rawEmployee, &employee)
+		err := json.Unmarshal(rawEmployee, &employee)
 		if err != nil {
 			log.Error().Err(err).Str("id", string(id)).Msg("could not unmarshal database object")
 			return nil, err
@@ -28,15 +29,15 @@ func (db *Memory) GetAllEmployees() (map[string]*proto.Employee, error) {
 }
 
 // GetEmployee returns a single employee by id
-func (db *Memory) GetEmployee(id string) (*proto.Employee, error) {
-	var storedEmployee proto.Employee
+func (db *Memory) GetEmployee(id string) (*models.Employee, error) {
+	var storedEmployee models.Employee
 
 	rawEmployee, ok := db.store[storage.EmployeesBucket][id]
 	if !ok {
 		return nil, utils.ErrEntityNotFound
 	}
 
-	err := go_proto.Unmarshal(rawEmployee, &storedEmployee)
+	err := json.Unmarshal(rawEmployee, &storedEmployee)
 	if err != nil {
 		return nil, err
 	}
@@ -45,13 +46,13 @@ func (db *Memory) GetEmployee(id string) (*proto.Employee, error) {
 }
 
 // AddEmployee stores a new employee
-func (db *Memory) AddEmployee(id string, employee *proto.Employee) error {
+func (db *Memory) AddEmployee(id string, employee *models.Employee) error {
 	_, ok := db.store[storage.EmployeesBucket][id]
 	if ok {
 		return utils.ErrEntityExists
 	}
 
-	employeeRaw, err := go_proto.Marshal(employee)
+	employeeRaw, err := json.Marshal(employee)
 	if err != nil {
 		return err
 	}
@@ -61,13 +62,13 @@ func (db *Memory) AddEmployee(id string, employee *proto.Employee) error {
 }
 
 // UpdateEmployee alters employee infromation
-func (db *Memory) UpdateEmployee(id string, employee *proto.Employee) error {
+func (db *Memory) UpdateEmployee(id string, employee *models.Employee) error {
 	_, ok := db.store[storage.EmployeesBucket][id]
 	if !ok {
 		return utils.ErrEntityNotFound
 	}
 
-	employeeRaw, err := go_proto.Marshal(employee)
+	employeeRaw, err := json.Marshal(employee)
 	if err != nil {
 		return err
 	}

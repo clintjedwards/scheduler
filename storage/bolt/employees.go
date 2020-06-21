@@ -1,25 +1,26 @@
 package bolt
 
 import (
+	"encoding/json"
+
 	"github.com/boltdb/bolt"
-	"github.com/clintjedwards/scheduler/proto"
+	"github.com/clintjedwards/scheduler/models"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
-	go_proto "github.com/golang/protobuf/proto"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllEmployees returns an unpaginated list of current links
-func (db *Bolt) GetAllEmployees() (map[string]*proto.Employee, error) {
-	results := map[string]*proto.Employee{}
+func (db *Bolt) GetAllEmployees() (map[string]*models.Employee, error) {
+	results := map[string]*models.Employee{}
 
 	db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 
 		err := bucket.ForEach(func(key, value []byte) error {
-			var employee proto.Employee
+			var employee models.Employee
 
-			err := go_proto.Unmarshal(value, &employee)
+			err := json.Unmarshal(value, &employee)
 			if err != nil {
 				log.Error().Err(err).Str("id", string(key)).Msg("could not unmarshal database object")
 				// We don't return an error here so that we can at least return a partial list
@@ -40,9 +41,9 @@ func (db *Bolt) GetAllEmployees() (map[string]*proto.Employee, error) {
 }
 
 // GetEmployee returns a single employee by id
-func (db *Bolt) GetEmployee(id string) (*proto.Employee, error) {
+func (db *Bolt) GetEmployee(id string) (*models.Employee, error) {
 
-	var storedEmployee proto.Employee
+	var storedEmployee models.Employee
 
 	err := db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
@@ -52,7 +53,7 @@ func (db *Bolt) GetEmployee(id string) (*proto.Employee, error) {
 			return utils.ErrEntityNotFound
 		}
 
-		err := go_proto.Unmarshal(employeeRaw, &storedEmployee)
+		err := json.Unmarshal(employeeRaw, &storedEmployee)
 		if err != nil {
 			return err
 		}
@@ -67,7 +68,7 @@ func (db *Bolt) GetEmployee(id string) (*proto.Employee, error) {
 }
 
 // AddEmployee stores a new employee
-func (db *Bolt) AddEmployee(id string, employee *proto.Employee) error {
+func (db *Bolt) AddEmployee(id string, employee *models.Employee) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 
@@ -77,7 +78,7 @@ func (db *Bolt) AddEmployee(id string, employee *proto.Employee) error {
 			return utils.ErrEntityExists
 		}
 
-		employeeRaw, err := go_proto.Marshal(employee)
+		employeeRaw, err := json.Marshal(employee)
 		if err != nil {
 			return err
 		}
@@ -95,7 +96,7 @@ func (db *Bolt) AddEmployee(id string, employee *proto.Employee) error {
 }
 
 // UpdateEmployee alters employee infromation
-func (db *Bolt) UpdateEmployee(id string, employee *proto.Employee) error {
+func (db *Bolt) UpdateEmployee(id string, employee *models.Employee) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 
@@ -105,7 +106,7 @@ func (db *Bolt) UpdateEmployee(id string, employee *proto.Employee) error {
 			return utils.ErrEntityNotFound
 		}
 
-		employeeRaw, err := go_proto.Marshal(employee)
+		employeeRaw, err := json.Marshal(employee)
 		if err != nil {
 			return err
 		}

@@ -39,8 +39,8 @@ func historyModeHandler(fileServerHandler http.Handler, indexFile []byte) http.H
 	})
 }
 
-//RegisterUIRoutes registers the endpoints needed for the frontend
-// with an already established http router
+// RegisterUIRoutes registers the endpoints needed for the frontend
+// with an already established http router.
 func (ui *Frontend) RegisterUIRoutes(router *mux.Router) {
 
 	// We bake frontend files directly into the binary

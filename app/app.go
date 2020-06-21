@@ -4,14 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/improbable-eng/grpc-web/go/grpcweb"
 	"github.com/rs/zerolog/log"
-	"google.golang.org/grpc"
 
 	"github.com/clintjedwards/scheduler/api"
 	"github.com/clintjedwards/scheduler/config"
@@ -34,10 +31,7 @@ func StartServices() {
 
 	log.Info().Str("engine", config.Database.Engine).Msg("storage engine initialized")
 
-	schedulerAPI := api.NewAPI(config, storage)
-	grpcServer := api.CreateGRPCServer(schedulerAPI)
-
-	initCombinedService(config, grpcServer)
+	startHTTPService(config, storage)
 }
 
 // InitStorage creates a storage object with the appropriate engine
@@ -70,40 +64,36 @@ func InitStorage(engineType storage.EngineType) (storage.Engine, error) {
 	}
 }
 
-// initCombinedService starts a long running combined grpc/http (grpc-web compatible) service
-// with all proper settings
-func initCombinedService(config *config.Config, server *grpc.Server) {
-	wrappedGrpc := grpcweb.WrapServer(server)
-
+func startHTTPService(config *config.Config, storage storage.Engine) {
 	router := mux.NewRouter()
+	api := api.NewAPI(config, storage)
 
+	api.RegisterEmployeeRoutes(router)
+	api.RegisterPositionRoutes(router)
+	api.RegisterScheduleRoutes(router)
+	api.RegisterSystemRoutes(router)
+
+	// we put frontend last since it serves as a catch-all and
+	// mux checks for route matches in the order they are registered
 	if config.Frontend {
 		frontend := frontend.NewFrontend()
 		frontend.RegisterUIRoutes(router)
 	}
 
-	combinedHandler := http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-		if strings.Contains(req.Header.Get("Content-Type"), "application/grpc") || wrappedGrpc.IsGrpcWebRequest(req) {
-			wrappedGrpc.ServeHTTP(resp, req)
-			return
-		}
-		router.ServeHTTP(resp, req)
-	})
-
 	var modifiedHandler http.Handler
 	if config.Debug {
-		modifiedHandler = handlers.LoggingHandler(os.Stdout, combinedHandler)
+		modifiedHandler = handlers.LoggingHandler(os.Stdout, router)
 	} else {
-		modifiedHandler = combinedHandler
+		modifiedHandler = router
 	}
 
-	httpServer := http.Server{
+	server := http.Server{
 		Addr:         config.URL,
 		Handler:      modifiedHandler,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Info().Str("url", config.URL).Msg("starting grpc/http combined service")
-	log.Fatal().Err(httpServer.ListenAndServeTLS(config.TLSCertPath, config.TLSKeyPath)).Msg("server exited abnormally")
+	log.Info().Str("url", config.URL).Msg("starting http service")
+	log.Fatal().Err(server.ListenAndServe())
 }
