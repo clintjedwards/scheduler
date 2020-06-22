@@ -75,7 +75,7 @@ func startHTTPService(config *config.Config, storage storage.Engine) {
 	api.RegisterScheduleRoutes(router)
 	api.RegisterSystemRoutes(router)
 
-	// we put frontend last since it serves as a catch-all and
+	// we put frontend routes last since it serves as a catch-all and
 	// mux checks for route matches in the order they are registered
 	if config.Frontend {
 		frontend := frontend.NewFrontend()

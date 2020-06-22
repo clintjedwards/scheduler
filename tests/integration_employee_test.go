@@ -1,49 +1,39 @@
 package tests
 
-// func (info *testHarness) TestAddEmployee(t *testing.T) {
-// 	t.Run("AddEmployee", func(t *testing.T) {
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
 
-// 		request := proto.AddEmployeeRequest{
-// 			Name:      "obama",
-// 			Positions: map[string]bool{},
-// 		}
+	"github.com/clintjedwards/scheduler/api"
+	"github.com/clintjedwards/scheduler/app"
+	"github.com/clintjedwards/scheduler/config"
+	"github.com/clintjedwards/scheduler/storage"
+	"github.com/rs/zerolog/log"
+)
 
-// 		response, err := info.client.AddEmployee(context.Background(), &request)
-// 		require.NoError(t, err)
-// 		require.NotNil(t, response)
-// 		require.NotEmpty(t, response)
-// 		require.NotEmpty(t, response.Employee.Positions)
-// 	})
-// }
+func TestListEmployees(t *testing.T) {
+	config, err := config.FromEnv()
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not get config in order to start services")
+	}
 
-// func (info *testHarness) TestGetEmployee(t *testing.T) {
-// 	t.Run("GetEmployee", func(t *testing.T) {
+	storage, err := app.InitStorage(storage.EngineType(config.Database.Engine))
+	if err != nil {
+		log.Panic().Err(err).Msg("could not init storage")
+	}
 
-// 		request := proto.AddEmployeeRequest{
-// 			Name:      "michelle",
-// 			Positions: map[string]bool{},
-// 		}
+	api := api.NewAPI(nil, storage)
 
-// 		response, err := info.client.AddEmployee(context.Background(), &request)
-// 		if err != nil {
-// 			require.NoError(t, err)
-// 		}
+	req, err := http.NewRequest("GET", "/employees", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 
-// 		expectedResponse := proto.GetEmployeeResponse{
-// 			Employee: &proto.Employee{
-// 				Id:        response.Employee.Id,
-// 				Name:      "michelle",
-// 				Positions: map[string]bool{},
-// 				Created:   response.Employee.Created,
-// 				Modified:  response.Employee.Modified,
-// 			},
-// 		}
-
-// 		getResponse, err := info.client.GetEmployee(context.Background(), &proto.GetEmployeeRequest{
-// 			Id: response.Employee.Id,
-// 		})
-// 		require.NoError(t, err)
-// 		require.NotNil(t, getResponse)
-// 		require.Equal(t, expectedResponse.Employee, getResponse.Employee)
-// 	})
-// }
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(api.ListEmployeesHandler)
+	handler.ServeHTTP(rr, req)
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v; want %v", status, http.StatusOK)
+	}
+}

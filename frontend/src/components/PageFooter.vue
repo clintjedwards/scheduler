@@ -1,11 +1,11 @@
 <template>
   <footer class="footer">
     <div class="page-footer-text fluid-container bg-dark text-secondary">
-      Version v{{ $store.state.appInfo.semver }} | {{ humanizedBuildTime }} ({{
+      Version v{{ $store.state.systemInfo.semver }} | {{ humanizedBuildTime }} ({{
       humanizedRelativeBuildTime
-      }}) | {{ $store.state.appInfo.commit }}
+      }}) | {{ $store.state.systemInfo.commit }}
       <template
-        v-if="$store.state.appInfo.debug_enabled"
+        v-if="$store.state.systemInfo.debug_enabled"
       >| Debug Enabled</template>
     </div>
   </footer>
@@ -22,14 +22,14 @@ export default Vue.extend({
   computed: {
     humanizedBuildTime: function() {
       let build_time = moment(
-        moment.unix(this.$store.state.appInfo.build_time)
+        moment.unix(this.$store.state.systemInfo.build_time)
       ).format("L");
 
       return build_time;
     },
     humanizedRelativeBuildTime: function() {
       let build_time = moment(
-        moment.unix(this.$store.state.appInfo.build_time)
+        moment.unix(this.$store.state.systemInfo.build_time)
       ).fromNow();
 
       return build_time;

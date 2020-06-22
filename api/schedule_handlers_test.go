@@ -21,8 +21,9 @@ func (info *testHarness) setup() {
 
 	mockAPI := NewAPI(nil, &memoryStorageEngine)
 	mockAPI.storage.AddEmployee("1", &models.Employee{
-		ID:   "1",
-		Name: "Clint",
+		ID:     "1",
+		Name:   "Clint",
+		Status: models.EmployeeActive,
 		Positions: map[string]bool{
 			"1": true,
 			"2": true,
@@ -30,8 +31,9 @@ func (info *testHarness) setup() {
 		},
 	})
 	mockAPI.storage.AddEmployee("2", &models.Employee{
-		ID:   "2",
-		Name: "Caroline",
+		ID:     "2",
+		Name:   "Caroline",
+		Status: models.EmployeeActive,
 		Positions: map[string]bool{
 			"1": true,
 			"2": true,
@@ -39,8 +41,9 @@ func (info *testHarness) setup() {
 		},
 	})
 	mockAPI.storage.AddEmployee("3", &models.Employee{
-		ID:   "3",
-		Name: "Shane",
+		ID:     "3",
+		Name:   "Shane",
+		Status: models.EmployeeActive,
 		Positions: map[string]bool{
 			"1": true,
 			"2": true,
@@ -198,7 +201,7 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 }
 
 func (info *testHarness) TestGetEligibleEmployees(t *testing.T) {
-	t.Run("GetEligibleEmployees", func(t *testing.T) {
+	t.Run("GetEligibleEmployeesFilter", func(t *testing.T) {
 		employees, err := info.mockAPI.getEmployees([]string{"1", "2"})
 
 		require.NoError(t, err)
@@ -206,6 +209,17 @@ func (info *testHarness) TestGetEligibleEmployees(t *testing.T) {
 		require.Contains(t, employees, "1", "")
 		require.Contains(t, employees, "2", "")
 		require.NotContains(t, employees, "3", "")
+		require.NotContains(t, employees, "4", "")
+	})
+
+	t.Run("GetEligibleEmployeesActive", func(t *testing.T) {
+		employees, err := info.mockAPI.getEmployees([]string{})
+
+		require.NoError(t, err)
+		require.NotNil(t, employees)
+		require.Contains(t, employees, "1", "")
+		require.Contains(t, employees, "2", "")
+		require.Contains(t, employees, "3", "")
 		require.NotContains(t, employees, "4", "")
 	})
 }

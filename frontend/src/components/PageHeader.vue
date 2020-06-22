@@ -17,14 +17,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { SchedulerClientWrapper } from "../scheduler_client_wrapper";
 
-let client: SchedulerClientWrapper;
-client = new SchedulerClientWrapper();
-
-export default Vue.extend({
-  methods: {}
-});
+export default Vue.extend({});
 </script>
 
 <style scoped></style>

@@ -176,22 +176,22 @@ func (api *API) ListSchedulesHandler(w http.ResponseWriter, r *http.Request) {
 	schedules, err := api.storage.GetAllSchedules()
 	if err != nil {
 		log.Error().Err(err).Msg("failed to retrieve schedules")
-		sendResponse(w, http.StatusBadGateway, nil, fmt.Errorf("failed to retrieve schedules"))
+		sendResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
-	sendResponse(w, http.StatusOK, schedules, nil)
+	sendResponse(w, http.StatusOK, schedules)
 }
 
-// AddSchedule adds a new schedule to the scheduler service
-func (api *API) AddSchedule(w http.ResponseWriter, r *http.Request) {
+// GenerateScheduleHandler adds a new schedule to the scheduler service
+func (api *API) GenerateScheduleHandler(w http.ResponseWriter, r *http.Request) {
 
 	newSchedule := models.Schedule{}
 
 	err := parseJSON(r.Body, &newSchedule)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not parse json request")
-		sendResponse(w, http.StatusBadRequest, nil, fmt.Errorf("could not parse json request: %v", err))
+		sendErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
 	defer r.Body.Close()
@@ -199,40 +199,40 @@ func (api *API) AddSchedule(w http.ResponseWriter, r *http.Request) {
 	newSchedule.ID = string(utils.GenerateRandString(api.config.IDLength))
 	err = api.generateSchedule(&newSchedule)
 	if err != nil {
-		sendResponse(w, http.StatusBadGateway, nil, err)
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
 	err = api.storage.AddSchedule(newSchedule.ID, &newSchedule)
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityExists) {
-			sendResponse(w, http.StatusConflict, nil, utils.ErrEntityExists)
+			sendErrResponse(w, http.StatusConflict, err)
 			return
 		}
 		log.Error().Err(err).Msg("could not add schedule")
-		sendResponse(w, http.StatusBadGateway, nil, fmt.Errorf("could not add schedule"))
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
 	log.Info().Interface("schedule", newSchedule).Msg("created new schedule")
-	sendResponse(w, http.StatusOK, newSchedule, nil)
+	sendResponse(w, http.StatusOK, newSchedule)
 }
 
-// GetSchedule returns a single schedule by id
-func (api *API) GetSchedule(w http.ResponseWriter, r *http.Request) {
+// GetScheduleHandler returns a single schedule by id
+func (api *API) GetScheduleHandler(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
 	schedule, err := api.storage.GetSchedule(vars["id"])
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityNotFound) {
-			sendResponse(w, http.StatusNotFound, nil, utils.ErrEntityNotFound)
+			sendErrResponse(w, http.StatusNotFound, err)
 			return
 		}
 		log.Error().Err(err).Msg("could not get schedule")
-		sendResponse(w, http.StatusBadGateway, nil, utils.ErrEntityNotFound)
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
-	sendResponse(w, http.StatusOK, schedule, nil)
+	sendResponse(w, http.StatusOK, schedule)
 }

@@ -4,26 +4,33 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+
+	"github.com/rs/zerolog/log"
 )
 
-// sendResponse formats and sends a message to supplied writer in json format
-func sendResponse(w http.ResponseWriter, httpStatusCode int, data interface{}, httpErr error) error {
-	w.Header().Set("Content-Type", "application/json")
+// sendResponse converts raw objects and parameters to a json response
+// and passes it to a provided writer.
+func sendResponse(w http.ResponseWriter, httpStatusCode int, payload interface{}) {
+	w.WriteHeader(httpStatusCode)
 
-	var errStr string
-	if httpErr != nil {
-		errStr = httpErr.Error()
-	}
-
-	err := json.NewEncoder(w).Encode(struct {
-		StatusText string      `json:"status_text"`
-		Data       interface{} `json:"data"`
-		Error      string      `json:"error"`
-	}{http.StatusText(httpStatusCode), data, errStr})
+	enc := json.NewEncoder(w)
+	err := enc.Encode(payload)
 	if err != nil {
-		return err
+		log.Error().Err(err).Msgf("could not encode json response: %v", err)
 	}
-	return nil
+}
+
+// sendErrResponse converts raw objects and parameters to a json response specifically for erorrs
+// and passes it to a provided writer. The creation of a separate function for just errors,
+// is due to how they are handled differently from other payload types.
+func sendErrResponse(w http.ResponseWriter, httpStatusCode int, appErr error) {
+	w.WriteHeader(httpStatusCode)
+
+	enc := json.NewEncoder(w)
+	err := enc.Encode(map[string]string{"err": appErr.Error()})
+	if err != nil {
+		log.Error().Err(err).Msgf("could not encode json response: %v", err)
+	}
 }
 
 // parseJSON parses the given json request into interface

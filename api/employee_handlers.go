@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -20,11 +19,11 @@ func (api *API) ListEmployeesHandler(w http.ResponseWriter, r *http.Request) {
 	employees, err := api.storage.GetAllEmployees()
 	if err != nil {
 		log.Error().Err(err).Msg("failed to retrieve employees")
-		sendResponse(w, http.StatusBadGateway, nil, errors.New("failed to retrieve employees"))
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
-	sendResponse(w, http.StatusOK, employees, nil)
+	sendResponse(w, http.StatusOK, employees)
 }
 
 // AddEmployeeHandler adds a new employee to the scheduler service
@@ -35,7 +34,7 @@ func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	err := parseJSON(r.Body, &newEmployee)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not parse json request")
-		sendResponse(w, http.StatusBadRequest, nil, fmt.Errorf("could not parse json request: %v", err))
+		sendErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
 	defer r.Body.Close()
@@ -47,16 +46,16 @@ func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	err = api.storage.AddEmployee(newEmployee.ID, &newEmployee)
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityExists) {
-			sendResponse(w, http.StatusConflict, nil, utils.ErrEntityExists)
+			sendErrResponse(w, http.StatusConflict, err)
 			return
 		}
 		log.Error().Err(err).Msg("could not add employee")
-		sendResponse(w, http.StatusBadGateway, nil, errors.New("could not add employee"))
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
 	log.Info().Interface("employee", newEmployee).Msg("created new employee")
-	sendResponse(w, http.StatusOK, newEmployee, nil)
+	sendResponse(w, http.StatusCreated, newEmployee)
 }
 
 // GetEmployeeHandler returns a single employee by id
@@ -67,13 +66,13 @@ func (api *API) GetEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	employee, err := api.storage.GetEmployee(vars["id"])
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityNotFound) {
-			sendResponse(w, http.StatusNotFound, nil, utils.ErrEntityNotFound)
+			http.Error(w, "employee not found", http.StatusNotFound)
 			return
 		}
 		log.Error().Err(err).Msg("could not get employee")
-		sendResponse(w, http.StatusBadGateway, nil, utils.ErrEntityNotFound)
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
-	sendResponse(w, http.StatusOK, employee, nil)
+	sendResponse(w, http.StatusOK, employee)
 }

@@ -1,41 +1,29 @@
 import Vue from "vue";
 import Vuex, { MutationTree } from "vuex";
-import { Employees, Positions, SystemInfo } from "./scheduler_client_wrapper";
 
 Vue.use(Vuex);
 
 interface RootState {
   isInitialized: boolean;
-  appInfo: SystemInfo;
-  employees: Employees;
-  positions: Positions;
+  systemInfo: Object;
+  employees: Object;
 }
 
 const state: RootState = {
   isInitialized: false,
-  appInfo: {
-    build_time: "",
-    commit: "",
-    debug_enabled: true,
-    frontend_enabled: false,
-    semver: "",
-  },
+  systemInfo: {},
   employees: {},
-  positions: {},
 };
 
 const mutations: MutationTree<RootState> = {
   setIsInitialized(state) {
     state.isInitialized = true;
   },
-  setAppInfo(state, systemInfo: SystemInfo) {
-    state.appInfo = systemInfo;
+  setSystemInfo(state, systemInfo: Object) {
+    state.systemInfo = systemInfo;
   },
-  setEmployees(state, employees: Employees) {
+  setEmployees(state, employees: Object) {
     state.employees = employees;
-  },
-  setPositions(state, positions: Positions) {
-    state.positions = positions;
   },
 };
 

@@ -5,19 +5,14 @@ import Vue from "vue";
 import PageFooter from "./components/PageFooter.vue";
 import PageHeader from "./components/PageHeader.vue";
 import router from "./router";
-import {
-  Employees,
-  Positions,
-  SchedulerClientWrapper,
-  SystemInfo,
-} from "./scheduler_client_wrapper";
+import { Employees, SchedulerClient, SystemInfo } from "./scheduler_client";
 import store from "./store";
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
-let client: SchedulerClientWrapper;
-client = new SchedulerClientWrapper();
+let client: SchedulerClient;
+client = new SchedulerClient();
 
 router.beforeEach((to, from, next) => {
   if (store.state.isInitialized) {
@@ -26,11 +21,11 @@ router.beforeEach((to, from, next) => {
   }
 
   var employeesPromise = client.listEmployees();
-  var positionsPromise = client.listPositions();
+  // var positionsPromise = client.listPositions();
 
-  Promise.all([employeesPromise, positionsPromise]).then((values) => {
+  Promise.all([employeesPromise]).then((values) => {
     store.commit("setEmployees", values[0]);
-    store.commit("setPositions", values[1]);
+    // store.commit("setPositions", values[1]);
     store.commit("setIsInitialized");
     next();
     return;
@@ -47,16 +42,16 @@ const app = new Vue({
   },
   mounted() {
     client.getSystemInfo().then((systemInfo: SystemInfo | undefined) => {
-      store.commit("setAppInfo", systemInfo);
+      store.commit("setSystemInfo", systemInfo);
     });
 
     setInterval(() => {
       client.listEmployees().then((employees: Employees | undefined) => {
         store.commit("setEmployees", employees);
       });
-      client.listPositions().then((positions: Positions | undefined) => {
-        store.commit("setPositions", positions);
-      });
+      // client.listPositions().then((positions: Positions | undefined) => {
+      //   store.commit("setPositions", positions);
+      // });
     }, 180000); //3mins
   },
 });

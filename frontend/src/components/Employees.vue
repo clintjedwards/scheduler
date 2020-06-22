@@ -8,7 +8,7 @@
     </div>
     <div class="content">
       <ul class="list-unstyled">
-        <b-media v-for="employee in employeeList" :key="employee.id" tag="li">
+        <b-media v-for="employee in employees" :key="employee.id" tag="li">
           <template v-slot:aside>
             <b-img blank blank-color="#abc" width="64" alt="placeholder"></b-img>
           </template>
@@ -24,35 +24,30 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Employee } from "../scheduler_message_pb";
+import { Employees, Employee } from "../scheduler_client";
 
 export default Vue.extend({
   components: {},
   data: function() {
     return {
-      employeeList: [] as Employee.AsObject[]
+      employees: [] as Employee[]
     };
   },
   mounted() {
-    this.employeeMapToList();
+    let employees: { [key: string]: Employee } = this.$store.state.employees;
   },
   created() {
     this.$store.subscribe((mutation, state) => {
       if (mutation.type === "setEmployees") {
-        this.employeeMapToList();
+        let employees: { [key: string]: Employee } = this.$store.state
+          .employees;
+        let newEmployeeList: Employee[] = [];
+        for (const [key, value] of Object.entries(employees)) {
+          newEmployeeList.push(value);
+        }
+        this.employees = newEmployeeList;
       }
     });
-  },
-  methods: {
-    employeeMapToList: function() {
-      let employees: { [key: string]: Employee } = this.$store.state.employees;
-      let newEmployeeList: Employee.AsObject[] = [];
-
-      for (const [key, value] of Object.entries(employees)) {
-        newEmployeeList.push(value.toObject());
-      }
-      this.employeeList = newEmployeeList;
-    }
   }
 });
 </script>

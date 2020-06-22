@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/clintjedwards/scheduler/models"
@@ -19,22 +18,22 @@ func (api *API) ListPositionsHandler(w http.ResponseWriter, r *http.Request) {
 	positions, err := api.storage.GetAllPositions()
 	if err != nil {
 		log.Error().Err(err).Msg("failed to retrieve positions")
-		sendResponse(w, http.StatusBadGateway, nil, fmt.Errorf("failed to retrieve positions"))
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
-	sendResponse(w, http.StatusOK, positions, nil)
+	sendResponse(w, http.StatusOK, positions)
 }
 
-// AddPosition adds a new position to the scheduler service
-func (api *API) AddPosition(w http.ResponseWriter, r *http.Request) {
+// AddPositionHandler adds a new position to the scheduler service
+func (api *API) AddPositionHandler(w http.ResponseWriter, r *http.Request) {
 
 	newPosition := models.Position{}
 
 	err := parseJSON(r.Body, &newPosition)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not parse json request")
-		sendResponse(w, http.StatusBadRequest, nil, fmt.Errorf("could not parse json request: %v", err))
+		sendErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
 	defer r.Body.Close()
@@ -44,33 +43,33 @@ func (api *API) AddPosition(w http.ResponseWriter, r *http.Request) {
 	err = api.storage.AddPosition(newPosition.ID, &newPosition)
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityExists) {
-			sendResponse(w, http.StatusConflict, nil, utils.ErrEntityExists)
+			sendErrResponse(w, http.StatusConflict, err)
 			return
 		}
 		log.Error().Err(err).Msg("could not add position")
-		sendResponse(w, http.StatusBadGateway, nil, fmt.Errorf("could not add position"))
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
 	log.Info().Interface("position", newPosition).Msg("created new position")
-	sendResponse(w, http.StatusOK, newPosition, nil)
+	sendResponse(w, http.StatusOK, newPosition)
 }
 
-// GetPosition returns a single position by id
-func (api *API) GetPosition(w http.ResponseWriter, r *http.Request) {
+// GetPositionHandler returns a single position by id
+func (api *API) GetPositionHandler(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
 	position, err := api.storage.GetPosition(vars["id"])
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityNotFound) {
-			sendResponse(w, http.StatusNotFound, nil, utils.ErrEntityNotFound)
+			sendErrResponse(w, http.StatusNotFound, err)
 			return
 		}
 		log.Error().Err(err).Msg("could not get position")
-		sendResponse(w, http.StatusBadGateway, nil, utils.ErrEntityNotFound)
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
-	sendResponse(w, http.StatusOK, position, nil)
+	sendResponse(w, http.StatusOK, position)
 }

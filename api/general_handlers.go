@@ -9,13 +9,13 @@ import (
 
 var appVersion = "v0.0.dev_<build_time>_<commit>"
 
-// GetSystemInfo returns system information and health
-func (api *API) GetSystemInfo(w http.ResponseWriter, r *http.Request) {
+// GetSystemInfoHandler returns system information and health
+func (api *API) GetSystemInfoHandler(w http.ResponseWriter, r *http.Request) {
 
 	info, err := version.Parse(appVersion)
 	if err != nil {
 		log.Error().Err(err).Msg("could not parse version string")
-		sendResponse(w, http.StatusBadGateway, nil, err)
+		sendErrResponse(w, http.StatusBadGateway, err)
 		return
 	}
 
@@ -33,5 +33,5 @@ func (api *API) GetSystemInfo(w http.ResponseWriter, r *http.Request) {
 		Semver:          info.Semver,
 	}
 
-	sendResponse(w, http.StatusOK, systemInfo, nil)
+	sendResponse(w, http.StatusOK, systemInfo)
 }
