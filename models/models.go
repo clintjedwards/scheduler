@@ -72,5 +72,5 @@ type Schedule struct {
 	// An empty filter will assume all available employees can be scheduled.
 	EmployeeFilter []string `json:"employee_filter"`
 	// TimeTable is the resulting schedule that has been generated with the other settings
-	TimeTable map[string]map[string][]Shift
+	TimeTable map[string]map[string][]Shift `json:"time_table"`
 }

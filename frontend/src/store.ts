@@ -7,12 +7,16 @@ interface RootState {
   isInitialized: boolean;
   systemInfo: Object;
   employees: Object;
+  positions: Object;
+  schedules: Object;
 }
 
 const state: RootState = {
   isInitialized: false,
   systemInfo: {},
   employees: {},
+  positions: {},
+  schedules: {},
 };
 
 const mutations: MutationTree<RootState> = {
@@ -24,6 +28,12 @@ const mutations: MutationTree<RootState> = {
   },
   setEmployees(state, employees: Object) {
     state.employees = employees;
+  },
+  setPositions(state, positions: Object) {
+    state.positions = positions;
+  },
+  setSchedules(state, schedules: Object) {
+    state.schedules = schedules;
   },
 };
 

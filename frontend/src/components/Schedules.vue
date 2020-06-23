@@ -24,37 +24,32 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Employee } from "../scheduler_message_pb";
+import { Schedules, Schedule } from "../scheduler_client";
 
-export default Vue.extend({
-  components: {},
-  data: function() {
-    return {
-      employeeList: [] as Employee.AsObject[]
-    };
-  },
-  mounted() {
-    this.employeeMapToList();
-  },
-  created() {
-    this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "setEmployees") {
-        this.employeeMapToList();
-      }
-    });
-  },
-  methods: {
-    employeeMapToList: function() {
-      let employees: { [key: string]: Employee } = this.$store.state.employees;
-      let newEmployeeList: Employee.AsObject[] = [];
-
-      for (const [key, value] of Object.entries(employees)) {
-        newEmployeeList.push(value.toObject());
-      }
-      this.employeeList = newEmployeeList;
-    }
-  }
-});
+// export default Vue.extend({
+//   components: {},
+//   data: function() {
+//     return {
+//       positions: [] as Position[]
+//     };
+//   },
+//   mounted() {
+//     this.positions = this.$store.state.positions;
+//   },
+//   created() {
+//     this.$store.subscribe((mutation, state) => {
+//       if (mutation.type === "setPositions") {
+//         let positions: { [key: string]: Position } = this.$store.state
+//           .positions;
+//         let newPositionList: Position[] = [];
+//         for (const [key, value] of Object.entries(positions)) {
+//           newPositionList.push(value);
+//         }
+//         this.positions = newPositionList;
+//       }
+//     });
+//   }
+// });
 </script>
 
 <style scoped>

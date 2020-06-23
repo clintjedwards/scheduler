@@ -197,6 +197,7 @@ func (api *API) GenerateScheduleHandler(w http.ResponseWriter, r *http.Request) 
 	defer r.Body.Close()
 
 	newSchedule.ID = string(utils.GenerateRandString(api.config.IDLength))
+	newSchedule.TimeTable = map[string]map[string][]models.Shift{}
 	err = api.generateSchedule(&newSchedule)
 	if err != nil {
 		sendErrResponse(w, http.StatusBadGateway, err)
@@ -215,7 +216,7 @@ func (api *API) GenerateScheduleHandler(w http.ResponseWriter, r *http.Request) 
 	}
 
 	log.Info().Interface("schedule", newSchedule).Msg("created new schedule")
-	sendResponse(w, http.StatusOK, newSchedule)
+	sendResponse(w, http.StatusCreated, newSchedule)
 }
 
 // GetScheduleHandler returns a single schedule by id

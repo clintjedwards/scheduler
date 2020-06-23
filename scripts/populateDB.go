@@ -1,309 +1,352 @@
 package main
 
-// import (
-// 	"context"
-// 	"fmt"
-// 	"log"
-// 	"os"
-// 	"strconv"
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+	"strconv"
+	"time"
 
-// 	"github.com/clintjedwards/scheduler/proto"
-// 	"github.com/icrowley/fake"
-// 	"google.golang.org/grpc"
-// 	"google.golang.org/grpc/credentials"
-// )
+	"github.com/clintjedwards/scheduler/models"
+	"github.com/icrowley/fake"
+)
 
-// type harness struct {
-// 	positionsList []string
-// 	employeesList []string
-// 	conn          *grpc.ClientConn
-// }
+type harness struct {
+	positionsList []string
+	employeesList []string
+}
 
-// func (h *harness) setup() {
+func (h *harness) setup() {
+}
 
-// 	const certPath string = "./localhost.crt"
+func createEmployee(employee models.Employee) string {
 
-// 	creds, err := credentials.NewClientTLSFromFile(certPath, "")
-// 	if err != nil {
-// 		log.Fatalf("failed to get certificates: %v", err)
-// 	}
+	requestBody, err := json.Marshal(employee)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-// 	var opts []grpc.DialOption
-// 	opts = append(opts, grpc.WithTransportCredentials(creds))
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+		Timeout: timeout,
+	}
 
-// 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", "localhost", "8080"), opts...)
-// 	if err != nil {
-// 		log.Fatalf("could not connect: %v", err)
-// 	}
+	request, err := http.NewRequest("POST", "http://localhost:8080/api/employees", bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Content-type", "application/json")
 
-// 	h.conn = conn
-// }
+	resp, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer resp.Body.Close()
 
-// func (h *harness) cleanup() {
-// 	defer h.conn.Close()
-// }
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-// func (h *harness) createEmployees(num int) {
+	response := models.Employee{}
 
-// 	positions := map[string]bool{}
-// 	for _, id := range h.positionsList {
-// 		positions[id] = true
-// 	}
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-// 	for i := 0; i < num; i++ {
-// 		newEmployee := &proto.AddEmployeeRequest{
-// 			Name:      fake.FullName(),
-// 			Notes:     fake.WordsN(30),
-// 			Positions: positions,
-// 		}
+	return response.ID
+}
 
-// 		client := proto.NewSchedulerAPIClient(h.conn)
+func (h *harness) createEmployees(num int) {
 
-// 		response, err := client.AddEmployee(context.Background(), newEmployee)
-// 		if err != nil {
-// 			log.Fatalf("could not create employee: %v", err)
-// 		}
+	positions := map[string]bool{}
+	for _, id := range h.positionsList {
+		positions[id] = true
+	}
 
-// 		h.employeesList = append(h.employeesList, response.Employee.Id)
-// 		log.Printf("created employee %s", newEmployee.Name)
-// 	}
-// }
+	for i := 0; i < num; i++ {
+		newEmployee := models.Employee{
+			Name:      fake.FullName(),
+			Notes:     fake.WordsN(30),
+			Status:    models.EmployeeActive,
+			Positions: positions,
+		}
 
-// func (h *harness) createPositions() {
-// 	positions := []proto.Position{
-// 		{
-// 			PrimaryName:   "Baking",
-// 			SecondaryName: "Shaping",
-// 			Description:   "Shaping is harder than mixing.",
-// 		},
-// 		{
-// 			PrimaryName:   "Baking",
-// 			SecondaryName: "Mixing",
-// 			Description:   "Nobody with any self respect wants to work in mixing.",
-// 		},
-// 		{
-// 			PrimaryName:   "Retail",
-// 			SecondaryName: "Line/Greeter",
-// 			Description:   "Usually our most cheerful and useless employee.",
-// 		},
-// 		{
-// 			PrimaryName:   "Retail",
-// 			SecondaryName: "Deliveries",
-// 			Description:   "Pleasing tastebuds one ubereats pickup at a time.",
-// 		},
-// 		{
-// 			PrimaryName:   "Retail",
-// 			SecondaryName: "General",
-// 			Description:   "For the non-specialist types",
-// 		},
-// 		{
-// 			PrimaryName:   "Retail",
-// 			SecondaryName: "Barista",
-// 			Description:   "Who unironically comes to a bakery for coffee? Just go to starbucks like a real person",
-// 		},
-// 		{
-// 			PrimaryName:   "Retail",
-// 			SecondaryName: "Cookie Baking",
-// 			Description:   "Demoted from being an actual baker",
-// 		},
-// 		{
-// 			PrimaryName: "Porter",
-// 			Description: "Demoted from being an actual employee",
-// 		},
-// 	}
+		id := createEmployee(newEmployee)
 
-// 	for _, position := range positions {
-// 		newPosition := &proto.AddPositionRequest{
-// 			PrimaryName:   position.PrimaryName,
-// 			SecondaryName: position.SecondaryName,
-// 			Description:   position.Description,
-// 		}
+		h.employeesList = append(h.employeesList, id)
+		log.Printf("created employee %s", newEmployee.Name)
+	}
+}
 
-// 		client := proto.NewSchedulerAPIClient(h.conn)
-// 		response, err := client.AddPosition(context.Background(), newPosition)
-// 		if err != nil {
-// 			log.Fatalf("could not create position: %v", err)
-// 		}
-// 		h.positionsList = append(h.positionsList, response.Position.Id)
-// 		log.Printf("created position %s", newPosition.PrimaryName)
-// 	}
-// }
+func createPosition(position models.Position) string {
 
-// func (h *harness) createSchedule() {
+	requestBody, err := json.Marshal(position)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-// 	position1 := h.positionsList[0]
-// 	position2 := h.positionsList[1]
-// 	position3 := h.positionsList[2]
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+		Timeout: timeout,
+	}
 
-// 	scheduleSettings := &proto.GenerateScheduleRequest{
-// 		Start:          "06-19-1990",
-// 		Length:         7,
-// 		EmployeeFilter: []string{},
-// 		Program: &proto.Program{
-// 			Monday: &proto.PositionShiftMap{
-// 				PositionShiftMap: map[string]*proto.Shifts{
-// 					position1: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position2: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position3: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Tuesday: &proto.PositionShiftMap{
-// 				PositionShiftMap: map[string]*proto.Shifts{
-// 					position1: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position2: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position3: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Wednesday: &proto.PositionShiftMap{
-// 				PositionShiftMap: map[string]*proto.Shifts{
-// 					position1: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position2: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position3: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Thursday: &proto.PositionShiftMap{
-// 				PositionShiftMap: map[string]*proto.Shifts{
-// 					position1: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position2: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position3: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 			Friday: &proto.PositionShiftMap{
-// 				PositionShiftMap: map[string]*proto.Shifts{
-// 					position1: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position2: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 					position3: {
-// 						Shifts: []*proto.Shift{
-// 							{
-// 								StartTime: "0800",
-// 								EndTime:   "1300",
-// 							},
-// 						},
-// 					},
-// 				},
-// 			},
-// 		},
-// 	}
+	request, err := http.NewRequest("POST", "http://localhost:8080/api/positions", bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Content-type", "application/json")
 
-// 	client := proto.NewSchedulerAPIClient(h.conn)
-// 	_, err := client.GenerateSchedule(context.Background(), scheduleSettings)
-// 	if err != nil {
-// 		log.Fatalf("could not create schedule: %v", err)
-// 	}
-// 	log.Println("created schedule")
-// }
+	resp, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer resp.Body.Close()
 
-// func main() {
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-// 	h := harness{}
-// 	h.setup()
+	response := models.Position{}
 
-// 	if len(os.Args) < 3 {
-// 		fmt.Println("Usage: go run populateDB.go <numEmployees>")
-// 		os.Exit(1)
-// 	}
-// 	numEmployees, _ := strconv.Atoi(os.Args[1])
-// 	h.createPositions()
-// 	h.createEmployees(numEmployees)
-// 	h.createSchedule()
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-// 	h.cleanup()
-// }
+	return response.ID
+}
+
+func (h *harness) createPositions() {
+	positions := []models.Position{
+		{
+			PrimaryName:   "Baking",
+			SecondaryName: "Shaping",
+			Description:   "Shaping is harder than mixing.",
+		},
+		{
+			PrimaryName:   "Baking",
+			SecondaryName: "Mixing",
+			Description:   "Nobody with any self respect wants to work in mixing.",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Line/Greeter",
+			Description:   "Usually our most cheerful and useless employee.",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Deliveries",
+			Description:   "Pleasing tastebuds one ubereats pickup at a time.",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "General",
+			Description:   "For the non-specialist types",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Barista",
+			Description:   "Who unironically comes to a bakery for coffee? Just go to starbucks like a real person",
+		},
+		{
+			PrimaryName:   "Retail",
+			SecondaryName: "Cookie Baking",
+			Description:   "Demoted from being an actual baker",
+		},
+		{
+			PrimaryName: "Porter",
+			Description: "Demoted from being an actual employee",
+		},
+	}
+
+	for _, position := range positions {
+		newPosition := models.Position{
+			PrimaryName:   position.PrimaryName,
+			SecondaryName: position.SecondaryName,
+			Description:   position.Description,
+		}
+
+		id := createPosition(newPosition)
+		h.positionsList = append(h.positionsList, id)
+		log.Printf("created position %s", newPosition.PrimaryName)
+	}
+}
+
+func createSchedule(schedule models.Schedule) string {
+
+	requestBody, err := json.Marshal(schedule)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+		Timeout: timeout,
+	}
+
+	request, err := http.NewRequest("POST", "http://localhost:8080/api/schedules", bytes.NewBuffer(requestBody))
+	if err != nil {
+		log.Fatalln(err)
+	}
+	request.Header.Set("Content-type", "application/json")
+
+	resp, err := client.Do(request)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	response := models.Position{}
+
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return response.ID
+}
+
+func (h *harness) generateSchedule() {
+
+	position1 := h.positionsList[0]
+	position2 := h.positionsList[1]
+	position3 := h.positionsList[2]
+
+	schedule := models.Schedule{
+		Start:          "06-19-1990",
+		End:            "06-27-1990",
+		EmployeeFilter: []string{},
+		Program: models.Program{
+			Monday: map[string][]models.Shift{
+				position1: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position2: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position3: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+			},
+			Tuesday: map[string][]models.Shift{
+				position1: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position2: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position3: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+			},
+			Wednesday: map[string][]models.Shift{
+				position1: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position2: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position3: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+			},
+			Thursday: map[string][]models.Shift{
+				position1: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position2: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position3: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+			},
+			Friday: map[string][]models.Shift{
+				position1: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position2: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+				position3: {
+					{
+						Start: "0800",
+						End:   "1300",
+					},
+				},
+			},
+		},
+	}
+
+	createSchedule(schedule)
+	log.Println("created schedule")
+}
+
+func main() {
+
+	h := harness{}
+	h.setup()
+
+	if len(os.Args) < 3 {
+		fmt.Println("Usage: go run populateDB.go <numEmployees>")
+		os.Exit(1)
+	}
+	numEmployees, _ := strconv.Atoi(os.Args[1])
+	h.createPositions()
+	h.createEmployees(numEmployees)
+	h.generateSchedule()
+}

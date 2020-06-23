@@ -34,7 +34,7 @@ export default Vue.extend({
     };
   },
   mounted() {
-    let employees: { [key: string]: Employee } = this.$store.state.employees;
+    this.employees = this.$store.state.employees;
   },
   created() {
     this.$store.subscribe((mutation, state) => {

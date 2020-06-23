@@ -52,7 +52,7 @@ func (api *API) AddPositionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Info().Interface("position", newPosition).Msg("created new position")
-	sendResponse(w, http.StatusOK, newPosition)
+	sendResponse(w, http.StatusCreated, newPosition)
 }
 
 // GetPositionHandler returns a single position by id
