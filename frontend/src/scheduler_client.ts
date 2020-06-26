@@ -61,7 +61,8 @@ interface Positions {
 }
 
 interface Schedules {
-  [key: string]: Schedule;
+  schedule: Map<string, Schedule>;
+  order: string[];
 }
 
 class SchedulerClient {
@@ -95,7 +96,7 @@ class SchedulerClient {
     return fetch(`${this.url}/api/schedules`).then((res) => res.json());
   }
 
-  getSchedules(id: string) {
+  getSchedule(id: string) {
     return fetch(`${this.url}/api/schedules/${id}`).then((res) => res.json());
   }
 }

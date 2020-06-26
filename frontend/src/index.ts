@@ -9,6 +9,7 @@ import {
   Employees,
   Positions,
   SchedulerClient,
+  Schedules,
   SystemInfo,
 } from "./scheduler_client";
 import store from "./store";
@@ -27,15 +28,18 @@ router.beforeEach((to, from, next) => {
 
   var employeesPromise = client.listEmployees();
   var positionsPromise = client.listPositions();
+  var schedulesPromise = client.listSchedules();
 
-  Promise.all([employeesPromise, positionsPromise]).then((values) => {
-    store.commit("setEmployees", values[0]);
-    store.commit("setPositions", values[1]);
-    //store.commit("setSchedules", values[2]);
-    store.commit("setIsInitialized");
-    next();
-    return;
-  });
+  Promise.all([employeesPromise, positionsPromise, schedulesPromise]).then(
+    (values) => {
+      store.commit("setEmployees", values[0]);
+      store.commit("setPositions", values[1]);
+      store.commit("setSchedules", values[2]);
+      store.commit("setIsInitialized");
+      next();
+      return;
+    }
+  );
 });
 
 const app = new Vue({
@@ -57,6 +61,9 @@ const app = new Vue({
       });
       client.listPositions().then((positions: Positions | undefined) => {
         store.commit("setPositions", positions);
+      });
+      client.listSchedules().then((schedules: Schedules | undefined) => {
+        store.commit("setSchedules", schedules);
       });
     }, 180000); //3mins
   },

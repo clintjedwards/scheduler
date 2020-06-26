@@ -5,9 +5,9 @@
         <b-navbar-brand href="/">
           <img src="/images/schedule_icon_light.svg" width="24" height="24" />
         </b-navbar-brand>
-        <b-nav-item href="/employees">Employees</b-nav-item>
-        <b-nav-item href="/positions">Positions</b-nav-item>
-        <b-nav-item href="#">Schedules</b-nav-item>
+        <b-nav-item to="/employees">Employees</b-nav-item>
+        <b-nav-item to="/positions">Positions</b-nav-item>
+        <b-nav-item to="/schedules">Schedules</b-nav-item>
         <b-nav-item href="#">Placeholder</b-nav-item>
         <b-nav-item href="#">Placeholder</b-nav-item>
       </b-navbar-nav>

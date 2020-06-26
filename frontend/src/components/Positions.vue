@@ -1,21 +1,28 @@
 <template>
   <div class="mt-5 mr-5 ml-5">
-    <h5 class="text-secondary">Configure schedule positions</h5>
-    <div class="float-right pr-5">
-      <button type="button" class="btn btn-dark">Add Position</button>
-    </div>
+    <b-container>
+      <b-row cols="1">
+        <b-col cols="10">
+          <h5 class="text-secondary">Configure employee positions.</h5>
+        </b-col>
+        <b-col cols="2">
+          <button type="button" class="btn btn-dark">Add Position</button>
+        </b-col>
+      </b-row>
+    </b-container>
     <div class="content">
-      <ul class="list-unstyled">
-        <b-media v-for="position in positions" :key="position.id" tag="li">
-          <template v-slot:aside>
-            <b-img blank blank-color="#abc" width="64" alt="placeholder"></b-img>
-          </template>
+      <b-list-group>
+        <b-list-group-item
+          v-for="position in positions"
+          :key="position.id"
+          class="flex-column align-items-start"
+        >
+          <div class="d-flex w-100 justify-content-between"></div>
           <h5 class="mt-0 mb-1">{{position.primary_name}}</h5>
           <h6 class="mt-0 mb-1 pl-3 text-secondary">{{position.secondary_name}}</h6>
-          <p class="mb-0">{{position.description}}</p>
-          <br />
-        </b-media>
-      </ul>
+          <small>{{position.description}}</small>
+        </b-list-group-item>
+      </b-list-group>
     </div>
     <!-- <router-view></router-view> -->
   </div>
@@ -33,7 +40,12 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.positions = this.$store.state.positions;
+    let positions: { [key: string]: Position } = this.$store.state.positions;
+    let newPositionList: Position[] = [];
+    for (const [key, value] of Object.entries(positions)) {
+      newPositionList.push(value);
+    }
+    this.positions = newPositionList;
   },
   created() {
     this.$store.subscribe((mutation, state) => {

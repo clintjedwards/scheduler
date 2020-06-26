@@ -1,22 +1,28 @@
 <template>
   <div class="mt-5 mr-5 ml-5">
-    <h5
-      class="text-secondary"
-    >Configure employee data, unavailability, eligible positions, and more.</h5>
-    <div class="float-right pr-5">
-      <button type="button" class="btn btn-dark">Add Employee</button>
-    </div>
+    <b-container>
+      <b-row cols="1">
+        <b-col cols="10">
+          <h5
+            class="text-secondary"
+          >Configure employee data, unavailability, eligible positions, and more.</h5>
+        </b-col>
+        <b-col cols="2">
+          <button type="button" class="btn btn-dark">Add Employee</button>
+        </b-col>
+      </b-row>
+    </b-container>
     <div class="content">
-      <ul class="list-unstyled">
-        <b-media v-for="employee in employees" :key="employee.id" tag="li">
-          <template v-slot:aside>
-            <b-img blank blank-color="#abc" width="64" alt="placeholder"></b-img>
-          </template>
+      <b-list-group>
+        <b-list-group-item
+          v-for="employee in employees"
+          :key="employee.id"
+          class="flex-column align-items-start"
+        >
           <h5 class="mt-0 mb-1">{{employee.name}}</h5>
           <p class="mb-0">{{employee.notes}}</p>
-          <br />
-        </b-media>
-      </ul>
+        </b-list-group-item>
+      </b-list-group>
     </div>
     <!-- <router-view></router-view> -->
   </div>
@@ -34,7 +40,12 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.employees = this.$store.state.employees;
+    let employees: { [key: string]: Employee } = this.$store.state.employees;
+    let newEmployeeList: Employee[] = [];
+    for (const [key, value] of Object.entries(employees)) {
+      newEmployeeList.push(value);
+    }
+    this.employees = newEmployeeList;
   },
   created() {
     this.$store.subscribe((mutation, state) => {
