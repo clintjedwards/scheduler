@@ -2,10 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Scheduler</title>
 
     <link
@@ -13,17 +10,48 @@
       href="/images/schedule_icon.ico"
       type="image/x-icon"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/css/uikit.min.css"
+    />
+    <link rel="stylesheet" href="/css/main.css" />
 
-    <script src="/javascript/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+    <script defer src="/javascript/scheduler_client.js"></script>
+    <script defer src="/javascript/main.js"></script>
   </head>
   <body>
-    <div id="app">
-      <page-header></page-header>
-
-      <router-view></router-view>
-
-      <br /><br /><br />
-      <page-footer></page-footer>
+    <div class="uk-width-1-2@s sidenav uk-align-left">
+      <ul class="uk-nav-primary uk-nav-parent-icon sidenav-content" uk-nav>
+        <br />
+        <br />
+        <li class="uk-active"><a href="#">Scheduler</a></li>
+        <br />
+        <hr />
+        <br />
+        <li><a href="#">Employees</a></li>
+        <li><a href="#">Positions</a></li>
+        <li><a href="#">Schedules</a></li>
+      </ul>
     </div>
+    <div id="content">
+      <dl class="uk-description-list">
+        <dt>TestTestTestTestTest</dt>
+        <dd>TestTestTestTestTest</dd>
+      </dl>
+      <dl class="uk-description-list">
+        <dt>Test</dt>
+        <dd>Test</dd>
+      </dl>
+      <dl class="uk-description-list">
+        <dt>Test</dt>
+        <dd>Test</dd>
+      </dl>
+    </div>
+    <footer class="footer">
+      <div id="footer-text"></div>
+    </footer>
   </body>
 </html>
