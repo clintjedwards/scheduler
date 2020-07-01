@@ -5,7 +5,8 @@
   width: 100%;
   height: 20px;
   padding-bottom: 5px;
-  background-color: black;
+  background-color: #475c7a;
+  color: #dfe6e9;
 }
 
 header,
@@ -25,10 +26,31 @@ footer {
 .nav-header {
   padding-left: 32px;
   padding-right: 32px;
+  color: #2d3436;
+}
+
+.content {
+  color: #475c7a;
 }
 
 .content-body {
   padding-top: 100px;
   padding-left: 100px;
   padding-right: 100px;
+  color: #475c7a;
 }
+
+.sidenav {
+  background-color: #fcbb6d;
+  color: #2d3436;
+}
+
+.nav-header-hr {
+  margin-left: 32px;
+  margin-right: 32px;
+  border: 1px solid #475c7a;
+}
+
+/* .colors {
+  background-color: #fcbb6d #d8737f #ab6c82 #685d79 #475c7a #dfe6e9 #2d3436;
+} */
