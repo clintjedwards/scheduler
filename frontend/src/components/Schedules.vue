@@ -16,6 +16,7 @@
           v-for="id in schedules.order"
           :key="id"
           class="flex-column align-items-start"
+          @click="navigateToSchedule(id)"
         >
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1">{{schedules.schedules[id].start}} - {{schedules.schedules[id].end}}</h5>
@@ -29,7 +30,7 @@
         </b-list-group-item>
       </b-list-group>
     </div>
-    <!-- <router-view></router-view> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -66,6 +67,11 @@ export default Vue.extend({
         this.schedules.order = order;
       }
     });
+  },
+  methods: {
+    navigateToSchedule: function(scheduleID: string) {
+      this.$router.push("/schedules/" + scheduleID);
+    }
   }
 });
 </script>

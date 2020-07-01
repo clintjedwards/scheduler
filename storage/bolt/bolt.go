@@ -9,8 +9,6 @@ import (
 	"github.com/clintjedwards/scheduler/storage"
 )
 
-//TODO(clintjedwards): make sure bolt is 1-1 with memory package
-
 // Bolt is a representation of the bolt datastore
 type Bolt struct {
 	store *bolt.DB

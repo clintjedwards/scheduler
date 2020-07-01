@@ -16,6 +16,7 @@ import (
 	"github.com/clintjedwards/scheduler/config"
 	"github.com/clintjedwards/scheduler/frontend"
 	"github.com/clintjedwards/scheduler/storage"
+	"github.com/clintjedwards/scheduler/storage/bolt"
 	"github.com/clintjedwards/scheduler/storage/memory"
 )
 
@@ -39,7 +40,7 @@ func StartServices() {
 // InitStorage creates a storage object with the appropriate engine
 func InitStorage(engineType storage.EngineType) (storage.Engine, error) {
 
-	_, err := config.FromEnv()
+	config, err := config.FromEnv()
 	if err != nil {
 		return nil, err
 	}
@@ -47,14 +48,13 @@ func InitStorage(engineType storage.EngineType) (storage.Engine, error) {
 	switch engineType {
 	case storage.BoltEngine:
 
-		// boltStorageEngine, err := bolt.Init(config.Database.Bolt)
-		// if err != nil {
-		// 	return nil, err
-		// }
+		boltStorageEngine, err := bolt.Init(config.Database.Bolt)
+		if err != nil {
+			return nil, err
+		}
 
-		return nil, nil
+		return &boltStorageEngine, nil
 	case storage.MemoryEngine:
-
 		memoryStorageEngine, err := memory.Init()
 		if err != nil {
 			return nil, err
