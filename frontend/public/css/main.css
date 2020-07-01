@@ -1,24 +1,3 @@
-body,
-html {
-  height: 100%;
-}
-
-.sidenav {
-  max-width: 10%;
-  background-color: #ffbe76;
-  height: 100%;
-  margin-bottom: 0;
-}
-
-.sidenav a {
-  color: #dff9fb;
-}
-
-.sidenav-content {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 .footer {
   text-align: center;
   position: fixed;
@@ -29,10 +8,21 @@ html {
   background-color: black;
 }
 
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 50%;
-  margin-top: 30%;
+header,
+#content,
+footer {
+  padding-left: 350px;
+}
+
+@media only screen and (max-width: 992px) {
+  header,
+  #content,
+  footer {
+    padding-left: 0;
+  }
+}
+
+.nav-header {
+  padding-left: 32px;
+  padding-right: 32px;
 }

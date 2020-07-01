@@ -51,4 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
   populateEmployeeList();
   populatePositionList();
   populateScheduleList();
+
+  var elems = document.querySelectorAll(".sidenav");
+  M.Sidenav.init(elems, { menuWidth: 300 });
 });
