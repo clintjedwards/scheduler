@@ -26,3 +26,9 @@ footer {
   padding-left: 32px;
   padding-right: 32px;
 }
+
+.content-body {
+  padding-top: 100px;
+  padding-left: 100px;
+  padding-right: 100px;
+}

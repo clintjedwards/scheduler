@@ -24,6 +24,11 @@
     <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
     <script defer src="/javascript/scheduler_client.js"></script>
     <script defer src="/javascript/main.js"></script>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", function () {
+        renderPositions();
+      });
+    </script>
   </head>
   <body>
     <div id="container">
@@ -43,11 +48,10 @@
       >
 
       <div id="content">
-        <h3>Main page</h3>
-
-        <p>
-          some statistics and quick facts about things would be really cool here
-        </p>
+        <div class="content-header">
+          <h3>Positions</h3>
+        </div>
+        <div id="positions-content-body" class="content-body"></div>
       </div>
     </div>
     <footer class="footer">

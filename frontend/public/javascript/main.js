@@ -1,8 +1,10 @@
 const client = new SchedulerClient();
 
-employees = [];
-schedules = [];
-schedules_order = [];
+let state = {
+  employees: [],
+  schedules: {},
+  schedules_order: [],
+};
 
 function humanizedBuildTime(time) {
   let human_time = moment(moment.unix(time)).format("L");
@@ -31,18 +33,87 @@ function populateSystemInfo() {
 
 function populateEmployeeList() {
   client.listEmployees().then((data) => {
-    employees = data;
+    state.employees = data;
   });
 }
 function populatePositionList() {
   client.listPositions().then((data) => {
-    positions = data;
+    state.positions = data;
   });
 }
 function populateScheduleList() {
   client.listSchedules().then((data) => {
-    schedules = data.Schedules;
-    schedules_order = data.Order;
+    state.schedules = data.Schedules;
+    state.schedules_order = data.Order;
+  });
+}
+
+function renderEmployees() {
+  client.listEmployees().then((data) => {
+    state.employees = data;
+
+    let content = document.getElementById("employees-content-body");
+
+    let innerHTML = "";
+    innerHTML += "<ul class='collection'>";
+
+    for (const [id, employee] of Object.entries(state.employees)) {
+      innerHTML += `<li class="collection-item">
+      <span class="title">${employee.name}</span>
+      </li>`;
+    }
+    innerHTML += "</ul>";
+
+    content.innerHTML = innerHTML;
+  });
+}
+
+function renderPositions() {
+  client.listPositions().then((data) => {
+    state.positions = data;
+
+    let content = document.getElementById("positions-content-body");
+
+    let innerHTML = "";
+    innerHTML += "<ul class='collection'>";
+
+    for (const [id, position] of Object.entries(state.positions)) {
+      innerHTML += `<li class="collection-item">
+        <h5>${position.primary_name}</h5>
+        <p class="grey-text text-darken-1">${position.secondary_name}</p>
+        <p>${position.description}</p>
+        </li>`;
+    }
+    innerHTML += "</ul>";
+
+    content.innerHTML = innerHTML;
+  });
+}
+
+function renderSchedules() {
+  client.listSchedules().then((data) => {
+    state.schedules = data.Schedules;
+    state.schedules_order = data.Order;
+
+    let content = document.getElementById("schedules-content-body");
+
+    let innerHTML = "";
+    innerHTML += "<ul id='schedules-collection' class='collection'>";
+
+    for (let id of state.schedules_order) {
+      innerHTML += `<li id="${id}" class="collection-item">
+          <h6>${state.schedules[id].start} - ${state.schedules[id].end}</h6>
+          </li>`;
+    }
+    innerHTML += "</ul>";
+
+    content.innerHTML = innerHTML;
+
+    document.querySelectorAll(".collection-item").forEach((item) => {
+      item.addEventListener("click", function (e) {
+        console.log(e.currentTarget.id);
+      });
+    });
   });
 }
 
