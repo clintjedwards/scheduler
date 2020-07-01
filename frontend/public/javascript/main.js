@@ -1,3 +1,9 @@
+const client = new SchedulerClient();
+
+employees = [];
+schedules = [];
+schedules_order = [];
+
 function humanizedBuildTime(time) {
   let human_time = moment(moment.unix(time)).format("L");
   return human_time;
@@ -9,13 +15,12 @@ function humanizedRelativeBuildTime(time) {
 }
 
 function populateSystemInfo() {
-  client = new SchedulerClient();
   systemInfo = client.getSystemInfo().then((info) => {
     let footer_text = `Version v${info.semver} | ${humanizedBuildTime(
       info.build_time
     )} (${humanizedRelativeBuildTime(info.build_time)}) | ${info.commit}`;
 
-    if (info.debug) {
+    if (info.debug_enabled) {
       footer_text += " | Debug Enabled";
     }
 
@@ -24,8 +29,26 @@ function populateSystemInfo() {
   });
 }
 
-function populateEmployees() {}
+function populateEmployeeList() {
+  client.listEmployees().then((data) => {
+    employees = data;
+  });
+}
+function populatePositionList() {
+  client.listPositions().then((data) => {
+    positions = data;
+  });
+}
+function populateScheduleList() {
+  client.listSchedules().then((data) => {
+    schedules = data.Schedules;
+    schedules_order = data.Order;
+  });
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   populateSystemInfo();
+  populateEmployeeList();
+  populatePositionList();
+  populateScheduleList();
 });
