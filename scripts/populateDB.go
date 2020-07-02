@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/icrowley/fake"
 )
 
@@ -23,7 +23,7 @@ type harness struct {
 func (h *harness) setup() {
 }
 
-func createEmployee(employee models.Employee) string {
+func createEmployee(employee model.Employee) string {
 
 	requestBody, err := json.Marshal(employee)
 	if err != nil {
@@ -52,7 +52,7 @@ func createEmployee(employee models.Employee) string {
 		log.Fatalln(err)
 	}
 
-	response := models.Employee{}
+	response := model.Employee{}
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
@@ -70,10 +70,10 @@ func (h *harness) createEmployees(num int) {
 	}
 
 	for i := 0; i < num; i++ {
-		newEmployee := models.Employee{
+		newEmployee := model.Employee{
 			Name:      fake.FullName(),
 			Notes:     fake.WordsN(30),
-			Status:    models.EmployeeActive,
+			Status:    model.EmployeeActive,
 			Positions: positions,
 		}
 
@@ -84,7 +84,7 @@ func (h *harness) createEmployees(num int) {
 	}
 }
 
-func createPosition(position models.Position) string {
+func createPosition(position model.Position) string {
 
 	requestBody, err := json.Marshal(position)
 	if err != nil {
@@ -113,7 +113,7 @@ func createPosition(position models.Position) string {
 		log.Fatalln(err)
 	}
 
-	response := models.Position{}
+	response := model.Position{}
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
@@ -124,7 +124,7 @@ func createPosition(position models.Position) string {
 }
 
 func (h *harness) createPositions() {
-	positions := []models.Position{
+	positions := []model.Position{
 		{
 			PrimaryName:   "Baking",
 			SecondaryName: "Shaping",
@@ -167,7 +167,7 @@ func (h *harness) createPositions() {
 	}
 
 	for _, position := range positions {
-		newPosition := models.Position{
+		newPosition := model.Position{
 			PrimaryName:   position.PrimaryName,
 			SecondaryName: position.SecondaryName,
 			Description:   position.Description,
@@ -179,7 +179,7 @@ func (h *harness) createPositions() {
 	}
 }
 
-func createSchedule(schedule models.Schedule) string {
+func createSchedule(schedule model.Schedule) string {
 
 	requestBody, err := json.Marshal(schedule)
 	if err != nil {
@@ -208,7 +208,7 @@ func createSchedule(schedule models.Schedule) string {
 		log.Fatalln(err)
 	}
 
-	response := models.Position{}
+	response := model.Position{}
 
 	err = json.Unmarshal(body, &response)
 	if err != nil {
@@ -224,12 +224,12 @@ func (h *harness) generateSchedule() {
 	position2 := h.positionsList[1]
 	position3 := h.positionsList[2]
 
-	schedule := models.Schedule{
+	schedule := model.Schedule{
 		Start:          "06-19-1990",
 		End:            "06-27-1990",
 		EmployeeFilter: []string{},
-		Program: models.Program{
-			Monday: map[string][]models.Shift{
+		Program: model.Program{
+			Monday: map[string][]model.Shift{
 				position1: {
 					{
 						Start: "0800",
@@ -249,7 +249,7 @@ func (h *harness) generateSchedule() {
 					},
 				},
 			},
-			Tuesday: map[string][]models.Shift{
+			Tuesday: map[string][]model.Shift{
 				position1: {
 					{
 						Start: "0800",
@@ -269,7 +269,7 @@ func (h *harness) generateSchedule() {
 					},
 				},
 			},
-			Wednesday: map[string][]models.Shift{
+			Wednesday: map[string][]model.Shift{
 				position1: {
 					{
 						Start: "0800",
@@ -289,7 +289,7 @@ func (h *harness) generateSchedule() {
 					},
 				},
 			},
-			Thursday: map[string][]models.Shift{
+			Thursday: map[string][]model.Shift{
 				position1: {
 					{
 						Start: "0800",
@@ -309,7 +309,7 @@ func (h *harness) generateSchedule() {
 					},
 				},
 			},
-			Friday: map[string][]models.Shift{
+			Friday: map[string][]model.Shift{
 				position1: {
 					{
 						Start: "0800",

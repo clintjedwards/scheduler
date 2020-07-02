@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
@@ -29,7 +29,7 @@ func (api *API) ListEmployeesHandler(w http.ResponseWriter, r *http.Request) {
 // AddEmployeeHandler adds a new employee to the scheduler service
 func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
-	newEmployee := models.Employee{}
+	newEmployee := model.Employee{}
 
 	err := parseJSON(r.Body, &newEmployee)
 	if err != nil {

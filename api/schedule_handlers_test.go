@@ -3,7 +3,7 @@ package api
 import (
 	"testing"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage/memory"
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
@@ -20,37 +20,37 @@ func (info *testHarness) setup() {
 	}
 
 	mockAPI := NewAPI(nil, &memoryStorageEngine)
-	mockAPI.storage.AddEmployee("1", &models.Employee{
+	mockAPI.storage.AddEmployee("1", &model.Employee{
 		ID:     "1",
 		Name:   "Clint",
-		Status: models.EmployeeActive,
+		Status: model.EmployeeActive,
 		Positions: map[string]bool{
 			"1": true,
 			"2": true,
 			"3": true,
 		},
 	})
-	mockAPI.storage.AddEmployee("2", &models.Employee{
+	mockAPI.storage.AddEmployee("2", &model.Employee{
 		ID:     "2",
 		Name:   "Caroline",
-		Status: models.EmployeeActive,
+		Status: model.EmployeeActive,
 		Positions: map[string]bool{
 			"1": true,
 			"2": true,
 			"3": true,
 		},
 	})
-	mockAPI.storage.AddEmployee("3", &models.Employee{
+	mockAPI.storage.AddEmployee("3", &model.Employee{
 		ID:     "3",
 		Name:   "Shane",
-		Status: models.EmployeeActive,
+		Status: model.EmployeeActive,
 		Positions: map[string]bool{
 			"1": true,
 			"2": true,
 			"3": true,
 		},
 	})
-	mockAPI.storage.AddEmployee("4", &models.Employee{
+	mockAPI.storage.AddEmployee("4", &model.Employee{
 		ID:   "4",
 		Name: "Shanaya",
 		Positions: map[string]bool{
@@ -59,15 +59,15 @@ func (info *testHarness) setup() {
 			"3": true,
 		},
 	})
-	mockAPI.storage.AddPosition("4", &models.Position{
+	mockAPI.storage.AddPosition("4", &model.Position{
 		ID:          "1",
 		PrimaryName: "baker",
 	})
-	mockAPI.storage.AddPosition("4", &models.Position{
+	mockAPI.storage.AddPosition("4", &model.Position{
 		ID:          "2",
 		PrimaryName: "porter",
 	})
-	mockAPI.storage.AddPosition("4", &models.Position{
+	mockAPI.storage.AddPosition("4", &model.Position{
 		ID:          "3",
 		PrimaryName: "second base",
 	})
@@ -79,12 +79,12 @@ func (info *testHarness) setup() {
 
 func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 	t.Run("GenerateSchedule", func(t *testing.T) {
-		_ = models.Schedule{
+		_ = model.Schedule{
 			Start:          "06-19-1990",
 			End:            "06-27-1990",
 			EmployeeFilter: []string{},
-			Program: models.Program{
-				Monday: map[string][]models.Shift{
+			Program: model.Program{
+				Monday: map[string][]model.Shift{
 					"1": {
 						{
 							Start: "0800",
@@ -104,7 +104,7 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 						},
 					},
 				},
-				Tuesday: map[string][]models.Shift{
+				Tuesday: map[string][]model.Shift{
 					"1": {
 						{
 							Start: "0800",
@@ -124,7 +124,7 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 						},
 					},
 				},
-				Wednesday: map[string][]models.Shift{
+				Wednesday: map[string][]model.Shift{
 					"1": {
 						{
 							Start: "0800",
@@ -144,7 +144,7 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 						},
 					},
 				},
-				Thursday: map[string][]models.Shift{
+				Thursday: map[string][]model.Shift{
 					"1": {
 						{
 							Start: "0800",
@@ -164,7 +164,7 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 						},
 					},
 				},
-				Friday: map[string][]models.Shift{
+				Friday: map[string][]model.Shift{
 					"1": {
 						{
 							Start: "0800",

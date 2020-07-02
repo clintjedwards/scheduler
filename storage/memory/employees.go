@@ -3,18 +3,18 @@ package memory
 import (
 	"encoding/json"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllEmployees returns an unpaginated list of current employees
-func (db *Memory) GetAllEmployees() (map[string]*models.Employee, error) {
-	results := map[string]*models.Employee{}
+func (db *Memory) GetAllEmployees() (map[string]*model.Employee, error) {
+	results := map[string]*model.Employee{}
 
 	for id, rawEmployee := range db.store[storage.EmployeesBucket] {
-		var employee models.Employee
+		var employee model.Employee
 
 		err := json.Unmarshal(rawEmployee, &employee)
 		if err != nil {
@@ -29,8 +29,8 @@ func (db *Memory) GetAllEmployees() (map[string]*models.Employee, error) {
 }
 
 // GetEmployee returns a single employee by id
-func (db *Memory) GetEmployee(id string) (*models.Employee, error) {
-	var storedEmployee models.Employee
+func (db *Memory) GetEmployee(id string) (*model.Employee, error) {
+	var storedEmployee model.Employee
 
 	rawEmployee, ok := db.store[storage.EmployeesBucket][id]
 	if !ok {
@@ -46,7 +46,7 @@ func (db *Memory) GetEmployee(id string) (*models.Employee, error) {
 }
 
 // AddEmployee stores a new employee
-func (db *Memory) AddEmployee(id string, employee *models.Employee) error {
+func (db *Memory) AddEmployee(id string, employee *model.Employee) error {
 	_, ok := db.store[storage.EmployeesBucket][id]
 	if ok {
 		return utils.ErrEntityExists
@@ -62,7 +62,7 @@ func (db *Memory) AddEmployee(id string, employee *models.Employee) error {
 }
 
 // UpdateEmployee alters employee infromation
-func (db *Memory) UpdateEmployee(id string, employee *models.Employee) error {
+func (db *Memory) UpdateEmployee(id string, employee *model.Employee) error {
 	_, ok := db.store[storage.EmployeesBucket][id]
 	if !ok {
 		return utils.ErrEntityNotFound

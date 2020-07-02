@@ -1,8 +1,6 @@
 package storage
 
-import (
-	"github.com/clintjedwards/scheduler/models"
-)
+import "github.com/clintjedwards/scheduler/model"
 
 // Bucket represents the name of a section of key/value pairs
 // usually a grouping of some sort
@@ -38,22 +36,22 @@ const (
 
 // Engine represents backend storage implementations where items can be persisted
 type Engine interface {
-	GetAllEmployees() (map[string]*models.Employee, error)
-	GetEmployee(id string) (*models.Employee, error)
-	AddEmployee(id string, employee *models.Employee) error
-	UpdateEmployee(id string, employee *models.Employee) error
+	GetAllEmployees() (map[string]*model.Employee, error)
+	GetEmployee(id string) (*model.Employee, error)
+	AddEmployee(id string, employee *model.Employee) error
+	UpdateEmployee(id string, employee *model.Employee) error
 	DeleteEmployee(id string) error
 
-	GetAllPositions() (map[string]*models.Position, error)
-	GetPosition(id string) (*models.Position, error)
-	AddPosition(id string, Position *models.Position) error
-	UpdatePosition(id string, Position *models.Position) error
+	GetAllPositions() (map[string]*model.Position, error)
+	GetPosition(id string) (*model.Position, error)
+	AddPosition(id string, Position *model.Position) error
+	UpdatePosition(id string, Position *model.Position) error
 	DeletePosition(id string) error
 
 	// GetAllSchedules returns an unpagined map of all schedules with the order they were added
 	GetAllSchedules() (schedules *ScheduleMap, err error)
-	GetSchedule(id string) (*models.Schedule, error)
-	AddSchedule(id string, schedule *models.Schedule) error
-	UpdateSchedule(id string, schedule *models.Schedule) error
+	GetSchedule(id string) (*model.Schedule, error)
+	AddSchedule(id string, schedule *model.Schedule) error
+	UpdateSchedule(id string, schedule *model.Schedule) error
 	DeleteSchedule(id string) error
 }

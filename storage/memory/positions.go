@@ -3,18 +3,18 @@ package memory
 import (
 	"encoding/json"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllPositions returns an unpaginated list of current positions
-func (db *Memory) GetAllPositions() (map[string]*models.Position, error) {
-	results := map[string]*models.Position{}
+func (db *Memory) GetAllPositions() (map[string]*model.Position, error) {
+	results := map[string]*model.Position{}
 
 	for id, rawPosition := range db.store[storage.PositionsBucket] {
-		var position models.Position
+		var position model.Position
 
 		err := json.Unmarshal(rawPosition, &position)
 		if err != nil {
@@ -29,8 +29,8 @@ func (db *Memory) GetAllPositions() (map[string]*models.Position, error) {
 }
 
 // GetPosition returns a single position by id
-func (db *Memory) GetPosition(id string) (*models.Position, error) {
-	var storedPosition models.Position
+func (db *Memory) GetPosition(id string) (*model.Position, error) {
+	var storedPosition model.Position
 
 	rawPosition, ok := db.store[storage.PositionsBucket][id]
 	if !ok {
@@ -46,7 +46,7 @@ func (db *Memory) GetPosition(id string) (*models.Position, error) {
 }
 
 // AddPosition stores a new position
-func (db *Memory) AddPosition(id string, position *models.Position) error {
+func (db *Memory) AddPosition(id string, position *model.Position) error {
 	_, ok := db.store[storage.PositionsBucket][id]
 	if ok {
 		return utils.ErrEntityExists
@@ -62,7 +62,7 @@ func (db *Memory) AddPosition(id string, position *models.Position) error {
 }
 
 // UpdatePosition alters position information
-func (db *Memory) UpdatePosition(id string, position *models.Position) error {
+func (db *Memory) UpdatePosition(id string, position *model.Position) error {
 	_, ok := db.store[storage.PositionsBucket][id]
 	if !ok {
 		return utils.ErrEntityNotFound

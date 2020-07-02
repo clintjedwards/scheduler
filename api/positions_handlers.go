@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/gorilla/mux"
 	"github.com/rs/zerolog/log"
@@ -28,7 +28,7 @@ func (api *API) ListPositionsHandler(w http.ResponseWriter, r *http.Request) {
 // AddPositionHandler adds a new position to the scheduler service
 func (api *API) AddPositionHandler(w http.ResponseWriter, r *http.Request) {
 
-	newPosition := models.Position{}
+	newPosition := model.Position{}
 
 	err := parseJSON(r.Body, &newPosition)
 	if err != nil {

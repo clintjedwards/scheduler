@@ -4,21 +4,21 @@ import (
 	"encoding/json"
 
 	"github.com/boltdb/bolt"
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllEmployees returns an unpaginated list of current links
-func (db *Bolt) GetAllEmployees() (map[string]*models.Employee, error) {
-	results := map[string]*models.Employee{}
+func (db *Bolt) GetAllEmployees() (map[string]*model.Employee, error) {
+	results := map[string]*model.Employee{}
 
 	db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 
 		err := bucket.ForEach(func(key, value []byte) error {
-			var employee models.Employee
+			var employee model.Employee
 
 			err := json.Unmarshal(value, &employee)
 			if err != nil {
@@ -41,9 +41,9 @@ func (db *Bolt) GetAllEmployees() (map[string]*models.Employee, error) {
 }
 
 // GetEmployee returns a single employee by id
-func (db *Bolt) GetEmployee(id string) (*models.Employee, error) {
+func (db *Bolt) GetEmployee(id string) (*model.Employee, error) {
 
-	var storedEmployee models.Employee
+	var storedEmployee model.Employee
 
 	err := db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
@@ -68,7 +68,7 @@ func (db *Bolt) GetEmployee(id string) (*models.Employee, error) {
 }
 
 // AddEmployee stores a new employee
-func (db *Bolt) AddEmployee(id string, employee *models.Employee) error {
+func (db *Bolt) AddEmployee(id string, employee *model.Employee) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 
@@ -96,7 +96,7 @@ func (db *Bolt) AddEmployee(id string, employee *models.Employee) error {
 }
 
 // UpdateEmployee alters employee infromation
-func (db *Bolt) UpdateEmployee(id string, employee *models.Employee) error {
+func (db *Bolt) UpdateEmployee(id string, employee *model.Employee) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 

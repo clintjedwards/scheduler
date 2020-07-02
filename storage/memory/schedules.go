@@ -3,7 +3,7 @@ package memory
 import (
 	"encoding/json"
 
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/clintjedwards/toolkit/listutil"
@@ -14,7 +14,7 @@ import (
 func (db *Memory) GetAllSchedules() (schedules *storage.ScheduleMap, err error) {
 
 	schedules = &storage.ScheduleMap{
-		Schedules: map[string]*models.Schedule{},
+		Schedules: map[string]*model.Schedule{},
 		Order:     []string{},
 	}
 
@@ -35,7 +35,7 @@ func (db *Memory) GetAllSchedules() (schedules *storage.ScheduleMap, err error) 
 			continue
 		}
 
-		var schedule models.Schedule
+		var schedule model.Schedule
 
 		err := json.Unmarshal(rawSchedule, &schedule)
 		if err != nil {
@@ -50,9 +50,9 @@ func (db *Memory) GetAllSchedules() (schedules *storage.ScheduleMap, err error) 
 }
 
 // GetSchedule returns a single schedule by id
-func (db *Memory) GetSchedule(id string) (*models.Schedule, error) {
+func (db *Memory) GetSchedule(id string) (*model.Schedule, error) {
 
-	var storedSchedule models.Schedule
+	var storedSchedule model.Schedule
 
 	rawSchedule, ok := db.store[storage.SchedulesBucket][id]
 	if !ok {
@@ -68,7 +68,7 @@ func (db *Memory) GetSchedule(id string) (*models.Schedule, error) {
 }
 
 // AddSchedule stores a new schedule
-func (db *Memory) AddSchedule(id string, schedule *models.Schedule) error {
+func (db *Memory) AddSchedule(id string, schedule *model.Schedule) error {
 	if _, ok := db.store[storage.SchedulesBucket][id]; ok {
 		return utils.ErrEntityExists
 	}
@@ -101,7 +101,7 @@ func (db *Memory) AddSchedule(id string, schedule *models.Schedule) error {
 }
 
 // UpdateSchedule alters schedule infromation
-func (db *Memory) UpdateSchedule(id string, schedule *models.Schedule) error {
+func (db *Memory) UpdateSchedule(id string, schedule *model.Schedule) error {
 	_, ok := db.store[storage.SchedulesBucket][id]
 	if !ok {
 		return utils.ErrEntityNotFound

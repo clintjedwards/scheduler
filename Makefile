@@ -12,26 +12,17 @@ VERSION = ${SEMVER}_${EPOCH_TIME}_${GIT_COMMIT}
 
 ## build: run tests and compile application
 build: check-path-included
-	go mod tidy
 	go test ./utils
 	go generate
+	go mod tidy
 	go build -ldflags $(GO_LDFLAGS) -o $(path)
 
 ## run: build application and run server
 run: export DEBUG=true
 run:
-	go mod tidy
 	go generate
+	go mod tidy
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
-
-## install: build application and install on system
-# install:
-# 	go mod tidy
-# 	npm run --prefix ./frontend build:production
-# 	go generate
-# 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME}
-# 	sudo mv /tmp/${APP_NAME} /usr/local/bin/
-# 	chmod +x /usr/local/bin/${APP_NAME}
 
 ## help: prints this help message
 help:

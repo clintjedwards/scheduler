@@ -4,21 +4,21 @@ import (
 	"encoding/json"
 
 	"github.com/boltdb/bolt"
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/rs/zerolog/log"
 )
 
 // GetAllPositions returns an unpaginated list of current links
-func (db *Bolt) GetAllPositions() (map[string]*models.Position, error) {
-	results := map[string]*models.Position{}
+func (db *Bolt) GetAllPositions() (map[string]*model.Position, error) {
+	results := map[string]*model.Position{}
 
 	db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.PositionsBucket))
 
 		err := bucket.ForEach(func(key, value []byte) error {
-			var position models.Position
+			var position model.Position
 
 			err := json.Unmarshal(value, &position)
 			if err != nil {
@@ -41,9 +41,9 @@ func (db *Bolt) GetAllPositions() (map[string]*models.Position, error) {
 }
 
 // GetPosition returns a single position by id
-func (db *Bolt) GetPosition(id string) (*models.Position, error) {
+func (db *Bolt) GetPosition(id string) (*model.Position, error) {
 
-	var storedPosition models.Position
+	var storedPosition model.Position
 
 	err := db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.PositionsBucket))
@@ -68,7 +68,7 @@ func (db *Bolt) GetPosition(id string) (*models.Position, error) {
 }
 
 // AddPosition stores a new position
-func (db *Bolt) AddPosition(id string, position *models.Position) error {
+func (db *Bolt) AddPosition(id string, position *model.Position) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.PositionsBucket))
 
@@ -96,7 +96,7 @@ func (db *Bolt) AddPosition(id string, position *models.Position) error {
 }
 
 // UpdatePosition alters position infromation
-func (db *Bolt) UpdatePosition(id string, position *models.Position) error {
+func (db *Bolt) UpdatePosition(id string, position *model.Position) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.PositionsBucket))
 

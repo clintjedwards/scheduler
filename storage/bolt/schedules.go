@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/boltdb/bolt"
-	"github.com/clintjedwards/scheduler/models"
+	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
 	"github.com/rs/zerolog/log"
@@ -13,7 +13,7 @@ import (
 // GetAllSchedules returns an unpaginated list of current links
 func (db *Bolt) GetAllSchedules() (schedules *storage.ScheduleMap, err error) {
 	schedules = &storage.ScheduleMap{
-		Schedules: map[string]*models.Schedule{},
+		Schedules: map[string]*model.Schedule{},
 		Order:     []string{},
 	}
 
@@ -36,7 +36,7 @@ func (db *Bolt) GetAllSchedules() (schedules *storage.ScheduleMap, err error) {
 				return nil
 			}
 
-			var schedule models.Schedule
+			var schedule model.Schedule
 
 			err := json.Unmarshal(value, &schedule)
 			if err != nil {
@@ -59,9 +59,9 @@ func (db *Bolt) GetAllSchedules() (schedules *storage.ScheduleMap, err error) {
 }
 
 // GetSchedule returns a single schedule by id
-func (db *Bolt) GetSchedule(id string) (*models.Schedule, error) {
+func (db *Bolt) GetSchedule(id string) (*model.Schedule, error) {
 
-	var storedSchedule models.Schedule
+	var storedSchedule model.Schedule
 
 	err := db.store.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulesBucket))
@@ -86,7 +86,7 @@ func (db *Bolt) GetSchedule(id string) (*models.Schedule, error) {
 }
 
 // AddSchedule stores a new schedule
-func (db *Bolt) AddSchedule(id string, schedule *models.Schedule) error {
+func (db *Bolt) AddSchedule(id string, schedule *model.Schedule) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulesBucket))
 
@@ -136,7 +136,7 @@ func (db *Bolt) AddSchedule(id string, schedule *models.Schedule) error {
 }
 
 // UpdateSchedule alters schedule infromation
-func (db *Bolt) UpdateSchedule(id string, schedule *models.Schedule) error {
+func (db *Bolt) UpdateSchedule(id string, schedule *model.Schedule) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.SchedulesBucket))
 
