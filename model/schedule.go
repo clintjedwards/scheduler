@@ -1,16 +1,11 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/rs/zerolog/log"
 )
-
-// Alloc represents an employee/position tuple that is inserted into timeslots
-type Alloc struct {
-	EmployeeID string `json:"employee_id"`
-	PositionID string `json:"position_id"`
-}
 
 // Schedule represents a generated timetable mapping of positions => shift => employee
 type Schedule struct {
@@ -57,11 +52,11 @@ func NewSchedule(id string, settings Schedule) *Schedule {
 
 // NewDay instantiates a new day and populates it with timeslots
 func (s *Schedule) NewDay(date string) map[string][]Alloc {
-	timeslots := []string{"0000", "0030", "0100", "0130", "0200", "0230", "0300", "0330", "0400",
-		"0430", "0500", "0530", "0600", "0630", "0700", "0730", "0800", "0830", "0900", "0930",
-		"1000", "1030", "1100", "1130", "1200", "1230", "1300", "1330", "1400", "1430", "1500",
-		"1530", "1600", "1630", "1700", "1730", "1800", "1830", "1900", "1930", "2000", "2030",
-		"2100", "2130", "2200", "2230", "2300", "2330", "2400"}
+	timeslots, err := parseTimeSlots("0000", "2330")
+	if err != nil {
+		log.Fatal().Msg("could not parse time slots for new day")
+	}
+	s.TimeTable[date] = map[string][]Alloc{}
 
 	for _, time := range timeslots {
 		s.TimeTable[date][time] = []Alloc{}
@@ -99,37 +94,34 @@ func (s *Schedule) ScheduleDay(dateTime time.Time, employees map[string]Employee
 	}
 
 	// populate the intended date with all needed timestamps
-	_ = s.NewDay(date)
+	day := s.NewDay(date)
 
 	// exit early if we don't actually need to schedule anything for this date
 	if program == nil || employees == nil {
 		return nil
 	}
 
-	// Copy the employee set so it's easy to delete an employee once they have been scheduled
-	availableEmployees := map[string]Employee{}
-	for employeeID, employee := range employees {
-		availableEmployees[employeeID] = employee
-	}
+	employeeSet := newEmployeeSet(employees)
 
 	for positionID, shifts := range program {
 		for _, shift := range shifts {
-			for id, employee := range availableEmployees {
-				if _, exists := employee.Positions[positionID]; !exists {
-					continue
-				}
-
-				// TODO(clintjedwards): for this specific shift we need to iterate through all
-				// possible 30 min increments and then populate the day structure with an alloc
-				// for each of those increments
-				delete(availableEmployees, id)
-				break
+			id, err := employeeSet.nextAvailableEmployee(positionID)
+			if err != nil {
+				return err
 			}
-			if shift.Employee == "" {
-				// TODO(clintjedwards): Return a collection of errors to the calling function,
-				/// so it can be assigned to the day and reported back to the user
-				log.Warn().Msgf("could not find eligible employee for postion: %s; shift %s-%s",
-					positionID, shift.Start, shift.End)
+
+			timeslots, err := parseTimeSlots(shift.Start, shift.End)
+			if err != nil {
+				return err
+			}
+
+			alloc := Alloc{
+				EmployeeID: id,
+				PositionID: positionID,
+			}
+
+			for _, time := range timeslots {
+				day[time] = append(day[time], alloc)
 			}
 		}
 	}
@@ -137,8 +129,60 @@ func (s *Schedule) ScheduleDay(dateTime time.Time, employees map[string]Employee
 	return nil
 }
 
-// getTimeslots returns all 30 min timeslots within a given shift period
-func getTimeslots(shift Shift) []string {
+// parseTimeSlots returns all 30 min timeslots within a given time period
+// format is of 4 digit 24 hour: 0300
+func parseTimeSlots(startTime, endTime string) ([]string, error) {
+	// the parsing format according to golang time package
+	// https://golang.org/pkg/time/#Parse
+	const format = "1504"
 
-	return nil
+	current, err := time.Parse(format, startTime)
+	end, err := time.Parse(format, endTime)
+	if err != nil {
+		return nil, err
+	}
+
+	timeSlots := []string{}
+
+	for {
+		if current.After(end) {
+			break
+		}
+
+		timeSlots = append(timeSlots, current.Format(format))
+		current = current.Add(time.Minute * 30)
+	}
+
+	return timeSlots, nil
+}
+
+// employee set represents a set of available employees
+type employeeSet map[string]Employee
+
+func newEmployeeSet(employees map[string]Employee) employeeSet {
+
+	availableEmployees := employeeSet{}
+	for employeeID, employee := range employees {
+		availableEmployees[employeeID] = employee
+	}
+
+	return availableEmployees
+}
+
+// nextAvailableEmployee returns an employee that is eligible to work the
+// given position. Will return an error if no employees are found for a given position
+// TODO(clintjedwards): return custom error types so that we can eventually return these
+// reasons to the user
+func (e employeeSet) nextAvailableEmployee(positionID string) (string, error) {
+
+	for id, employee := range e {
+		if _, exists := employee.Positions[positionID]; !exists {
+			continue
+		}
+
+		delete(e, id)
+		return id, nil
+	}
+
+	return "", fmt.Errorf("could not find an eligible employee for position %s", positionID)
 }

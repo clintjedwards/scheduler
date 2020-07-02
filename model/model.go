@@ -57,3 +57,9 @@ type Program struct {
 	Saturday  map[string][]Shift `json:"saturday"`
 	Sunday    map[string][]Shift `json:"sunday"`
 }
+
+// Alloc represents an employee/position tuple that is inserted into timeslots
+type Alloc struct {
+	EmployeeID string `json:"employee_id"`
+	PositionID string `json:"position_id"`
+}
