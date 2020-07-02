@@ -10,7 +10,9 @@ function renderSchedules() {
 
     for (let id of state.schedules_order) {
       innerHTML += `<li id="${id}" class="collection-item">
-            <h6>${state.schedules[id].start} - ${state.schedules[id].end}</h6>
+            <h6>${humanizedDate(state.schedules[id].start)} - ${humanizedDate(
+        state.schedules[id].end
+      )}</h6>
             </li>`;
     }
     innerHTML += "</ul>";
@@ -29,13 +31,21 @@ function renderSchedule(id) {
   client.getSchedule(id).then((schedule) => {
     let content = document.getElementById("view-schedule-modal-content");
     let innerHTML = "";
-    innerHTML += `<h4>Schedule ${schedule.start} - ${schedule.end}</h4>
+    innerHTML += `<h4>Schedule ${humanizedDate(
+      schedule.start
+    )} - ${humanizedDate(schedule.end)}</h4>
     <h6 class="grey-text text-darken-1">Created: ${humanizedBuildTime(
       schedule.created
     )} (${humanizedRelativeBuildTime(schedule.created)})</h6>
     `;
     content.innerHTML = innerHTML;
   });
+}
+
+function humanizedDate(date) {
+  let momentObj = moment(date, "MM-DD-YYYY");
+  let humanDate = momentObj.format("MMM Do");
+  return humanDate;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
