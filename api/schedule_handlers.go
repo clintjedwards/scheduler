@@ -198,6 +198,8 @@ func (api *API) GenerateScheduleHandler(w http.ResponseWriter, r *http.Request) 
 
 	newSchedule.ID = string(utils.GenerateRandString(api.config.IDLength))
 	newSchedule.TimeTable = map[string]map[string][]models.Shift{}
+	newSchedule.Created = time.Now().Unix()
+	newSchedule.Modified = time.Now().Unix()
 	err = api.generateSchedule(&newSchedule)
 	if err != nil {
 		sendErrResponse(w, http.StatusBadGateway, err)

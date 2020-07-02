@@ -90,38 +90,8 @@ function renderPositions() {
   });
 }
 
-function renderSchedules() {
-  client.listSchedules().then((data) => {
-    state.schedules = data.Schedules;
-    state.schedules_order = data.Order;
-
-    let content = document.getElementById("schedules-content-body");
-
-    let innerHTML = "";
-    innerHTML += "<ul id='schedules-collection' class='collection'>";
-
-    for (let id of state.schedules_order) {
-      innerHTML += `<li id="${id}" class="collection-item">
-          <h6>${state.schedules[id].start} - ${state.schedules[id].end}</h6>
-          </li>`;
-    }
-    innerHTML += "</ul>";
-
-    content.innerHTML = innerHTML;
-
-    document.querySelectorAll(".collection-item").forEach((item) => {
-      item.addEventListener("click", function (e) {
-        console.log(e.currentTarget.id);
-      });
-    });
-  });
-}
-
 document.addEventListener("DOMContentLoaded", function () {
   populateSystemInfo();
-  populateEmployeeList();
-  populatePositionList();
-  populateScheduleList();
 
   var elems = document.querySelectorAll(".sidenav");
   M.Sidenav.init(elems, { menuWidth: 300 });

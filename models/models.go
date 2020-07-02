@@ -73,4 +73,6 @@ type Schedule struct {
 	EmployeeFilter []string `json:"employee_filter"`
 	// TimeTable is the resulting schedule that has been generated with the other settings
 	TimeTable map[string]map[string][]Shift `json:"time_table"`
+	Created   int64                         `json:"created"`
+	Modified  int64                         `json:"modified"`
 }
