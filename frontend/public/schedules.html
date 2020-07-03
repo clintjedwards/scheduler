@@ -24,7 +24,6 @@
     <script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
     <script defer src="/javascript/scheduler_client.js"></script>
     <script defer src="/javascript/main.js"></script>
-    <script defer src="/javascript/sticky.js"></script>
     <script defer src="/javascript/calendar.js"></script>
     <script defer src="/javascript/schedules.js"></script>
   </head>
@@ -55,11 +54,12 @@
           <h3>Schedules</h3>
         </div>
         <div id="schedules-content-body" class="content-body"></div>
-        <div id="view-schedule-modal" class="modal modal-fixed-footer">
+        <div
+          id="view-schedule-modal"
+          class="modal modal-fixed-footer modal-fixed-header"
+        >
+          <div id="view-schedule-modal-heading" class="modal-header"></div>
           <div id="view-schedule-modal-content" class="modal-content"></div>
-          <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect btn-flat">Close</a>
-          </div>
         </div>
       </div>
     </div>

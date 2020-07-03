@@ -35,18 +35,22 @@ function renderSchedules() {
 
 function renderSchedule(id) {
   client.getSchedule(id).then((schedule) => {
-    let content = document.getElementById("view-schedule-modal-content");
+    let heading = document.getElementById("view-schedule-modal-heading");
     let innerHTML = "";
-    innerHTML += `<h4>Schedule ${humanizedDate(
+    innerHTML += `<div id="schedule-title"><h4>Schedule ${humanizedDate(
       schedule.start
     )} - ${humanizedDate(schedule.end)}</h4>
     <h6 class="grey-text text-darken-1">Created: ${humanizedBuildTime(
       schedule.created
-    )} (${humanizedRelativeBuildTime(schedule.created)})</h6><br><br>
+    )} (${humanizedRelativeBuildTime(schedule.created)})</h6></div><br><br>
     `;
 
-    innerHTML += generateCalendar(schedule.time_table);
+    innerHTML += generateHeadings(schedule.time_table);
+    heading.innerHTML = innerHTML;
 
+    let content = document.getElementById("view-schedule-modal-content");
+    innerHTML = "";
+    innerHTML += generateCalendar(schedule.time_table);
     content.innerHTML = innerHTML;
   });
 }

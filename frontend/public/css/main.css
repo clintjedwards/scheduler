@@ -56,8 +56,9 @@ footer {
 
 #view-schedule-modal.modal {
   width: 98%;
-  height: 92%;
-  max-height: 92%;
+  height: 88%;
+  max-height: 88%;
+  display: table;
 }
 .nav-icon {
   color: #475c7a;
@@ -66,18 +67,25 @@ footer {
 }
 
 #calendar {
-  overflow: auto;
-}
-
-#calendar-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: fixed;
 }
 
 .heading {
-  display: table-row;
+  display: table-header-group;
   text-align: center;
+}
+
+.modal.modal-fixed-header .modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 2000;
+}
+
+#schedule-title {
+  margin-left: 30px;
+  margin-top: 30px;
 }
 
 .row {

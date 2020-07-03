@@ -13,7 +13,7 @@ type BoltConfig struct {
 type DatabaseConfig struct {
 	// The database engine used by the backend
 	// possible values are: bolt, memory
-	Engine string `envconfig:"scheduler_database_engine" default:"memory"`
+	Engine string `envconfig:"scheduler_database_engine" default:"bolt"`
 	Bolt   *BoltConfig
 }
 

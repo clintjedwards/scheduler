@@ -1,5 +1,3 @@
-var sticky = new Sticky(".sticky");
-
 const timeslots = [
   "0000",
   "0030",
@@ -52,16 +50,16 @@ const timeslots = [
 ];
 
 function generateCalendar(timetable) {
-  let html = `<div id="calendar-container"><div id="calendar">`;
-  html += generateHeadings(timetable);
+  let html = `<div id="calendar">`;
+  //html += generateHeadings(timetable);
   html += generateDays(timetable);
 
-  html += `</div></div>`;
+  html += `</div>`;
   return html;
 }
 
 function generateHeadings(timetable) {
-  let html = `<div class="heading sticky">`;
+  let html = `<div class="heading">`;
   html += `<div class="cell"></div>`;
 
   for (const [date, times] of Object.entries(timetable)) {
