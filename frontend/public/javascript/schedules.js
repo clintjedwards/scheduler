@@ -1,5 +1,8 @@
 function renderSchedules() {
   client.listSchedules().then((data) => {
+    if (data.Schedules === null || data.Order === null) {
+      return;
+    }
     state.schedules = data.Schedules;
     state.schedules_order = data.Order;
 
@@ -21,7 +24,10 @@ function renderSchedules() {
 
     document.querySelectorAll(".collection-item").forEach((item) => {
       item.addEventListener("click", function (e) {
-        console.log(e.currentTarget.id);
+        var elem = document.querySelector(".modal");
+        var instance = M.Modal.getInstance(elem);
+        instance.open();
+        renderSchedule(e.currentTarget.id);
       });
     });
   });
@@ -36,8 +42,11 @@ function renderSchedule(id) {
     )} - ${humanizedDate(schedule.end)}</h4>
     <h6 class="grey-text text-darken-1">Created: ${humanizedBuildTime(
       schedule.created
-    )} (${humanizedRelativeBuildTime(schedule.created)})</h6>
+    )} (${humanizedRelativeBuildTime(schedule.created)})</h6><br><br>
     `;
+
+    innerHTML += generateCalendar(schedule.time_table);
+
     content.innerHTML = innerHTML;
   });
 }
@@ -52,7 +61,4 @@ document.addEventListener("DOMContentLoaded", function () {
   renderSchedules();
   var elem = document.querySelector(".modal");
   M.Modal.init(elem, {});
-  var instance = M.Modal.getInstance(elem);
-  instance.open();
-  renderSchedule("C3PWd");
 });

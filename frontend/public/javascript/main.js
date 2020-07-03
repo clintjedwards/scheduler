@@ -1,10 +1,6 @@
 const client = new SchedulerClient();
 
-let state = {
-  employees: [],
-  schedules: {},
-  schedules_order: [],
-};
+let state = {};
 
 function humanizedBuildTime(time) {
   let human_time = moment(moment.unix(time)).format("L");
