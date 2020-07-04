@@ -54,11 +54,14 @@ footer {
   border: 1px solid #475c7a;
 }
 
+.nav-home-link {
+  color: #475c7a;
+}
+
 #view-schedule-modal.modal {
   width: 98%;
   height: 88%;
   max-height: 88%;
-  display: table;
 }
 .nav-icon {
   color: #475c7a;
@@ -73,6 +76,7 @@ footer {
 .heading {
   display: table-header-group;
   text-align: center;
+  background: inherit;
 }
 
 .modal.modal-fixed-header .modal-header {
@@ -80,7 +84,7 @@ footer {
   position: sticky;
   top: 0;
   background: inherit;
-  z-index: 2000;
+  z-index: 1003;
 }
 
 .modal .modal-content {
@@ -92,13 +96,21 @@ footer {
   margin-top: 30px;
 }
 
+.collection-item {
+  cursor: pointer;
+}
+
+.collection-item:hover {
+  background-color: #ffd8a8;
+}
+
 .row {
   display: table-row;
   height: 90px;
 }
 
 .row:hover {
-  background-color: #fcbb6d;
+  background-color: #ffd8a8;
 }
 
 .cell {
@@ -116,6 +128,16 @@ footer {
   color: #685d79;
 }
 
+.main-action-button {
+  margin-right: 100px;
+  background-color: #d8737f;
+}
+
+.main-action-button:hover {
+  background-color: #685d79;
+}
+
 .colors {
-  background-color: #fcbb6d #d8737f #ab6c82 #685d79 #475c7a #dfe6e9 #2d3436;
+  background-color: #ffd8a8 #fcbb6d #d8737f #ab6c82 #685d79 #475c7a #dfe6e9
+    #2d3436;
 }

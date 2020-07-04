@@ -49,8 +49,9 @@ const timeslots = [
   "2330",
 ];
 
-// returns a list of empty timeslots so that we can not render them if we so choose
-function usedTimeSlots(timetable) {
+// occupiedTimeSlots returns a list of timeslots that have at least one allocation.
+// This is useful in a situation where we don't want to render unused time slots.
+function occupiedTimeSlots(timetable) {
   let usedTimeSlots = {};
 
   for (const [date, times] of Object.entries(timetable)) {
@@ -65,6 +66,7 @@ function usedTimeSlots(timetable) {
   return usedTimeSlots;
 }
 
+// generateCalendar generates the times and allocations for a specific schedule
 function generateCalendar(timetable) {
   let html = `<div id="calendar">`;
   html += generateDays(timetable, false);
@@ -72,37 +74,46 @@ function generateCalendar(timetable) {
   return html;
 }
 
+// generateHeadings generates the dates that are used for headings to the timetable
 function generateHeadings(timetable) {
   let html = `<div class="heading">`;
   html += `<div class="cell"></div>`;
 
   for (const [date, times] of Object.entries(timetable)) {
+    // convert date into pretty date and use as heading
+    // take in date format: 06-19-1990 and return Jun and 19th
     momentObj = moment(date, "MM-DD-YYYY");
     humanDate = momentObj.format("Do");
     humanDay = momentObj.format("ddd");
 
-    // convert date into pretty date and use as heading
     html += `<div class="cell"><h2>${humanDay}</h2><h2>${humanDate}</h2></div>`;
   }
   html += `</div>`;
   return html;
 }
 
+// generateDays iterates through the timetable datastructure by times first and then by date
+// this is because to create valid html we need to generate things by rows instead of columns.
+// To this end we start iterating through a static list of all times first and then
+// draw the row by iterating through allocs for each date
 function generateDays(timetable, drawAll) {
+  let occupiedSlots = occupiedTimeSlots(timetable);
+
   let html = "";
-  let nonEmptySlots = usedTimeSlots(timetable);
   for (const time of timeslots) {
-    if (!drawAll && !nonEmptySlots[time]) {
+    // if this timeslot contains no allocations don't draw it
+    if (!drawAll && !occupiedSlots[time]) {
       continue;
     }
     html += `<div class="row">`;
+
     // render the time period y axis
     momentObj = moment(time, "hhmm");
-    // format: 1:23 pm
-    humanTime = momentObj.format("h:mm a");
+    humanTime = momentObj.format("h:mm a"); // format: 1:23 pm
     html += `<div class="cell timeslot">${humanTime}</div>`;
+
     for (const [date, timeslots] of Object.entries(timetable)) {
-      // render all allocations for that time period
+      // render all allocations for time period
       let allocs = timeslots[time];
       if (allocs.length === 0) {
         html += `<div class="cell"></div>`;

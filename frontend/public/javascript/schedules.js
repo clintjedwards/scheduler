@@ -1,3 +1,5 @@
+// renderSchedules draws a list of schedules that have been generated
+// and enables modal interaction for each
 function renderSchedules() {
   client.listSchedules().then((data) => {
     if (data.Schedules === null || data.Order === null) {
@@ -33,11 +35,14 @@ function renderSchedules() {
   });
 }
 
+// renderSchedule draws a full schedule timetable
 function renderSchedule(id) {
   client.getSchedule(id).then((schedule) => {
-    let heading = document.getElementById("view-schedule-modal-heading");
-    let innerHTML = "";
-    innerHTML += `<div id="schedule-title"><h4>Schedule ${humanizedDate(
+    // Schedule heading contains the dates for the schedule.
+    // The heading needs to be outside of the modal content because modal-content
+    // uses transform which prevents us from setting the heading to position fixed.
+    let modal_header = document.getElementById("view-schedule-modal-heading");
+    let innerHTML = `<div id="schedule-title"><h4>Schedule ${humanizedDate(
       schedule.start
     )} - ${humanizedDate(schedule.end)}</h4>
     <h6 class="text-secondary">Created: ${humanizedBuildTime(
@@ -46,18 +51,20 @@ function renderSchedule(id) {
     `;
 
     innerHTML += generateHeadings(schedule.time_table);
-    heading.innerHTML = innerHTML;
+    modal_header.innerHTML = innerHTML;
 
-    let content = document.getElementById("view-schedule-modal-content");
-    innerHTML = "";
-    innerHTML += generateCalendar(schedule.time_table);
-    content.innerHTML = innerHTML;
+    // Schedule content contains the times and scheduled employees for those times
+    let modal_content = document.getElementById("view-schedule-modal-content");
+    innerHTML = generateCalendar(schedule.time_table);
+    modal_content.innerHTML = innerHTML;
   });
 }
 
+// humanizedDate takes a date in format 06-19-1990 and returns humanized date
+// in format Jun 19
 function humanizedDate(date) {
   let momentObj = moment(date, "MM-DD-YYYY");
-  let humanDate = momentObj.format("MMM Do");
+  let humanDate = momentObj.format("MMMM Do");
   return humanDate;
 }
 
