@@ -83,6 +83,10 @@ footer {
   z-index: 2000;
 }
 
+.modal .modal-content {
+  padding-left: 0;
+}
+
 #schedule-title {
   margin-left: 30px;
   margin-top: 30px;
@@ -93,15 +97,25 @@ footer {
   height: 90px;
 }
 
-.cell {
-  display: table-cell;
-  border: none;
-  border-width: thin;
-  padding-left: 60px;
-  padding-right: 60px;
-  text-align: center;
+.row:hover {
+  background-color: #fcbb6d;
 }
 
-/* .colors {
+.cell {
+  display: table-cell;
+  width: 220px;
+  min-width: 220px;
+  border-width: thin;
+  padding-left: 30px;
+  padding-right: 30px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.text-secondary {
+  color: #685d79;
+}
+
+.colors {
   background-color: #fcbb6d #d8737f #ab6c82 #685d79 #475c7a #dfe6e9 #2d3436;
-} */
+}

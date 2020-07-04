@@ -49,11 +49,25 @@ const timeslots = [
   "2330",
 ];
 
+// returns a list of empty timeslots so that we can not render them if we so choose
+function usedTimeSlots(timetable) {
+  let usedTimeSlots = {};
+
+  for (const [date, times] of Object.entries(timetable)) {
+    usedTimeSlots = {};
+    for (const time of timeslots) {
+      if (times[time].length !== 0) {
+        usedTimeSlots[time] = true;
+      }
+    }
+  }
+
+  return usedTimeSlots;
+}
+
 function generateCalendar(timetable) {
   let html = `<div id="calendar">`;
-  //html += generateHeadings(timetable);
-  html += generateDays(timetable);
-
+  html += generateDays(timetable, false);
   html += `</div>`;
   return html;
 }
@@ -74,22 +88,32 @@ function generateHeadings(timetable) {
   return html;
 }
 
-function generateDays(timetable) {
+function generateDays(timetable, drawAll) {
   let html = "";
-
+  let nonEmptySlots = usedTimeSlots(timetable);
   for (const time of timeslots) {
+    if (!drawAll && !nonEmptySlots[time]) {
+      continue;
+    }
     html += `<div class="row">`;
     // render the time period y axis
-    html += `<div class="cell">${time}</div>`;
+    momentObj = moment(time, "hhmm");
+    // format: 1:23 pm
+    humanTime = momentObj.format("h:mm a");
+    html += `<div class="cell timeslot">${humanTime}</div>`;
     for (const [date, timeslots] of Object.entries(timetable)) {
       // render all allocations for that time period
       let allocs = timeslots[time];
       if (allocs.length === 0) {
+        html += `<div class="cell"></div>`;
         continue;
       }
       html += `<div class="cell">
-            <p>${allocs[0].employee_id}</p>
-            <p>${allocs[0].position_id}</p>
+            <h6>${state.employees[allocs[0].employee_id].name}</h6>
+            <p>${state.positions[allocs[0].position_id].primary_name}</p>
+            <p class="text-secondary">${
+              state.positions[allocs[0].position_id].secondary_name
+            }</p>
         </div>`;
     }
     html += `</div>`;

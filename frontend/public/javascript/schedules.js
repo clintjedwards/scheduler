@@ -40,7 +40,7 @@ function renderSchedule(id) {
     innerHTML += `<div id="schedule-title"><h4>Schedule ${humanizedDate(
       schedule.start
     )} - ${humanizedDate(schedule.end)}</h4>
-    <h6 class="grey-text text-darken-1">Created: ${humanizedBuildTime(
+    <h6 class="text-secondary">Created: ${humanizedBuildTime(
       schedule.created
     )} (${humanizedRelativeBuildTime(schedule.created)})</h6></div><br><br>
     `;
@@ -62,6 +62,8 @@ function humanizedDate(date) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  populateEmployeeList();
+  populatePositionList();
   renderSchedules();
   var elem = document.querySelector(".modal");
   M.Modal.init(elem, {});
