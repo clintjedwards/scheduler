@@ -69,14 +69,13 @@ footer {
   height: 40px;
 }
 
-#calendar {
-  position: fixed;
+.heading {
+  padding-left: 80px;
+  border-bottom: 1px solid #fcbb6d;
 }
 
-.heading {
-  display: table-header-group;
-  text-align: center;
-  background: inherit;
+#calendar {
+  margin-left: 80px;
 }
 
 .modal.modal-fixed-header .modal-header {
@@ -100,32 +99,41 @@ footer {
   cursor: pointer;
 }
 
+.colgroup {
+  display: inline-block;
+  overflow: hidden;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
 .collection-item:hover {
   background-color: #ffd8a8;
 }
 
 .row {
-  display: table-row;
-  height: 90px;
-}
-
-.row:hover {
-  background-color: #ffd8a8;
-}
-
-.cell {
-  display: table-cell;
-  width: 220px;
-  min-width: 220px;
-  border-width: thin;
-  padding-left: 30px;
-  padding-right: 30px;
-  text-align: center;
   vertical-align: middle;
+  text-align: center;
+  width: 250px;
+  max-width: 250px;
+  min-width: 250px;
+  height: 100px;
+  max-height: 100px;
+  min-height: 100px;
+}
+
+.row > * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+  margin-bottom: 1px;
 }
 
 .text-secondary {
   color: #685d79;
+}
+
+.text-tertiary {
+  color: #ab6c82;
 }
 
 .main-action-button {

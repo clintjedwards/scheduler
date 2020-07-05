@@ -6,7 +6,7 @@ require (
 	github.com/boltdb/bolt v1.3.1
 	github.com/clintjedwards/toolkit v1.1.0
 	github.com/corpix/uarand v0.1.1 // indirect
-	github.com/google/go-cmp v0.4.0
+	github.com/google/go-cmp v0.4.0 // indirect
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.4
 	github.com/icrowley/fake v0.0.0-20180203215853-4178557ae428

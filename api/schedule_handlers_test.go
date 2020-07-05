@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/clintjedwards/scheduler/model"
@@ -79,128 +80,113 @@ func (info *testHarness) setup() {
 
 func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 	t.Run("GenerateSchedule", func(t *testing.T) {
-		_ = model.Schedule{
+		sch := model.Schedule{
 			Start:          "06-19-1990",
-			End:            "06-19-1990",
+			End:            "06-22-1990",
 			EmployeeFilter: []string{},
 			Program: model.Program{
-				Monday: map[string][]model.Shift{
-					"1": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+				Monday: []model.Shift{
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "1",
 					},
-					"2": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "2",
 					},
-					"3": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "3",
 					},
 				},
-				Tuesday: map[string][]model.Shift{
-					"1": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+				Tuesday: []model.Shift{
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "1",
 					},
-					"2": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "2",
 					},
-					"3": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "3",
 					},
 				},
-				Wednesday: map[string][]model.Shift{
-					"1": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+				Wednesday: []model.Shift{
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "1",
 					},
-					"2": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "2",
 					},
-					"3": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "3",
 					},
 				},
-				Thursday: map[string][]model.Shift{
-					"1": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+				Thursday: []model.Shift{
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "1",
 					},
-					"2": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "2",
 					},
-					"3": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "3",
 					},
 				},
-				Friday: map[string][]model.Shift{
-					"1": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+				Friday: []model.Shift{
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "1",
 					},
-					"2": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "2",
 					},
-					"3": {
-						{
-							Start: "0800",
-							End:   "1300",
-						},
+					{
+						Start:      "0800",
+						End:        "1300",
+						PositionID: "3",
 					},
 				},
 			},
 		}
 
-		// newSchedule := model.NewSchedule("test", sch)
-		// err := info.mockAPI.generateSchedule(newSchedule)
-		// if err != nil {
-		// 	t.Error(err)
-		// }
-		// for date, times := range newSchedule.TimeTable {
-		// 	fmt.Println(date)
-		// 	for time, allocs := range times {
-		// 		fmt.Printf("\ttime %s:\n", time)
-		// 		for _, alloc := range allocs {
-		// 			fmt.Printf("\t\t\temployee: %s\n", alloc.EmployeeID)
-		// 		}
-		// 	}
-		// }
+		newSchedule := model.NewSchedule("test", sch)
+		err := info.mockAPI.generateSchedule(newSchedule)
+		if err != nil {
+			t.Error(err)
+		}
+		for date, shifts := range newSchedule.TimeTable {
+			fmt.Println(date)
+			for _, shift := range shifts {
+				fmt.Printf("\temployee: %s\n", shift.EmployeeID)
+				fmt.Printf("\tposition: %s\n", shift.PositionID)
+				fmt.Printf("\tstart: %s\n", shift.Start)
+				fmt.Printf("\tend: %s\n\n", shift.End)
+			}
+		}
 	})
 }
 

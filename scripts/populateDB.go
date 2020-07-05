@@ -3,12 +3,9 @@ package main
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
-	"strconv"
 	"time"
 
 	"github.com/clintjedwards/scheduler/model"
@@ -223,110 +220,130 @@ func (h *harness) generateSchedule() {
 	position1 := h.positionsList[0]
 	position2 := h.positionsList[1]
 	position3 := h.positionsList[2]
+	position4 := h.positionsList[3]
+	position5 := h.positionsList[4]
+	position6 := h.positionsList[5]
+	position7 := h.positionsList[6]
+	position8 := h.positionsList[7]
 
 	schedule := model.Schedule{
 		Start:          "06-19-1990",
 		End:            "06-27-1990",
 		EmployeeFilter: []string{},
 		Program: model.Program{
-			Monday: map[string][]model.Shift{
-				position1: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+			Monday: []model.Shift{
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position1,
 				},
-				position2: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position2,
 				},
-				position3: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position3,
 				},
-			},
-			Tuesday: map[string][]model.Shift{
-				position1: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "1300",
+					End:        "1600",
+					PositionID: position4,
 				},
-				position2: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "1300",
+					End:        "1600",
+					PositionID: position5,
 				},
-				position3: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "1600",
+					End:        "2200",
+					PositionID: position6,
 				},
-			},
-			Wednesday: map[string][]model.Shift{
-				position1: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "1600",
+					End:        "2200",
+					PositionID: position7,
 				},
-				position2: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "1600",
+					End:        "2200",
+					PositionID: position8,
 				},
-				position3: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "1600",
+					End:        "2200",
+					PositionID: position1,
 				},
 			},
-			Thursday: map[string][]model.Shift{
-				position1: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+			Tuesday: []model.Shift{
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position1,
 				},
-				position2: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position2,
 				},
-				position3: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position3,
 				},
 			},
-			Friday: map[string][]model.Shift{
-				position1: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+			Wednesday: []model.Shift{
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position1,
 				},
-				position2: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position2,
 				},
-				position3: {
-					{
-						Start: "0800",
-						End:   "1300",
-					},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position3,
+				},
+			},
+			Thursday: []model.Shift{
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position1,
+				},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position2,
+				},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position3,
+				},
+			},
+			Friday: []model.Shift{
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position1,
+				},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position2,
+				},
+				{
+					Start:      "0800",
+					End:        "1300",
+					PositionID: position3,
 				},
 			},
 		},
@@ -341,12 +358,7 @@ func main() {
 	h := harness{}
 	h.setup()
 
-	if len(os.Args) < 3 {
-		fmt.Println("Usage: go run populateDB.go <numEmployees>")
-		os.Exit(1)
-	}
-	numEmployees, _ := strconv.Atoi(os.Args[1])
 	h.createPositions()
-	h.createEmployees(numEmployees)
+	h.createEmployees(10)
 	h.generateSchedule()
 }
