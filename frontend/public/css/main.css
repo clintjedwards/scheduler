@@ -86,7 +86,7 @@ footer {
   z-index: 1003;
 }
 
-.modal .modal-content {
+#view-schedule-modal.modal .modal-content {
   padding-left: 0;
 }
 

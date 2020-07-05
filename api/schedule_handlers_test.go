@@ -104,18 +104,18 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 				},
 				Tuesday: []model.Shift{
 					{
-						Start:      "0800",
-						End:        "1300",
+						Start:      "0900",
+						End:        "1400",
 						PositionID: "1",
 					},
 					{
-						Start:      "0800",
-						End:        "1300",
+						Start:      "0900",
+						End:        "1400",
 						PositionID: "2",
 					},
 					{
-						Start:      "0800",
-						End:        "1300",
+						Start:      "0900",
+						End:        "1400",
 						PositionID: "3",
 					},
 				},
