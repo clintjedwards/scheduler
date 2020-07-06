@@ -1,7 +1,5 @@
 const client = new SchedulerClient();
 
-let state = {};
-
 function humanizedBuildTime(time) {
   let human_time = moment(moment.unix(time)).format("L");
   return human_time;
@@ -29,31 +27,34 @@ function populateSystemInfo() {
 
 function populateEmployeeList() {
   client.listEmployees().then((data) => {
-    state.employees = data;
+    localStorage.setItem("employees", JSON.stringify(data));
   });
 }
+
 function populatePositionList() {
   client.listPositions().then((data) => {
-    state.positions = data;
+    localStorage.setItem("positions", JSON.stringify(data));
   });
 }
+
 function populateScheduleList() {
   client.listSchedules().then((data) => {
-    state.schedules = data.Schedules;
-    state.schedules_order = data.Order;
+    localStorage.setItem("schedules", JSON.stringify(data.Schedules));
+    localStorage.setItem("schedules_order", JSON.stringify(data.Order));
   });
 }
 
 function renderEmployees() {
   client.listEmployees().then((data) => {
-    state.employees = data;
+    let employees = data;
+    localStorage.setItem("employees", JSON.stringify(data));
 
     let content = document.getElementById("employees-content-body");
 
     let innerHTML = "";
     innerHTML += "<ul class='collection'>";
 
-    for (const [id, employee] of Object.entries(state.employees)) {
+    for (const [id, employee] of Object.entries(employees)) {
       innerHTML += `<li class="collection-item">
       <span class="title">${employee.name}</span>
       </li>`;
@@ -66,14 +67,15 @@ function renderEmployees() {
 
 function renderPositions() {
   client.listPositions().then((data) => {
-    state.positions = data;
+    let positions = data;
+    localStorage.setItem("positions", JSON.stringify(data));
 
     let content = document.getElementById("positions-content-body");
 
     let innerHTML = "";
     innerHTML += "<ul class='collection'>";
 
-    for (const [id, position] of Object.entries(state.positions)) {
+    for (const [id, position] of Object.entries(positions)) {
       innerHTML += `<li class="collection-item">
         <h5>${position.primary_name}</h5>
         <p class="grey-text text-darken-1">${position.secondary_name}</p>
@@ -88,6 +90,9 @@ function renderPositions() {
 
 document.addEventListener("DOMContentLoaded", function () {
   populateSystemInfo();
+  populateEmployeeList();
+  populatePositionList();
+  populateScheduleList();
 
   var elems = document.querySelectorAll(".sidenav");
   M.Sidenav.init(elems, { menuWidth: 300 });

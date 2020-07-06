@@ -5,18 +5,21 @@ function renderSchedules() {
     if (data.Schedules === null || data.Order === null) {
       return;
     }
-    state.schedules = data.Schedules;
-    state.schedules_order = data.Order;
+
+    let schedules = data.Schedules;
+    localStorage.setItem("schedules", JSON.stringify(data.Schedules));
+    let schedules_order = data.Order;
+    localStorage.setItem("schedules_order", JSON.stringify(data.Order));
 
     let content = document.getElementById("schedules-content-body");
 
     let innerHTML = "";
     innerHTML += "<ul id='schedules-collection' class='collection'>";
 
-    for (let id of state.schedules_order) {
+    for (let id of schedules_order) {
       innerHTML += `<li id="${id}" class="collection-item">
-            <h6>${humanizedDate(state.schedules[id].start)} - ${humanizedDate(
-        state.schedules[id].end
+            <h6>${humanizedDate(schedules[id].start)} - ${humanizedDate(
+        schedules[id].end
       )}</h6>
             </li>`;
     }

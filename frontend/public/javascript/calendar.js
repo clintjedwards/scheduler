@@ -29,17 +29,19 @@ function generateHeadings(timetable) {
 // draw the row by iterating through allocs for each date
 function generateDays(timetable) {
   let html = "";
+  let employees = JSON.parse(localStorage.getItem("employees"));
+  let positions = JSON.parse(localStorage.getItem("positions"));
 
   for (const [date, shifts] of Object.entries(timetable)) {
     html += `<div class="colgroup">`;
     for (let shift of timetable[date]) {
       html += `<div class="row">
       <h6>${humanizeTime(shift.start)} - ${humanizeTime(shift.end)}</h6>
-      <h5 class="text-tertiary">${state.employees[shift.employee_id].name}</h5>
-        <p>${state.positions[shift.position_id].primary_name}`;
-      if (state.positions[shift.position_id].secondary_name !== "") {
+      <h5 class="text-tertiary">${employees[shift.employee_id].name}</h5>
+        <p>${positions[shift.position_id].primary_name}`;
+      if (positions[shift.position_id].secondary_name !== "") {
         html += `<span class="text-secondary"> (${
-          state.positions[shift.position_id].secondary_name
+          positions[shift.position_id].secondary_name
         })</span>`;
       }
       html += `</p></div>`;

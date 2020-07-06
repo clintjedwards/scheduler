@@ -72,8 +72,35 @@
           </div>
         </div>
         <div id="employees-content-body" class="content-body"></div>
-        <div id="add-employee-modal" class="modal">
-          <div id="add-employee-modal-content" class="modal-content"></div>
+        <div id="add-employee-modal" class="modal modal-fixed-footer">
+          <div id="add-employee-modal-content" class="modal-content">
+            <h3>Add Employee <i class="material-icons">person_add</i></h3>
+            <div class="row container">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="name" type="text" class="validate" />
+                    <label for="name">Name</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="start_date" type="text" class="datepicker" />
+                    <label for="start_date">Start Date</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <select id="position-selector" multiple> </select>
+                    <label>Eligible Positions</label>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect btn-flat">Close</a>
+          </div>
         </div>
       </div>
     </div>

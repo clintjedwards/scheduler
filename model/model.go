@@ -15,7 +15,7 @@ type Employee struct {
 	ID        string         `json:"id"`
 	Name      string         `json:"name"`
 	Notes     string         `json:"notes"`
-	StartDate string         `json:"start_date"`
+	StartDate string         `json:"start_date"` //format: mm-dd-yyyy
 	Status    EmployeeStatus `json:"status"`
 	// Unavailable represents a mapping of date(format: mm-dd-yyyy) with
 	// time range(format: 00:00-24:00) when the employee will not be able to be
