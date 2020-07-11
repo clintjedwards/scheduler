@@ -72,7 +72,7 @@
           </div>
         </div>
         <div id="employees-content-body" class="content-body"></div>
-        <div id="add-employee-modal" class="modal modal-fixed-footer">
+        <div id="add-employee-modal" class="modal">
           <div id="add-employee-modal-content" class="modal-content">
             <h3>Add Employee <i class="material-icons">person_add</i></h3>
             <div class="row container">
@@ -84,22 +84,40 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="input-field col s12">
+                  <div class="input-field col s6">
                     <input id="start_date" type="text" class="datepicker" />
                     <label for="start_date">Start Date</label>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="input-field col s12">
+                  <div class="input-field col s6">
                     <select id="position-selector" multiple> </select>
                     <label>Eligible Positions</label>
                   </div>
                 </div>
+                <div class="row">
+                  <div class="input-field col s12">
+                    <p>Unavailability</p>
+                    <!-- <input
+                      disabled
+                      value="I am not editable"
+                      id="disabled"
+                      type="text"
+                    /> -->
+                    <a class="waves-effect waves-light btn primary-button"
+                      ><i class="material-icons left">alarm_off</i>add new
+                      unavailability</a
+                    >
+                  </div>
+                </div>
               </form>
             </div>
-          </div>
-          <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect btn-flat">Close</a>
+            <footer class="right">
+              <a href="#!" class="waves-effect btn-flat footer-button">Add</a>
+              <a
+                href="#!"
+                class="modal-close waves-effect btn-flat footer-button"
+                >Close</a
+              >
+            </footer>
           </div>
         </div>
       </div>

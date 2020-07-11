@@ -65,7 +65,7 @@ footer {
 }
 
 #add-employee-modal.modal {
-  width: 40%;
+  width: 50%;
   max-height: 80%;
   height: 80%;
 }
@@ -79,10 +79,13 @@ footer {
 .heading {
   padding-left: 80px;
   border-bottom: 1px solid #fcbb6d;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 #calendar {
   margin-left: 80px;
+  white-space: nowrap;
 }
 
 .modal.modal-fixed-header .modal-header {
@@ -157,6 +160,26 @@ footer {
 }
 
 .main-action-button:hover {
+  background-color: #685d79;
+}
+
+.primary-button {
+  color: #dfe6e9;
+  background-color: #d8737f;
+}
+
+.primary-button:hover {
+  color: #dfe6e9;
+  background-color: #685d79;
+}
+
+.footer-button {
+  color: #dfe6e9;
+  background-color: #d8737f;
+}
+
+.footer-button:hover {
+  color: #dfe6e9;
   background-color: #685d79;
 }
 
