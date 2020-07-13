@@ -2,7 +2,7 @@ package avail
 
 import "regexp"
 
-// list of regexs that we use to match against an expression
+// list of regexs that we use to match against a single cron expression
 var (
 	spanRegex     = regexp.MustCompile(`^[0-9]+-[0-9]+$`)
 	wildcardRegex = regexp.MustCompile(`^\*$`)
