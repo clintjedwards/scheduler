@@ -37,8 +37,10 @@ function generateDays(timetable) {
     for (let shift of timetable[date]) {
       html += `<div class="row">
       <h6>${humanizeTime(shift.start)} - ${humanizeTime(shift.end)}</h6>
-      <h5 class="text-tertiary">${employees[shift.employee_id].name}</h5>
-        <p>${positions[shift.position_id].primary_name}`;
+      <h5 class="text-tertiary">${sanitizeHTML(
+        employees[shift.employee_id].name
+      )}</h5>
+        <p>${sanitizeHTML(positions[shift.position_id].primary_name)}`;
       if (positions[shift.position_id].secondary_name !== "") {
         html += `<span class="text-secondary"> (${
           positions[shift.position_id].secondary_name

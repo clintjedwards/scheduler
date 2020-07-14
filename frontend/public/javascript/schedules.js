@@ -17,7 +17,7 @@ function renderSchedules() {
     innerHTML += "<ul id='schedules-collection' class='collection'>";
 
     for (let id of schedules_order) {
-      innerHTML += `<li id="${id}" class="collection-item">
+      innerHTML += `<li id="${sanitizeHTML(id)}" class="collection-item">
             <h6>${humanizedDate(schedules[id].start)} - ${humanizedDate(
         schedules[id].end
       )}</h6>

@@ -5,9 +5,11 @@ function populatePositionSelector() {
   let html = `<option value="" disabled selected> Choose Positions </option>`;
 
   for (let [id, position] of Object.entries(positions)) {
-    html += `<option value="${id}">${position.primary_name}`;
+    html += `<option value="${sanitizeHTML(id)}">${sanitizeHTML(
+      position.primary_name
+    )}`;
     if (position.secondary_name !== "") {
-      html += ` (${position.secondary_name})`;
+      html += ` (${sanitizeHTML(position.secondary_name)})`;
     }
     html += "</option>";
   }

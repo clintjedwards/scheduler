@@ -19,69 +19,50 @@ package avail
 
 import (
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
 )
 
-type field struct {
-	name       string
-	expression string
-	min, max   int
+// fieldType is an enum which represents different parts of a total cron expression.
+// For example in the expression "0 10 15 * * *", 0 would be of type "minute".
+type fieldType string
+
+const (
+	minute fieldType = "minute"
+	hour             = "hour"
+	date             = "date"
+	month            = "month"
+	day              = "day"
+	year             = "year"
+)
+
+type Field struct {
+	Kind fieldType
+	// Term is a single field in a complete cron expression.
+	// Ex. in the expression: "0 15 10 * * *", "15" would be a term.
+	Term     string
+	Min, Max int
+	Values   map[int]struct{}
 }
 
-func newMinuteField(expression string) field {
-	return field{
-		name:       "minute",
-		expression: expression,
-		min:        0,
-		max:        59,
-	}
-}
+var cronExpressionRegex = regexp.MustCompile(`^((((\d+,)+\d+|(\d+(-)\d+)|\d+|\*) ?){6})$`)
 
-func newHourField(expression string) field {
-	return field{
-		name:       "hour",
-		expression: expression,
-		min:        0,
-		max:        23,
+func newField(kind fieldType, term string, min, max int) (Field, error) {
+	newField := Field{
+		Kind: kind,
+		Term: term,
+		Min:  min,
+		Max:  max,
 	}
-}
 
-func newDOMField(expression string) field {
-	return field{
-		name:       "day-of-month",
-		expression: expression,
-		min:        0,
-		max:        6,
+	err := newField.parse()
+	if err != nil {
+		return Field{}, err
 	}
-}
 
-func newMonthField(expression string) field {
-	return field{
-		name:       "month",
-		expression: expression,
-		min:        1,
-		max:        12,
-	}
-}
-
-func newDOWField(expression string) field {
-	return field{
-		name:       "day-of-week",
-		expression: expression,
-		min:        0,
-		max:        6,
-	}
-}
-
-func newYearField(expression string) field {
-	return field{
-		name:       "year",
-		expression: expression,
-		min:        1970,
-		max:        2100,
-	}
+	return newField, nil
 }
 
 // api should look like:
@@ -98,7 +79,12 @@ func newYearField(expression string) field {
 // is within the set. These sets are made with structs because empty structs are 0 bytes.
 // https://dave.cheney.net/2014/03/25/the-empty-struct
 type Result struct {
-	seconds map[int]struct{}
+	Minutes Field
+	Hours   Field
+	Dates   Field
+	Months  Field
+	Days    Field
+	Years   Field
 }
 
 // Avail represents both the raw cron expression and the datastructures used to represent that
@@ -109,53 +95,122 @@ type Avail struct {
 }
 
 // New will parse the given cron expression and allow user to check if the time given is within
-func New(expression string) *Avail {
-	return &Avail{}
+func New(expression string) (Avail, error) {
+	isMatch := cronExpressionRegex.MatchString(expression)
+	if !isMatch {
+		return Avail{}, fmt.Errorf("could not parse cron expression: %s", expression)
+	}
+
+	terms := strings.Split(expression, " ")
+
+	minutes, err := newField(minute, terms[0], 0, 59)
+	hours, err := newField(hour, terms[1], 0, 23)
+	date, err := newField(date, terms[2], 1, 31)
+	month, err := newField(month, terms[3], 1, 12)
+	day, err := newField(day, terms[4], 0, 6)
+	year, err := newField(year, terms[5], 1970, 2100)
+	if err != nil {
+		return Avail{}, err
+	}
+
+	return Avail{
+		Expression: expression,
+		Result: Result{
+			Minutes: minutes,
+			Hours:   hours,
+			Dates:   date,
+			Months:  month,
+			Days:    day,
+			Years:   year,
+		},
+	}, nil
 }
 
-// Able will evaluate if the time passed is within the cron expression.
-func (u *Avail) Able(time time.Time) {
+// Able will evaluate if the time given is within the cron expression.
+func (a *Avail) Able(time time.Time) bool {
+	fieldTypes := []fieldType{
+		minute,
+		hour,
+		date,
+		month,
+		day,
+		year,
+	}
 
-}
+	for _, field := range fieldTypes {
+		switch field {
+		case minute:
+			if _, ok := a.Result.Minutes.Values[time.Minute()]; !ok {
+				return false
+			}
+		case hour:
+			if _, ok := a.Result.Hours.Values[time.Hour()]; !ok {
+				return false
+			}
+		case date:
+			if _, ok := a.Result.Dates.Values[time.Day()]; !ok {
+				return false
+			}
+		case month:
+			if _, ok := a.Result.Months.Values[int(time.Month())]; !ok {
+				return false
+			}
+		case day:
+			if _, ok := a.Result.Days.Values[int(time.Weekday())]; !ok {
+				return false
+			}
+		case year:
+			if _, ok := a.Result.Years.Values[time.Year()]; !ok {
+				return false
+			}
+		}
+	}
 
-func parse(expression string) Result {
-
-	return Result{}
+	return true
 }
 
 // parse returns a representation of the field as a set
-func (f field) parse() (map[int]struct{}, error) {
-	switch identifyFieldType(f.expression) {
+func (f *Field) parse() error {
+	switch identifyTermType(f.Term) {
 	case wildcard:
-		return f.parseWildcardField(), nil
+		f.Values = f.parseWildcardField()
+		return nil
 	case span:
 		result, err := f.parseSpanField()
 		if err != nil {
-			return result, fmt.Errorf("could not parse %s: %w", f.name, err)
+			return fmt.Errorf("could not parse %s: %w", f.Kind, err)
 		}
+		f.Values = result
+		return nil
 	case value:
 		result, err := f.parseValueField()
 		if err != nil {
-			return result, fmt.Errorf("could not parse %s: %w", f.name, err)
+			return fmt.Errorf("could not parse %s: %w", f.Kind, err)
 		}
+		f.Values = result
+		return nil
 	case list:
 		result, err := f.parseListField()
 		if err != nil {
-			return result, fmt.Errorf("could not parse %s: %w", f.name, err)
+			return fmt.Errorf("could not parse %s: %w", f.Kind, err)
 		}
+		f.Values = result
+		return nil
 	case unknown:
-		return nil, fmt.Errorf("could not parse field: %s; expression: %s", f.name, f.expression)
+		return fmt.Errorf("could not parse field: %s; expression: %s", f.Kind, f.Term)
 	}
 
-	return nil, fmt.Errorf("could not parse field: %s; expression: %s", f.name, f.expression)
+	return fmt.Errorf("could not parse field: %s; expression: %s", f.Kind, f.Term)
 }
 
-func (f field) parseWildcardField() map[int]struct{} {
-	return generateSequentialSet(f.min, f.max)
+func (f *Field) parseWildcardField() map[int]struct{} {
+	return generateSequentialSet(f.Min, f.Max)
 }
 
-func (f field) parseSpanField() (map[int]struct{}, error) {
-	values := strings.Split(f.expression, "-")
+// TODO(clintjedwards): We should break field into one more struct
+// that defines descriptors for individual field types
+func (f *Field) parseSpanField() (map[int]struct{}, error) {
+	values := strings.Split(f.Term, "-")
 
 	min, err := strconv.Atoi(values[0])
 	if err != nil {
@@ -171,29 +226,29 @@ func (f field) parseSpanField() (map[int]struct{}, error) {
 		return nil, fmt.Errorf("first value(%d) cannot be greater/equal to second(%d)", min, max)
 	}
 
-	if min < f.min {
-		return nil, fmt.Errorf("value(%d) cannot be less than min(%d)", min, f.min)
+	if min < f.Min {
+		return nil, fmt.Errorf("value(%d) cannot be less than min(%d)", min, f.Min)
 	}
 
-	if max < f.max {
-		return nil, fmt.Errorf("value(%d) cannot be more than max(%d)", max, f.max)
+	if max > f.Max {
+		return nil, fmt.Errorf("value(%d) cannot be more than max(%d)", max, f.Max)
 	}
 
 	return generateSequentialSet(min, max), nil
 }
 
-func (f field) parseValueField() (map[int]struct{}, error) {
-	value, err := strconv.Atoi(f.expression)
+func (f *Field) parseValueField() (map[int]struct{}, error) {
+	value, err := strconv.Atoi(f.Term)
 	if err != nil {
-		return nil, fmt.Errorf("could not parse value %s: %v", f.expression, err)
+		return nil, fmt.Errorf("could not parse value %s: %v", f.Term, err)
 	}
 
-	if value < f.min {
-		return nil, fmt.Errorf("value(%d) cannot be less than min(%d)", value, f.min)
+	if value < f.Min {
+		return nil, fmt.Errorf("value(%d) cannot be less than min(%d)", value, f.Min)
 	}
 
-	if value < f.max {
-		return nil, fmt.Errorf("value(%d) cannot be more than max(%d)", value, f.max)
+	if value < f.Max {
+		return nil, fmt.Errorf("value(%d) cannot be more than max(%d)", value, f.Max)
 	}
 
 	return map[int]struct{}{
@@ -201,22 +256,22 @@ func (f field) parseValueField() (map[int]struct{}, error) {
 	}, nil
 }
 
-func (f field) parseListField() (map[int]struct{}, error) {
+func (f *Field) parseListField() (map[int]struct{}, error) {
 	set := map[int]struct{}{}
-	values := strings.Split(f.expression, ",")
+	values := strings.Split(f.Term, ",")
 
 	for _, rawValue := range values {
 		value, err := strconv.Atoi(rawValue)
 		if err != nil {
-			return nil, fmt.Errorf("could not parse value %s: %v", f.expression, err)
+			return nil, fmt.Errorf("could not parse value %s: %v", f.Term, err)
 		}
 
-		if value < f.min {
-			return nil, fmt.Errorf("value(%d) cannot be less than min(%d)", value, f.min)
+		if value < f.Min {
+			return nil, fmt.Errorf("value(%d) cannot be less than min(%d)", value, f.Min)
 		}
 
-		if value < f.max {
-			return nil, fmt.Errorf("value(%d) cannot be more than max(%d)", value, f.max)
+		if value < f.Max {
+			return nil, fmt.Errorf("value(%d) cannot be more than max(%d)", value, f.Max)
 		}
 
 		set[value] = struct{}{}
@@ -227,7 +282,7 @@ func (f field) parseListField() (map[int]struct{}, error) {
 
 func generateSequentialSet(start, end int) map[int]struct{} {
 	set := map[int]struct{}{}
-	for i := start; i < end; i++ {
+	for i := start; i < end+1; i++ {
 		set[i] = struct{}{}
 	}
 	return set

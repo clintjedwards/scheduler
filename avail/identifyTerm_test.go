@@ -2,10 +2,10 @@ package avail
 
 import "testing"
 
-func TestIdentifyFieldType(t *testing.T) {
+func TestIdentifyTermType(t *testing.T) {
 	tests := map[string]struct {
 		input string
-		want  fieldType
+		want  termType
 	}{
 		"span":     {"1-12", span},
 		"wildcard": {"*", wildcard},
@@ -16,7 +16,7 @@ func TestIdentifyFieldType(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := identifyFieldType(tc.input)
+			got := identifyTermType(tc.input)
 			if got != tc.want {
 				t.Errorf("incorrect field type identified for %s; got %s, want %s", tc.input, got, tc.want)
 			}

@@ -1,5 +1,11 @@
 const client = new SchedulerClient();
 
+function sanitizeHTML(text) {
+  var element = document.createElement("div");
+  element.innerText = text;
+  return element.innerHTML;
+}
+
 function humanizedBuildTime(time) {
   let human_time = moment(moment.unix(time)).format("L");
   return human_time;
@@ -12,9 +18,11 @@ function humanizedRelativeBuildTime(time) {
 
 function populateSystemInfo() {
   systemInfo = client.getSystemInfo().then((info) => {
-    let footer_text = `Version v${info.semver} | ${humanizedBuildTime(
+    let footer_text = `Version v${sanitizeHTML(
+      info.semver
+    )} | ${humanizedBuildTime(info.build_time)} (${humanizedRelativeBuildTime(
       info.build_time
-    )} (${humanizedRelativeBuildTime(info.build_time)}) | ${info.commit}`;
+    )}) | ${sanitizeHTML(info.commit)}`;
 
     if (info.debug_enabled) {
       footer_text += " | Debug Enabled";
@@ -56,7 +64,7 @@ function renderEmployees() {
 
     for (const [id, employee] of Object.entries(employees)) {
       innerHTML += `<li class="collection-item">
-      <span class="title">${employee.name}</span>
+      <span class="title">${sanitizeHTML(employee.name)}</span>
       </li>`;
     }
     innerHTML += "</ul>";
@@ -77,9 +85,11 @@ function renderPositions() {
 
     for (const [id, position] of Object.entries(positions)) {
       innerHTML += `<li class="collection-item">
-        <h5>${position.primary_name}</h5>
-        <p class="grey-text text-darken-1">${position.secondary_name}</p>
-        <p>${position.description}</p>
+        <h5>${sanitizeHTML(position.primary_name)}</h5>
+        <p class="grey-text text-darken-1">${sanitizeHTML(
+          position.secondary_name
+        )}</p>
+        <p>${sanitizeHTML(position.description)}</p>
         </li>`;
     }
     innerHTML += "</ul>";
