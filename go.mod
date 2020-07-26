@@ -16,9 +16,7 @@ require (
 	github.com/spf13/cobra v0.0.7
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/net v0.0.0-20200301022130-244492dfa37a // indirect
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
 	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/tools v0.0.0-20200612220849-54c614fe050c // indirect
+	golang.org/x/tools v0.0.0-20200725200936-102e7d357031 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )

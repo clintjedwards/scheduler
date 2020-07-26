@@ -1,7 +1,9 @@
 package avail
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 )
@@ -28,8 +30,8 @@ func TestNew(t *testing.T) {
 					Max:    23,
 					Values: generateSequentialSet(0, 23),
 				},
-				Dates: Field{
-					Kind:   date,
+				Days: Field{
+					Kind:   day,
 					Term:   "*",
 					Min:    1,
 					Max:    31,
@@ -42,8 +44,8 @@ func TestNew(t *testing.T) {
 					Max:    12,
 					Values: generateSequentialSet(1, 12),
 				},
-				Days: Field{
-					Kind:   day,
+				Weekdays: Field{
+					Kind:   weekday,
 					Term:   "*",
 					Min:    0,
 					Max:    6,
@@ -114,30 +116,24 @@ func TestParseSpan(t *testing.T) {
 }
 
 func TestAble(t *testing.T) {
+	avail, err := New("* * * * * *")
+	if err != nil {
+		t.Error(err)
+	}
 
+	now := time.Now()
+
+	isAvailable := avail.Able(now)
+	if isAvailable != true {
+		t.Error("expected true; got false")
+	}
 }
 
-// func TestIdentifyTermType(t *testing.T) {
-// 	tests := map[string]struct {
-// 		input string
-// 		want  termType
-// 	}{
-// 		"span":     {"1-12", span},
-// 		"wildcard": {"*", wildcard},
-// 		"list":     {"1,2,3,4,5,6", list},
-// 		"value":    {"45", value},
-// 		"unknown":  {"233)#!", unknown},
-// 	}
+func ExampleAvail_Able() {
+	avail, _ := New("* * * * * *")
 
-// 	for name, tc := range tests {
-// 		t.Run(name, func(t *testing.T) {
-// 			got := identifyTermType(tc.input)
-// 			if got != tc.want {
-// 				t.Errorf("incorrect field type identified for %s; got %s, want %s", tc.input, got, tc.want)
-// 			}
-// 		})
-// 	}
-// }
+	now := time.Now()
 
-// func New(expression string) (*Avail, error) {
-// 	func (a *Avail) Able(time time.Time) bool {
+	fmt.Println(avail.Able(now))
+	// Output: true
+}
