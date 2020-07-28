@@ -17,12 +17,10 @@ type Employee struct {
 	Notes     string         `json:"notes"`
 	StartDate string         `json:"start_date"` //format: mm-dd-yyyy
 	Status    EmployeeStatus `json:"status"`
-	// Unavailable represents a mapping of date(format: mm-dd-yyyy) with
-	// time range(format: 00:00-24:00) when the employee will not be able to be
-	// scheduled
-	Unavailable map[string]string `json:"unavailable"`
+	// Unavailabilities represents time periods that an employee cannot work expressed as cron expressions
+	Unavailabilities []string `json:"unavailabilities"`
 	// Positions is a set of positions ids that the employee is allowed to work
-	Positions map[string]bool `json:"positions"`
+	Positions map[string]struct{} `json:"positions"`
 	// Preferences are used to weight employees in scheduling. The key of the dictionary
 	// is the preferences type and the value can be the current setting.
 	// example POSITION => "$somePositionID"

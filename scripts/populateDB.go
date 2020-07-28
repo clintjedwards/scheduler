@@ -61,9 +61,9 @@ func createEmployee(employee model.Employee) string {
 
 func (h *harness) createEmployees(num int) {
 
-	positions := map[string]bool{}
+	positions := map[string]struct{}{}
 	for _, id := range h.positionsList {
-		positions[id] = true
+		positions[id] = struct{}{}
 	}
 
 	for i := 0; i < num; i++ {

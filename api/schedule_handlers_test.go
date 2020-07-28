@@ -25,39 +25,39 @@ func (info *testHarness) setup() {
 		ID:     "1",
 		Name:   "Clint",
 		Status: model.EmployeeActive,
-		Positions: map[string]bool{
-			"1": true,
-			"2": true,
-			"3": true,
+		Positions: map[string]struct{}{
+			"1": {},
+			"2": {},
+			"3": {},
 		},
 	})
 	mockAPI.storage.AddEmployee("2", &model.Employee{
 		ID:     "2",
 		Name:   "Caroline",
 		Status: model.EmployeeActive,
-		Positions: map[string]bool{
-			"1": true,
-			"2": true,
-			"3": true,
+		Positions: map[string]struct{}{
+			"1": {},
+			"2": {},
+			"3": {},
 		},
 	})
 	mockAPI.storage.AddEmployee("3", &model.Employee{
 		ID:     "3",
 		Name:   "Shane",
 		Status: model.EmployeeActive,
-		Positions: map[string]bool{
-			"1": true,
-			"2": true,
-			"3": true,
+		Positions: map[string]struct{}{
+			"1": {},
+			"2": {},
+			"3": {},
 		},
 	})
 	mockAPI.storage.AddEmployee("4", &model.Employee{
 		ID:   "4",
 		Name: "Shanaya",
-		Positions: map[string]bool{
-			"1": true,
-			"2": true,
-			"3": true,
+		Positions: map[string]struct{}{
+			"1": {},
+			"2": {},
+			"3": {},
 		},
 	})
 	mockAPI.storage.AddPosition("4", &model.Position{

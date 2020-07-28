@@ -116,17 +116,30 @@ func TestParseSpan(t *testing.T) {
 }
 
 func TestAble(t *testing.T) {
-	avail, err := New("* * * * * *")
-	if err != nil {
-		t.Error(err)
+
+	tests := map[string]struct {
+		expression string
+		time       time.Time
+		want       bool
+	}{
+		"wildcard":           {"* * * * * *", time.Now(), true},
+		"year out of range":  {"* * * * * 2019", time.Now(), false},
+		"year list in range": {"* * * * * 2019,2020,2021", time.Now(), true},
 	}
 
-	now := time.Now()
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			avail, err := New(tc.expression)
+			if err != nil {
+				t.Error(err)
+			}
 
-	isAvailable := avail.Able(now)
-	if isAvailable != true {
-		t.Error("expected true; got false")
+			if avail.Able(tc.time) != tc.want {
+				t.Errorf("want %t, got %t", tc.want, !tc.want)
+			}
+		})
 	}
+
 }
 
 func ExampleAvail_Able() {
