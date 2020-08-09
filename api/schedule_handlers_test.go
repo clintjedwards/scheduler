@@ -7,7 +7,6 @@ import (
 	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage/memory"
 	"github.com/rs/zerolog/log"
-	"github.com/stretchr/testify/require"
 )
 
 type testHarness struct {
@@ -190,34 +189,9 @@ func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 	})
 }
 
-func (info *testHarness) TestGetEligibleEmployees(t *testing.T) {
-	t.Run("GetEligibleEmployeesFilter", func(t *testing.T) {
-		employees, err := info.mockAPI.getEmployees([]string{"1", "2"})
-
-		require.NoError(t, err)
-		require.NotNil(t, employees)
-		require.Contains(t, employees, "1", "")
-		require.Contains(t, employees, "2", "")
-		require.NotContains(t, employees, "3", "")
-		require.NotContains(t, employees, "4", "")
-	})
-
-	t.Run("GetEligibleEmployeesActive", func(t *testing.T) {
-		employees, err := info.mockAPI.getEmployees([]string{})
-
-		require.NoError(t, err)
-		require.NotNil(t, employees)
-		require.Contains(t, employees, "1", "")
-		require.Contains(t, employees, "2", "")
-		require.Contains(t, employees, "3", "")
-		require.NotContains(t, employees, "4", "")
-	})
-}
-
 func TestScheduleHandlers(t *testing.T) {
 	info := testHarness{}
 	info.setup()
 
 	info.TestGenerateSchedule(t)
-	info.TestGetEligibleEmployees(t)
 }

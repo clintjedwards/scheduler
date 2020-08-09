@@ -2,7 +2,10 @@ package model
 
 import (
 	"fmt"
+	"log"
 	"time"
+
+	"github.com/clintjedwards/scheduler/avail"
 )
 
 // Schedule represents a generated timetable mapping of positions => shift => employee
@@ -48,7 +51,7 @@ func NewSchedule(id string, settings Schedule) *Schedule {
 
 // ScheduleDay will insert employees into roles they are best suited for per day; this alters the
 // schedule datastructure.
-func (s *Schedule) ScheduleDay(dateTime time.Time, employees map[string]Employee) error {
+func (sch *Schedule) ScheduleDay(dateTime time.Time, employees map[string]*Employee) error {
 	date := dateTime.Format("01-02-2006")
 
 	// Figure out which program we should have on any given day. We might be able to turn
@@ -56,19 +59,19 @@ func (s *Schedule) ScheduleDay(dateTime time.Time, employees map[string]Employee
 	program := []Shift{}
 	switch weekday := dateTime.Weekday(); weekday {
 	case time.Monday:
-		program = s.Program.Monday
+		program = sch.Program.Monday
 	case time.Tuesday:
-		program = s.Program.Tuesday
+		program = sch.Program.Tuesday
 	case time.Wednesday:
-		program = s.Program.Wednesday
+		program = sch.Program.Wednesday
 	case time.Thursday:
-		program = s.Program.Thursday
+		program = sch.Program.Thursday
 	case time.Friday:
-		program = s.Program.Friday
+		program = sch.Program.Friday
 	case time.Saturday:
-		program = s.Program.Saturday
+		program = sch.Program.Saturday
 	case time.Sunday:
-		program = s.Program.Sunday
+		program = sch.Program.Sunday
 	default:
 		return fmt.Errorf("could not generate day %q; not a valid weekday", weekday)
 	}
@@ -78,15 +81,17 @@ func (s *Schedule) ScheduleDay(dateTime time.Time, employees map[string]Employee
 		return nil
 	}
 
-	employeeSet := newEmployeeSet(employees)
+	// filter out employees that aren't eligible for this date
+	employees = filterUnavailableEmployees(dateTime, employees)
 
+	employeeSet := newEmployeeSet(employees)
 	for _, shift := range program {
 		id, err := employeeSet.pop(shift.PositionID)
 		if err != nil {
 			return err
 		}
 
-		s.TimeTable[date] = append(s.TimeTable[date], Shift{
+		sch.TimeTable[date] = append(sch.TimeTable[date], Shift{
 			Start:      shift.Start,
 			End:        shift.End,
 			PositionID: shift.PositionID,
@@ -97,11 +102,38 @@ func (s *Schedule) ScheduleDay(dateTime time.Time, employees map[string]Employee
 	return nil
 }
 
+func filterUnavailableEmployees(date time.Time, employees map[string]*Employee) map[string]*Employee {
+	filtered := map[string]*Employee{}
+
+	for id, employee := range employees {
+		eligible := true
+
+		for _, expression := range employee.Unavailabilities {
+			avail, err := avail.New(expression)
+			if err != nil {
+				log.Printf("(UPDATEME) avail error: %v", err)
+				continue
+			}
+
+			// if date is within user unavail range user cannot work on that day
+			if avail.Able(date) {
+				eligible = false
+			}
+		}
+
+		if eligible {
+			filtered[id] = employee
+		}
+	}
+
+	return filtered
+}
+
 // employee set represents a set of available employees
-type employeeSet map[string]Employee
+type employeeSet map[string]*Employee
 
 // newEmployeeSet creates a new set datastructure for managing available employees
-func newEmployeeSet(employees map[string]Employee) employeeSet {
+func newEmployeeSet(employees map[string]*Employee) employeeSet {
 
 	availableEmployees := employeeSet{}
 	for employeeID, employee := range employees {

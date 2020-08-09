@@ -13,67 +13,89 @@ import (
 )
 
 func (api *API) generateSchedule(sch *model.Schedule) error {
-
-	currentDate, err := time.Parse("01-02-2006", sch.Start)
-	if err != nil {
-		return fmt.Errorf("could not parse start date; should be in format mm-dd-yyy: %v", err)
-	}
-
-	endDate, err := time.Parse("01-02-2006", sch.End)
-	if err != nil {
-		return fmt.Errorf("could not parse end date; should be in format mm-dd-yyy: %v", err)
-	}
-
-	employees, err := api.getEmployees(sch.EmployeeFilter)
+	dates, err := getDates(sch.Start, sch.End)
 	if err != nil {
 		return err
 	}
 
-	for {
-		if currentDate.After(endDate) {
-			break
-		}
-		err := sch.ScheduleDay(currentDate, employees)
+	employeePool, err := api.storage.GetAllEmployees()
+	if err != nil {
+		return err
+	}
+
+	// filter out employees that are ineligible for scheduling
+	employeePool = filterEmployeesByID(sch.EmployeeFilter, employeePool)
+	employeePool = filterInactiveEmployee(employeePool)
+
+	for _, date := range dates {
+		err := sch.ScheduleDay(date, employeePool)
 		if err != nil {
 			return err
 		}
-		currentDate = currentDate.AddDate(0, 0, 1)
 	}
 
 	return nil
 }
 
-// getEmployees returns a map of eligible employees for future scheduling.
-// TODO(clintjedwards): This datastructure should be more advanced, something like a heap would work nicely here
-// since eventually employees will have a weight. We might have to calculate weights for each
-// position ahead of time and then use that here later
-func (api *API) getEmployees(employeeFilter []string) (map[string]model.Employee, error) {
+// getDates returns a list of consecutive dates as time.Time objects given a start date and an end date in format mm-dd-yyy
+func getDates(start, end string) ([]time.Time, error) {
 
-	eligibleEmployees := map[string]model.Employee{}
-
-	employees, err := api.storage.GetAllEmployees()
+	currentDate, err := time.Parse("01-02-2006", start)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("could not parse start date; should be in format mm-dd-yyyy: %v", err)
 	}
 
-	if len(employeeFilter) != 0 {
-		for _, employee := range employeeFilter {
-			if employees[employee].Status != model.EmployeeActive {
-				continue
-			}
-			eligibleEmployees[employee] = *employees[employee]
-		}
-		return eligibleEmployees, nil
+	endDate, err := time.Parse("01-02-2006", end)
+	if err != nil {
+		return nil, fmt.Errorf("could not parse end date; should be in format mm-dd-yyyy: %v", err)
 	}
+
+	dates := []time.Time{}
+
+	for {
+		if currentDate.After(endDate) {
+			break
+		}
+		dates = append(dates, currentDate)
+		currentDate = currentDate.AddDate(0, 0, 1)
+	}
+
+	return dates, nil
+}
+
+func filterInactiveEmployee(employees map[string]*model.Employee) map[string]*model.Employee {
+	filtered := map[string]*model.Employee{}
 
 	for id, employee := range employees {
 		if employee.Status != model.EmployeeActive {
 			continue
 		}
-		eligibleEmployees[id] = *employees[id]
+		filtered[id] = employee
 	}
 
-	return eligibleEmployees, nil
+	return filtered
+}
+
+func filterEmployeesByID(filter []string, employees map[string]*model.Employee) map[string]*model.Employee {
+
+	if len(filter) == 0 {
+		return employees
+	}
+
+	filtered := map[string]*model.Employee{}
+	filterMap := map[string]struct{}{}
+
+	for _, id := range filter {
+		filterMap[id] = struct{}{}
+	}
+
+	for id, employee := range employees {
+		if _, exists := filterMap[id]; exists {
+			filtered[id] = employee
+		}
+	}
+
+	return filtered
 }
 
 // ListSchedulesHandler returns all schedules unpaginated
