@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 // EmployeeStatus represents the working state an employee is currently in
 type EmployeeStatus string
 
@@ -27,6 +29,15 @@ type Employee struct {
 	Preferences map[string]string `json:"preferences"`
 	Created     int64             `json:"created"`
 	Modified    int64             `json:"modified"`
+}
+
+// IsValid ensures the bare minimum for an employee is present
+func (e *Employee) IsValid() error {
+	if e.Name == "" {
+		return fmt.Errorf("employee must include name")
+	}
+
+	return nil
 }
 
 // Position represents an employment position

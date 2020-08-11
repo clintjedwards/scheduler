@@ -59,15 +59,26 @@ func (info *testHarness) setup() {
 			"3": {},
 		},
 	})
-	mockAPI.storage.AddPosition("4", &model.Position{
+	// This employee is always unavailable
+	mockAPI.storage.AddEmployee("5", &model.Employee{
+		ID:   "5",
+		Name: "Lazy",
+		Positions: map[string]struct{}{
+			"1": {},
+			"2": {},
+			"3": {},
+		},
+		Unavailabilities: []string{"* * * * * *"},
+	})
+	mockAPI.storage.AddPosition("1", &model.Position{
 		ID:          "1",
 		PrimaryName: "baker",
 	})
-	mockAPI.storage.AddPosition("4", &model.Position{
+	mockAPI.storage.AddPosition("2", &model.Position{
 		ID:          "2",
 		PrimaryName: "porter",
 	})
-	mockAPI.storage.AddPosition("4", &model.Position{
+	mockAPI.storage.AddPosition("3", &model.Position{
 		ID:          "3",
 		PrimaryName: "second base",
 	})

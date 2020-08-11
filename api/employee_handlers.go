@@ -43,6 +43,11 @@ func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	newEmployee.Created = time.Now().Unix()
 	newEmployee.Modified = time.Now().Unix()
 
+	err = newEmployee.IsValid()
+	if err != nil {
+		sendErrResponse(w, http.StatusBadRequest, err)
+	}
+
 	err = api.storage.AddEmployee(newEmployee.ID, &newEmployee)
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityExists) {
