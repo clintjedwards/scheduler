@@ -184,6 +184,53 @@ footer {
   background-color: #685d79;
 }
 
+/* An equivelent to the prefix for input fields for suffixes */
+.input-field.suffix i {
+  position: absolute;
+  width: 3rem;
+  font-size: 2rem;
+  transition: color 0.2s;
+  top: 0px;
+  right: 0px;
+}
+
+.input-field.suffix i.active {
+  color: #26a69a;
+}
+
+.input-field.suffix input,
+.input-field.suffix textarea {
+  margin-right: 3rem;
+  width: 92%;
+  width: calc(100% - 3rem);
+}
+
+.input-field.suffix textarea {
+  padding-top: 0.8rem;
+}
+
+.input-field.suffix label {
+  margin-right: 3rem;
+}
+
+@media only screen and (max-width: 992px) {
+  .input-field.suffix input {
+    width: 86%;
+    width: calc(100% - 3rem);
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .input-field.suffix input {
+    width: 80%;
+    width: calc(100% - 3rem);
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
 .colors {
   background-color: #ffd8a8 #fcbb6d #d8737f #ab6c82 #685d79 #475c7a #dfe6e9
     #2d3436;
