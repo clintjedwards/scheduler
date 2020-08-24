@@ -9,7 +9,7 @@ class SchedulerClient {
     return fetch(`${this.url}/api/employees`).then((res) => res.json());
   }
 
-  getEmployee(id) {
+  getEmployee(id: string) {
     return fetch(`${this.url}/api/employees/${id}`).then((res) => res.json());
   }
 
@@ -17,7 +17,7 @@ class SchedulerClient {
     return fetch(`${this.url}/api/positions`).then((res) => res.json());
   }
 
-  getPosition(id) {
+  getPosition(id: string) {
     return fetch(`${this.url}/api/positions/${id}`).then((res) => res.json());
   }
 
@@ -25,7 +25,9 @@ class SchedulerClient {
     return fetch(`${this.url}/api/schedules`).then((res) => res.json());
   }
 
-  getSchedule(id) {
+  getSchedule(id: string) {
     return fetch(`${this.url}/api/schedules/${id}`).then((res) => res.json());
   }
 }
+
+module.exports = new SchedulerClient();

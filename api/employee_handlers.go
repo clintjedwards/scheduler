@@ -46,6 +46,7 @@ func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	err = newEmployee.IsValid()
 	if err != nil {
 		sendErrResponse(w, http.StatusBadRequest, err)
+		return
 	}
 
 	err = api.storage.AddEmployee(newEmployee.ID, &newEmployee)

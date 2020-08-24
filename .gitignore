@@ -14,3 +14,5 @@
 
 #ignore frontend static import
 frontend/assets.go
+
+node_modules/

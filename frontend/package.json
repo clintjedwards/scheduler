@@ -1,0 +1,18 @@
+{
+  "name": "scheduler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/clintjedwards/scheduler"
+  },
+  "author": "clintjedwards",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.6.0"
+  }
+}

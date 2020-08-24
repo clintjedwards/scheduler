@@ -1,44 +1,3 @@
-const client = new SchedulerClient();
-
-function sanitizeHTML(text) {
-  var element = document.createElement("div");
-  element.innerText = text;
-  return element.innerHTML;
-}
-
-function humanizedBuildTime(time) {
-  let human_time = moment(moment.unix(time)).format("L");
-  return human_time;
-}
-
-function humanizedRelativeBuildTime(time) {
-  let human_time = moment(moment.unix(time)).fromNow();
-  return human_time;
-}
-
-function populateSystemInfo() {
-  systemInfo = client.getSystemInfo().then((info) => {
-    let footer_text = `Version v${sanitizeHTML(
-      info.semver
-    )} | ${humanizedBuildTime(info.build_time)} (${humanizedRelativeBuildTime(
-      info.build_time
-    )}) | ${sanitizeHTML(info.commit)}`;
-
-    if (info.debug_enabled) {
-      footer_text += " | Debug Enabled";
-    }
-
-    let footer = document.getElementById("footer-text");
-    footer.innerText = footer_text;
-  });
-}
-
-function populateEmployeeList() {
-  client.listEmployees().then((data) => {
-    localStorage.setItem("employees", JSON.stringify(data));
-  });
-}
-
 function populatePositionList() {
   client.listPositions().then((data) => {
     localStorage.setItem("positions", JSON.stringify(data));
@@ -49,27 +8,6 @@ function populateScheduleList() {
   client.listSchedules().then((data) => {
     localStorage.setItem("schedules", JSON.stringify(data.Schedules));
     localStorage.setItem("schedules_order", JSON.stringify(data.Order));
-  });
-}
-
-function renderEmployees() {
-  client.listEmployees().then((data) => {
-    let employees = data;
-    localStorage.setItem("employees", JSON.stringify(data));
-
-    let content = document.getElementById("employees-content-body");
-
-    let innerHTML = "";
-    innerHTML += "<ul class='collection'>";
-
-    for (const [id, employee] of Object.entries(employees)) {
-      innerHTML += `<li class="collection-item">
-      <span class="title">${sanitizeHTML(employee.name)}</span>
-      </li>`;
-    }
-    innerHTML += "</ul>";
-
-    content.innerHTML = innerHTML;
   });
 }
 
