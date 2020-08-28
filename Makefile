@@ -11,13 +11,15 @@ SHELL = /bin/bash
 VERSION = ${SEMVER}_${EPOCH_TIME}_${GIT_COMMIT}
 
 ## build: run tests and compile application
+.PHONY: build
 build: check-path-included
 	go test ./utils
 	go generate
 	go mod tidy
 	go build -ldflags $(GO_LDFLAGS) -o $(path)
 
-## run: build application and run server
+## run: build application and run server with debug flag
+.PHONY: run
 run: export DEBUG=true
 run:
 	go generate
@@ -25,11 +27,13 @@ run:
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 
 ## help: prints this help message
+.PHONY: help
 help:
 	@echo "Usage: "
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' |  sed -e 's/^/ /'
 
+.PHONY: check-path-included
 check-path-included:
 ifndef path
-	$(error path is undefined; ex. path=/tmp/${APP_NAME})
+	$(error please provide path; ex. path=/tmp/${APP_NAME})
 endif
