@@ -12,5 +12,11 @@
 *.crt
 *.key
 
+#frontend
+node_modules/
+dist/*
+-dist/.gitkeep
+bundle.js
+
 #ignore frontend static import
 frontend/assets.go

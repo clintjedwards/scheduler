@@ -1,7 +1,7 @@
 class SchedulerClient {
   url = location.protocol + "//" + location.host;
 
-  getSystemInfo() {
+  getAppInfo() {
     return fetch(`${this.url}/api/system/info`).then((res) => res.json());
   }
 
@@ -11,6 +11,18 @@ class SchedulerClient {
 
   getEmployee(id) {
     return fetch(`${this.url}/api/employees/${id}`).then((res) => res.json());
+  }
+
+  createEmployee(payload) {
+    if (payload == null) {
+      console.log("no payload passed");
+      return;
+    }
+    return fetch(`${this.url}/api/employees`, {
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      method: "POST",
+      body: JSON.stringify(payload),
+    }).then((res) => res.json());
   }
 
   listPositions() {
@@ -29,3 +41,5 @@ class SchedulerClient {
     return fetch(`${this.url}/api/schedules/${id}`).then((res) => res.json());
   }
 }
+
+export default SchedulerClient;

@@ -122,8 +122,10 @@ func TestAble(t *testing.T) {
 		time       time.Time
 		want       bool
 	}{
-		"wildcard":           {"* * * * * *", time.Now(), true},
-		"year out of range":  {"* * * * * 2019", time.Now(), false},
+		"wildcard":          {"* * * * * *", time.Now(), true},
+		"year out of range": {"* * * * * 2019", time.Now(), false},
+		//TODO(clintjedwards): this will eventually fail if the package is old enough
+		// change from time.now to predetermined time
 		"year list in range": {"* * * * * 2019,2020,2021", time.Now(), true},
 	}
 

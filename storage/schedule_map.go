@@ -6,8 +6,8 @@ import "github.com/clintjedwards/scheduler/model"
 // The order field contains keys where the last key inserted is added to the back of the slice.
 // TODO(clintjedwards): Make the order sorted by schedule date instead of insertion order
 type ScheduleMap struct {
-	Schedules map[string]*model.Schedule
-	Order     []string
+	Schedules map[string]*model.Schedule `json:"schedules"`
+	Order     []string                   `json:"order"`
 }
 
 // Set inserts an element in the map in order

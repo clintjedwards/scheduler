@@ -3,7 +3,6 @@ package api
 import (
 	"errors"
 	"net/http"
-	"time"
 
 	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/utils"
@@ -29,9 +28,9 @@ func (api *API) ListEmployeesHandler(w http.ResponseWriter, r *http.Request) {
 // AddEmployeeHandler adds a new employee to the scheduler service
 func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
-	newEmployee := model.Employee{}
+	pendingEmployee := model.AddEmployee{}
 
-	err := parseJSON(r.Body, &newEmployee)
+	err := parseJSON(r.Body, &pendingEmployee)
 	if err != nil {
 		log.Warn().Err(err).Msg("could not parse json request")
 		sendErrResponse(w, http.StatusBadRequest, err)
@@ -39,16 +38,15 @@ func (api *API) AddEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	newEmployee.ID = string(utils.GenerateRandString(api.config.IDLength))
-	newEmployee.Created = time.Now().Unix()
-	newEmployee.Modified = time.Now().Unix()
+	newEmployee := model.NewEmployee(api.config.IDLength)
+	pendingEmployee.ToEmployee(newEmployee)
 
 	err = newEmployee.IsValid()
 	if err != nil {
 		sendErrResponse(w, http.StatusBadRequest, err)
 	}
 
-	err = api.storage.AddEmployee(newEmployee.ID, &newEmployee)
+	err = api.storage.AddEmployee(newEmployee.ID, newEmployee)
 	if err != nil {
 		if errors.Is(err, utils.ErrEntityExists) {
 			sendErrResponse(w, http.StatusConflict, err)
