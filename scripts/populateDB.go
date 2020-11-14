@@ -20,7 +20,7 @@ type harness struct {
 func (h *harness) setup() {
 }
 
-func createEmployee(employee model.Employee) string {
+func createEmployee(employee model.AddEmployee) string {
 
 	requestBody, err := json.Marshal(employee)
 	if err != nil {
@@ -61,16 +61,15 @@ func createEmployee(employee model.Employee) string {
 
 func (h *harness) createEmployees(num int) {
 
-	positions := map[string]struct{}{}
+	positions := []string{}
 	for _, id := range h.positionsList {
-		positions[id] = struct{}{}
+		positions = append(positions, id)
 	}
 
 	for i := 0; i < num; i++ {
-		newEmployee := model.Employee{
+		newEmployee := model.AddEmployee{
 			Name:      fake.FullName(),
 			Notes:     fake.WordsN(30),
-			Status:    model.EmployeeActive,
 			Positions: positions,
 		}
 

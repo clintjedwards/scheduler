@@ -13,8 +13,8 @@ type EmployeeStatus string
 const (
 	// EmployeeActive represents an employee that can be scheduled
 	EmployeeActive EmployeeStatus = "active"
-	// EmployeeDisabled represents an employee that is not currently working
-	EmployeeDisabled EmployeeStatus = "disabled"
+	// EmployeeInactive represents an employee that is not currently working
+	EmployeeInactive EmployeeStatus = "inactive"
 )
 
 // Employee represents a schedulable employee
@@ -57,6 +57,7 @@ func NewEmployee(idLength int) *Employee {
 		ID:       string(utils.GenerateRandString(idLength)),
 		Created:  time.Now().Unix(),
 		Modified: time.Now().Unix(),
+		Status:   EmployeeActive,
 	}
 }
 

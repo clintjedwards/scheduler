@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form ref="add_employee_modal" @submit.stop.prevent="handleSubmit">
+    <form ref="add_employee_form" @submit.stop.prevent="handleSubmit">
       <b-modal
         id="add_employee_modal"
         size="xl"
@@ -233,7 +233,6 @@ Never schedule for 9am          * 9 * * * *
 <script>
 import SchedulerClient from "../scheduler_client";
 let client = new SchedulerClient();
-import * as moment from "moment";
 
 export default {
   components: {},
@@ -356,7 +355,6 @@ export default {
       // We store the states in the unavailabilities list because then when we update the state
       // it causes vue to re-render and show the error properly
       unavailabilities: [],
-      nameState: null,
       selected_positions: [],
     };
   },

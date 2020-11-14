@@ -7,10 +7,12 @@
         Add Employee</b-button
       >
     </div>
-    <b-list-group class="list">
+    <b-list-group class="list" style="cursor: pointer;" flush>
       <b-list-group-item
         v-for="employee in $store.state.employees"
         :key="employee.id"
+        :to="employee.id"
+        append
         >{{ employee.name }}</b-list-group-item
       >
     </b-list-group>

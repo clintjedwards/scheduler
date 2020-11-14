@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import AddEmployeeModal from "../views/AddEmployeeModal";
 import Employees from "../views/Employees";
 import Home from "../views/Home";
+import ManageEmployeeModal from "../views/ManageEmployeeModal/ManageEmployeeModal";
 import Positions from "../views/Positions";
 import Schedules from "../views/Schedules";
 
@@ -23,6 +24,11 @@ const routes = [
         path: "add",
         name: "addEmployeeModal",
         component: AddEmployeeModal,
+      },
+      {
+        path: ":id",
+        name: "manageEmployeeModal",
+        component: ManageEmployeeModal,
       },
     ],
   },
