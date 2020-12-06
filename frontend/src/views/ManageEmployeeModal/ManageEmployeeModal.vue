@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <b-modal
+    id="manage_employee_modal"
+    size="xl"
+    :title="employee.id"
+    title-class="text-muted"
+    v-model="showModal"
+    @ok="handleSubmit"
+    @close="handleClose"
+    @cancel="handleClose"
+    no-close-on-backdrop
+    no-close-on-esc
+    ok-title="Employee"
+  >
     <form ref="manage_employee_form" @submit.stop.prevent="handleSubmit">
-      <b-modal
-        id="manage_employee_modal"
-        size="xl"
-        :title="employee.id"
-        title-class="text-muted"
-        v-model="showModal"
-        @ok="handleSubmit"
-        @close="handleClose"
-        @cancel="handleClose"
-        no-close-on-backdrop
-        no-close-on-esc
-        ok-title="Employee"
-      >
+      <div v-show="formMode === 'view'">
         <p class="text-right text-muted">
           Started {{ humanizeDate }} |
           <b-badge
@@ -70,9 +70,36 @@
         <!-- Notes -->
         <h3 id="employee_notes_header" class="font-weight-light">Notes</h3>
         <p>{{ employee.notes }}</p>
-      </b-modal>
+      </div>
     </form>
-  </div>
+    <div slot="modal-footer">
+      <b-button squared variant="outline-danger" @click="handleDelete()">
+        Delete
+      </b-button>
+      <b-button squared variant="outline-secondary" @click="handleClose()">
+        Close
+      </b-button>
+      <b-button
+        squared
+        v-show="formMode === 'view'"
+        variant="outline-primary"
+        @click="setFormModeEdit()"
+      >
+        Edit
+      </b-button>
+      <b-button
+        squared
+        v-show="formMode === 'edit'"
+        variant="outline-primary"
+        @click="setFormModeView()"
+      >
+        View
+      </b-button>
+      <b-button squared variant="success" @click="handleSave()">
+        Save
+      </b-button>
+    </div>
+  </b-modal>
 </template>
 
 <script>
@@ -120,10 +147,16 @@ export default {
     },
   },
   methods: {
-    addUnavailTime: function() {
+    setFormModeEdit: function () {
+      this.formMode = "edit";
+    },
+    setFormModeView: function () {
+      this.formMode = "view";
+    },
+    addUnavailTime: function () {
       this.unavailabilities.push({ time: "", state: null });
     },
-    removeUnavailTime: function(index) {
+    removeUnavailTime: function (index) {
       this.unavailabilities.splice(index, 1);
     },
     validateUnavail(index) {
@@ -135,7 +168,7 @@ export default {
       this.unavailabilities[index].state = false;
       return false;
     },
-    toggleHelp: function() {
+    toggleHelp: function () {
       if (this.showHelp) {
         this.showHelp = false;
         var element = document.getElementById("help_button");
@@ -149,10 +182,11 @@ export default {
       element.classList.add("btn-outline-primary");
       return;
     },
-    handleClose: function() {
+    handleClose: function () {
+      this.setFormModeView();
       this.$router.push({ name: "Employees" });
     },
-    handleSubmit: function(e) {
+    handleSubmit: function (e) {
       e.preventDefault();
       let unavailabilities = [];
       for (const [index, value] of this.unavailabilities.entries()) {
@@ -192,7 +226,7 @@ export default {
   },
   data() {
     return {
-      formMode: "",
+      formMode: "view",
       showModal: true,
       showHelp: false,
       employee: {
