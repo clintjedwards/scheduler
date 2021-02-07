@@ -7,10 +7,11 @@ function populateEmployee() {
   const id = urlParams.get("id");
 
   client.getEmployee(id).then((employee) => {
-    let body = document.getElementById("content");
+    let body = document.getElementById("employee-info-top");
     body.appendChild(generateID(employee.id));
     body.appendChild(generateName(employee.name));
     body.appendChild(generateStartDate(employee.start_date));
+    generatePositions(employee.positions);
   });
 }
 
@@ -41,6 +42,57 @@ function generateStartDate(employeeStartDate) {
 
 function humanizeDate(date) {
   return moment(date, "YYYY-MM-DD").format("MMMM Do, YYYY");
+}
+
+function generatePositions(employeePositions) {
+  let client = new SchedulerClient();
+  client.listPositions().then(function(positions) {
+    let positions_list_element = document.getElementById("positions-list");
+
+    for (const [id, empty] of Object.entries(employeePositions)) {
+      let a = document.createElement("a");
+      a.setAttribute("href", "/position.html?id=" + id);
+
+      let li = document.createElement("li");
+      //TODO(clintjedwards:sanitize this content
+      let text = positions[id].primary_name;
+
+      console.log(positions[id].secondary_name.length);
+
+      if (positions[id].secondary_name.length !== 0) {
+        text =
+          text +
+          " | <span class='orange'>" +
+          positions[id].secondary_name +
+          "</span>";
+      }
+      a.innerHTML = text;
+
+      li.appendChild(a);
+      li.setAttribute("class", "mb-3 mt-3");
+
+      positions_list_element.appendChild(li);
+    }
+  });
+}
+
+function generateUnavailabilities(employeeUnavailabilities) {
+  let employee_list = document.getElementById("employee_list");
+
+  for (const [id, employee] of Object.entries(employees)) {
+    let a = document.createElement("a");
+    a.setAttribute("href", "/employee.html?id=" + id);
+
+    let li = document.createElement("li");
+    let context = document.createTextNode(employee.name);
+
+    a.appendChild(context);
+
+    li.appendChild(a);
+    li.setAttribute("class", "mb-3 mt-3");
+
+    employee_list.appendChild(li);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", function() {

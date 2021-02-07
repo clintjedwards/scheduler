@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/clintjedwards/scheduler/model"
@@ -70,6 +71,7 @@ func (h *harness) createEmployees(num int) {
 		newEmployee := model.AddEmployee{
 			Name:      fake.FullName(),
 			Notes:     fake.WordsN(30),
+			StartDate: strconv.Itoa(fake.Year(2000, 2020)) + "-" + strconv.Itoa(fake.MonthNum()) + "-" + strconv.Itoa(fake.Day()),
 			Positions: positions,
 		}
 
