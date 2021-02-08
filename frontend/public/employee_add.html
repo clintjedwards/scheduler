@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Scheduler</title>
+
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:100,300,400,500,700,900">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" defer></script>
+    <script type="module" src="/javascript/main.js" defer></script>
+</head>
+
+<body>
+    <div id="app">
+        <div id="sidebar" class="m-2">
+            <h1 class="text-3xl mb-8 font-light"><a href="/">Scheduler</h1>
+            <ul class="ml-4">
+                <li class="text-xl mb-2 font-light"><a href="/employees.html">Employees</a></li>
+                <li class="text-xl mb-2 font-light"><a href="/positions.html">Positions</a></li>
+                <li class="text-xl mb-2 font-light"><a href="/schedules.html">Schedules</a></li>
+            </ul>
+        </div>
+
+        <div id="content" class="mt-52 ml-8">
+            <h1 class="text-5xl font-light mb-16">Add New Employee</h1>
+            <form autocomplete="off">
+            <div class="shadow overflow-hidden sm:rounded-md w-1/2">
+                <div class="px-4 py-5 bg-white sm:p-6">
+                  <div class="grid grid-cols-6 gap-6">
+                    <div class="col-span-6 sm:col-span-3">
+                      <label for="first_name" class="block text-sm font-medium text-gray-700">First name</label>
+                      <input type="text" name="first_name" autocomplete="off" id="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3">
+                      <label for="last_name" class="block text-sm font-medium text-gray-700">Last name</label>
+                      <input type="text" name="last_name" autocomplete="off" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-4">
+                      <label for="email_address" class="block text-sm font-medium text-gray-700">Email address</label>
+                      <input type="text" name="email_address" autocomplete="off" id="email_address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3">
+                      <label for="country" class="block text-sm font-medium text-gray-700">Country / Region</label>
+                      <select id="country" name="country" autocomplete="off" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option>United States</option>
+                        <option>Canada</option>
+                        <option>Mexico</option>
+                      </select>
+                    </div>
+
+                    <div class="col-span-6">
+                      <label for="street_address" class="block text-sm font-medium text-gray-700">Street address</label>
+                      <input type="text" name="street_address" autocomplete="off" id="street_address" autocomplete="street-address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
+                      <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                      <input type="text" name="city" autocomplete="off" id="city" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                      <label for="state" class="block text-sm font-medium text-gray-700">State / Province</label>
+                      <input type="text" name="state" autocomplete="off" id="state" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+
+                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
+                      <label for="postal_code" class="block text-sm font-medium text-gray-700">ZIP / Postal</label>
+                      <input type="text" name="postal_code" autocomplete="off" id="postal_code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                  </div>
+                </div>
+                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                  <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Save
+                  </button>
+                </div>
+              </div>
+              </form>
+        <div id="footer">placeholder</div>
+    </div>
+</body>
+
+</html>
