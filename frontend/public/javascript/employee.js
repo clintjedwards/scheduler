@@ -108,31 +108,3 @@ function generateNotes(employeeNotes) {
 document.addEventListener("DOMContentLoaded", function() {
   populateEmployee();
 });
-
-// ID        string         `json:"id"`
-// Name      string         `json:"name"`
-// Notes     string         `json:"notes"`
-// StartDate string         `json:"start_date"` //format: yy-mm-dd
-// Status    EmployeeStatus `json:"status"`
-// // Unavailabilities represents time periods that an employee cannot work expressed as cron expressions
-// Unavailabilities []string `json:"unavailabilities"`
-// // Positions is a set of positions ids that the employee is allowed to work
-// Positions map[string]struct{} `json:"positions"`
-// // Preferences are used to weight employees in scheduling. The key of the dictionary
-// // is the preferences type and the value can be the current setting.
-// // example POSITION => "$somePositionID"
-// Preferences map[string]string `json:"preferences"`
-// Created     int64             `json:"created"`
-// Modified    int64
-
-// {id: "41L8c", name: "Ryan Reynolds", notes: "quaerat ea sit eum explicabo dolore sunt assumenda…t excepturi nobis tempore numquam qui quis facere", start_date: "", status: "active", …}
-// created: 1612081896
-// id: "41L8c"
-// modified: 1612081896
-// name: "Ryan Reynolds"
-// notes: "quaerat ea sit eum explicabo dolore sunt assumenda omnis neque et labore velit odit fuga vitae saepe natus similique ipsum ad provident sunt excepturi nobis tempore numquam qui quis facere"
-// positions: {1ApaJ: {…}, 3N3jk: {…}, HFl6T: {…}, Vv3tF: {…}, Zpfrp: {…}, …}
-// preferences: null
-// start_date: ""
-// status: "active"
-// unavailabilities: null

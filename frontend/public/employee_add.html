@@ -3,89 +3,121 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Scheduler</title>
 
     <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="/css/main.css" />
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:100,300,400,500,700,900" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:100,300,400,500,700,900" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" defer></script>
     <script type="module" src="/javascript/main.js" defer></script>
+    <script type="module" src="/javascript/employee_add.js" defer></script>
 </head>
 
 <body>
     <div id="app">
         <div id="sidebar" class="m-2">
-            <h1 class="text-3xl mb-8 font-light"><a href="/">Scheduler</h1>
+            <h1 class="text-3xl mb-8 font-light"><a href="/">Scheduler</a></h1>
             <ul class="ml-4">
-                <li class="text-xl mb-2 font-light"><a href="/employees.html">Employees</a></li>
-                <li class="text-xl mb-2 font-light"><a href="/positions.html">Positions</a></li>
-                <li class="text-xl mb-2 font-light"><a href="/schedules.html">Schedules</a></li>
+                <li class="text-xl mb-2 font-light">
+                    <a href="/employees.html">Employees</a>
+                </li>
+                <li class="text-xl mb-2 font-light">
+                    <a href="/positions.html">Positions</a>
+                </li>
+                <li class="text-xl mb-2 font-light">
+                    <a href="/schedules.html">Schedules</a>
+                </li>
             </ul>
         </div>
 
-        <div id="content" class="mt-52 ml-8">
-            <h1 class="text-5xl font-light mb-16">Add New Employee</h1>
-            <form autocomplete="off">
+        <!-- // ID        string         `json:"id"`
+        // Name      string         `json:"name"`
+        // Notes     string         `json:"notes"`
+        // StartDate string         `json:"start_date"` //format: yy-mm-dd
+        // Status    EmployeeStatus `json:"status"`
+        // // Unavailabilities represents time periods that an employee cannot work expressed as cron expressions
+        // Unavailabilities []string `json:"unavailabilities"`
+        // // Positions is a set of positions ids that the employee is allowed to work
+        // Positions map[string]struct{} `json:"positions"`
+        // // Preferences are used to weight employees in scheduling. The key of the dictionary
+        // // is the preferences type and the value can be the current setting.
+        // // example POSITION => "$somePositionID"
+        // Preferences map[string]string `json:"preferences"`
+        // Created     int64             `json:"created"`
+        // Modified    int64
+
+        // {id: "41L8c", name: "Ryan Reynolds", notes: "quaerat ea sit eum explicabo dolore sunt assumenda…t excepturi nobis tempore numquam qui quis facere", start_date: "", status: "active", …}
+        // created: 1612081896
+        // id: "41L8c"
+        // modified: 1612081896
+        // name: "Ryan Reynolds"
+        // notes: "quaerat ea sit eum explicabo dolore sunt assumenda omnis neque et labore velit odit fuga vitae saepe natus similique ipsum ad provident sunt excepturi nobis tempore numquam qui quis facere"
+        // positions: {1ApaJ: {…}, 3N3jk: {…}, HFl6T: {…}, Vv3tF: {…}, Zpfrp: {…}, …}
+        // preferences: null
+        // start_date: ""
+        // status: "active"
+        // unavailabilities: null -->
+
+        <div id="content" class="mt-36 ml-8">
+            <h1 class="text-5xl font-light mb-8">Add New Employee</h1>
             <div class="shadow overflow-hidden sm:rounded-md w-1/2">
                 <div class="px-4 py-5 bg-white sm:p-6">
-                  <div class="grid grid-cols-6 gap-6">
-                    <div class="col-span-6 sm:col-span-3">
-                      <label for="first_name" class="block text-sm font-medium text-gray-700">First name</label>
-                      <input type="text" name="first_name" autocomplete="off" id="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    <div class="grid grid-cols-2 gap-10">
+                        <div class="col-span-full">
+                            <label for="name" class="block text-gray-700">Name</label>
+                            <input type="text" name="name" autocomplete="off" id="name" class="
+                                block h-4/5 text-4xl font-light border
+                                border-transparent mt-1 focus:ring-orange-500 focus:border-orange-500
+                                w-full shadow-sm border-gray-500 rounded-md" />
+                        </div>
+                        <div class="col-span-full">
+                            <label for="start_date" class="block text-gray-700">
+                                Start Date
+                            </label>
+                            <input type="date" id="start_date" class="text-2xl" name="start_date" />
+                        </div>
+                        <div class="col-span-1 sm:col-span-full xl:col-span-1">
+                            <label for="unavailabilities" class="block text-gray-700">
+                                Unavailabilities
+                            </label>
+                            <input type="text" name="unavailabilities-1" autocomplete="off" id="unavailabilities-1"
+                                class="h-2/5 mb-2 text-2xl font-light border
+                                border-transparent mt-1 text-center focus:ring-orange-500 focus:border-orange-500
+                                shadow-sm border-gray-500 rounded-md" />
+                            <br />
+                            <button class="mr-6 border">Add Another</button>
+                            <button class="border">Remove Last</button>
+                        </div>
+                        <div class="col-span-1 sm:col-span-full xl:col-span-1">
+                            Some long ass description here.
+                        </div>
+                        <div class="col-span-full">
+                            <label for="positions" class="block text-gray-700">
+                                Positions
+                            </label>
+                            <select id="positions" name="positions" autocomplete="off"
+                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                multiple>
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="col-span-6 sm:col-span-3">
-                      <label for="last_name" class="block text-sm font-medium text-gray-700">Last name</label>
-                      <input type="text" name="last_name" autocomplete="off" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-
-                    <div class="col-span-6 sm:col-span-4">
-                      <label for="email_address" class="block text-sm font-medium text-gray-700">Email address</label>
-                      <input type="text" name="email_address" autocomplete="off" id="email_address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-
-                    <div class="col-span-6 sm:col-span-3">
-                      <label for="country" class="block text-sm font-medium text-gray-700">Country / Region</label>
-                      <select id="country" name="country" autocomplete="off" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                      </select>
-                    </div>
-
-                    <div class="col-span-6">
-                      <label for="street_address" class="block text-sm font-medium text-gray-700">Street address</label>
-                      <input type="text" name="street_address" autocomplete="off" id="street_address" autocomplete="street-address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-
-                    <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                      <label for="city" class="block text-sm font-medium text-gray-700">City</label>
-                      <input type="text" name="city" autocomplete="off" id="city" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-
-                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                      <label for="state" class="block text-sm font-medium text-gray-700">State / Province</label>
-                      <input type="text" name="state" autocomplete="off" id="state" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-
-                    <div class="col-span-6 sm:col-span-3 lg:col-span-2">
-                      <label for="postal_code" class="block text-sm font-medium text-gray-700">ZIP / Postal</label>
-                      <input type="text" name="postal_code" autocomplete="off" id="postal_code" autocomplete="postal-code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                    </div>
-                  </div>
                 </div>
-                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Save
-                  </button>
+                <div class="px-4 py-3 bg-gray-50 sm:px-6">
+                    <button class="inline-flex justify-center py-2 px-4 border
+                            border-transparent shadow-sm text-sm font-medium
+                            rounded-md text-white bg-green-600 hover:bg-green-700
+                            focus:outline-none focus:ring-2 focus:ring-offset-2
+                            focus:ring-green-500">
+                        Add Employee
+                    </button>
                 </div>
-              </div>
-              </form>
-        <div id="footer">placeholder</div>
+            </div>
+            <div id="footer" class="mt-6 text-gray-400">placeholder</div>
+        </div>
     </div>
 </body>
 
