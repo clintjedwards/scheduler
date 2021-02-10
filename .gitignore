@@ -20,3 +20,4 @@ bundle.js
 
 #ignore frontend static import
 frontend/assets.go
+frontend/public/css/main.css
