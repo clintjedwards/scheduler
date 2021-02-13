@@ -14,9 +14,8 @@
 
 #frontend
 node_modules/
-dist/*
--dist/.gitkeep
-bundle.js
+public/bundle.*
+
 
 #ignore frontend static import
 frontend/assets.go

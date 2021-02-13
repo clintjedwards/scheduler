@@ -21,8 +21,8 @@ build: check-path-included
 ## run: build application and run server
 run: export DEBUG=true
 run:
+	npm run --prefix ./frontend build
 	go generate
-	cd ./frontend && npx tailwindcss-cli@latest build ./src/main.src.css -o public/css/main.css && cd ..
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 
 ## help: prints this help message
