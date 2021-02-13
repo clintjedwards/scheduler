@@ -47,7 +47,7 @@ function add_unavail_field(count) {
   new_field.setAttribute("id", "time-" + count);
   new_field.setAttribute(
     "class",
-    "mb-2 text-2xl font-light border border-transparent mt-1 text-center shadow-sm border-gray-500 rounded-md"
+    "mb-2 text-2xl font-light border border-transparent mt-1 text-center shadow-sm border-gray-600 rounded-md"
   );
 
   times.appendChild(new_field);
@@ -55,6 +55,9 @@ function add_unavail_field(count) {
 }
 
 function remove_unavail_field(count) {
+  if (count == 0) {
+    return count;
+  }
   let times = document.getElementById("unavail_times");
 
   times.removeChild(times.lastChild);
@@ -74,6 +77,14 @@ function add_unavail_button_actions() {
   remove_button.addEventListener("click", function() {
     count = remove_unavail_field(count);
   });
+}
+
+function addEmployee() {
+  let times = document.getElementById("unavail_times");
+  let start_date = document.getElementById("start_date");
+  let name = document.getElementById("name");
+  let positions = document.getElementById("positions");
+  let notes = document.getElementById("notes");
 }
 
 document.addEventListener("DOMContentLoaded", function() {

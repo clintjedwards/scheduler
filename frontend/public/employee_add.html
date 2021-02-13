@@ -34,34 +34,6 @@
             </ul>
         </div>
 
-        <!-- // ID        string         `json:"id"`
-        // Name      string         `json:"name"`
-        // Notes     string         `json:"notes"`
-        // StartDate string         `json:"start_date"` //format: yy-mm-dd
-        // Status    EmployeeStatus `json:"status"`
-        // // Unavailabilities represents time periods that an employee cannot work expressed as cron expressions
-        // Unavailabilities []string `json:"unavailabilities"`
-        // // Positions is a set of positions ids that the employee is allowed to work
-        // Positions map[string]struct{} `json:"positions"`
-        // // Preferences are used to weight employees in scheduling. The key of the dictionary
-        // // is the preferences type and the value can be the current setting.
-        // // example POSITION => "$somePositionID"
-        // Preferences map[string]string `json:"preferences"`
-        // Created     int64             `json:"created"`
-        // Modified    int64
-
-        // {id: "41L8c", name: "Ryan Reynolds", notes: "quaerat ea sit eum explicabo dolore sunt assumenda…t excepturi nobis tempore numquam qui quis facere", start_date: "", status: "active", …}
-        // created: 1612081896
-        // id: "41L8c"
-        // modified: 1612081896
-        // name: "Ryan Reynolds"
-        // notes: "quaerat ea sit eum explicabo dolore sunt assumenda omnis neque et labore velit odit fuga vitae saepe natus similique ipsum ad provident sunt excepturi nobis tempore numquam qui quis facere"
-        // positions: {1ApaJ: {…}, 3N3jk: {…}, HFl6T: {…}, Vv3tF: {…}, Zpfrp: {…}, …}
-        // preferences: null
-        // start_date: ""
-        // status: "active"
-        // unavailabilities: null -->
-
         <div id="content" class="mt-36 ml-8">
             <h1 class="text-5xl font-light mb-8">Add New Employee</h1>
             <div class="shadow overflow-hidden sm:rounded-md w-1/2">
@@ -72,7 +44,7 @@
                             <input type="text" name="name" autocomplete="off" id="name" class="
                                 block h-4/5 text-4xl font-light border
                                 border-transparent mt-1 focus:ring-orange-500 focus:border-orange-500
-                                w-full shadow-sm border-gray-500 rounded-md" />
+                                w-full shadow-sm border-gray-600 rounded-md" />
                         </div>
                         <div class="col-span-full">
                             <label for="start_date" class="block text-gray-700">
@@ -180,9 +152,15 @@ Never schedule for 9am          * 9 * * * *
                                 Positions
                             </label>
                             <select id="positions" name="positions" autocomplete="off"
-                                class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                class="mt-1 block h-full w-full py-2 px-3 border border-gray-600 bg-white rounded-md shadow-sm focus:outline-none sm:text-sm"
                                 multiple>
                             </select>
+                        </div>
+                        <div class="col-span-full">
+                            <label for="notes" class="block text-gray-700">
+                                Notes
+                            </label>
+                            <textarea id="notes" class="border border-gray-600 text-xl w-full" name="notes"></textarea>
                         </div>
                     </div>
                 </div>
