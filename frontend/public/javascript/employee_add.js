@@ -12,7 +12,7 @@ function populatePositions() {
       let text = position.primary_name;
 
       if (position.secondary_name.length !== 0) {
-        text = text + " | " + position.secondary_name;
+        text = text + " |" + position.secondary_name;
       }
 
       let option = new Option(text, id);
@@ -22,6 +22,23 @@ function populatePositions() {
   });
 }
 
+function toggle_collapse(element) {
+  if (element.style.display === "block") {
+    element.style.display = "none";
+  } else {
+    element.style.display = "block";
+  }
+}
+
+function help_collapse() {
+  let help_button = document.getElementById("show-help");
+  help_button.addEventListener("click", function() {
+    let help_text = document.getElementById("help-text");
+    toggle_collapse(help_text);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   populatePositions();
+  help_collapse();
 });
