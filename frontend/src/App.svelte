@@ -1,5 +1,6 @@
 <script>
   import { link, Route, Router } from "svelte-routing";
+  import AddEmployee from "./components/AddEmployee.svelte";
   import Employees from "./components/Employees.svelte";
   import Footer from "./components/Footer.svelte";
   import Positions from "./components/Positions.svelte";
@@ -12,12 +13,13 @@
       <h1>Scheduler</h1>
       <Router>
         <nav>
-          <a href="employees" use:link>Employees</a>
-          <a href="positions" use:link>Positions</a>
-          <a href="schedules" use:link>Schedules</a>
+          <a href="/employees" use:link>Employees</a>
+          <a href="/positions" use:link>Positions</a>
+          <a href="/schedules" use:link>Schedules</a>
         </nav>
         <div>
           <Route path="employees" component={Employees} />
+          <Route path="employees/add" component={AddEmployee} />
           <Route path="positions" component={Positions} />
           <Route path="schedules" component={Schedules} />
         </div>

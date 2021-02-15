@@ -1,4 +1,5 @@
 <script>
+  import { link } from "svelte-routing";
   import { client } from "../client.js";
   import { EmployeesStore } from "../store.js";
   import Button from "./Button.svelte";
@@ -12,7 +13,7 @@
 
 <employees>
   <div id="actions">
-    <Button>Add Employee</Button>
+    <a href="/employees/add" use:link><Button>Add Employee</Button></a>
   </div>
 
   <ul>
