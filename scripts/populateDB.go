@@ -228,8 +228,8 @@ func (h *harness) generateSchedule() {
 	position8 := h.positionsList[7]
 
 	schedule := model.Schedule{
-		Start:          "06-19-1990",
-		End:            "06-27-1990",
+		Start:          "1990-06-19",
+		End:            "1990-06-27",
 		EmployeeFilter: []string{},
 		Program: model.Program{
 			Monday: []model.Shift{

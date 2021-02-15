@@ -9,6 +9,16 @@ class SchedulerClient {
     return fetch(`${this.url}/api/employees`).then((res) => res.json());
   }
 
+  addEmployee(employee) {
+    return fetch(`${this.url}/api/employees`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(employee),
+    });
+  }
+
   getEmployee(id) {
     return fetch(`${this.url}/api/employees/${id}`).then((res) => res.json());
   }

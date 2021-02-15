@@ -1,6 +1,8 @@
 <script>
+  import { navigate } from "svelte-routing";
   import { client } from "../client.js";
   import { PositionsStore } from "../store.js";
+  import Button from "./Button.svelte";
   import UnavailHelp from "./UnavailHelp.svelte";
 
   client.listPositions().then((positions) => {
@@ -34,6 +36,24 @@
   let removeUnavailInput = (index) => {
     new_employee.unavailabilities.splice(index, 1);
     new_employee = new_employee;
+  };
+
+  let addEmployee = () => {
+    client
+      .addEmployee(new_employee)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `incorrect error code returned: ${response.status} ${response.statusText}`
+          );
+        }
+      })
+      .then(() => {
+        navigate("/employees", { replace: true });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 </script>
 
@@ -105,6 +125,9 @@ Year           1970-2100
       <label for="notes">Notes:</label>
       <textarea id="notes" bind:value={new_employee.notes} />
     </div>
+    <div id="submit" class="full" on:click={addEmployee}>
+      <Button>Add Employee</Button>
+    </div>
   </div>
 </div>
 
@@ -119,6 +142,10 @@ Year           1970-2100
   .full {
     grid-column: 1/3;
     width: 100%;
+  }
+
+  #submit {
+    margin-top: 20px;
   }
 
   #addButton {

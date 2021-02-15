@@ -11,8 +11,8 @@ import (
 // Schedule represents a generated timetable mapping of positions => shift => employee
 type Schedule struct {
 	ID      string  `json:"id"`
-	Start   string  `json:"start"`
-	End     string  `json:"end"`
+	Start   string  `json:"start"` // yyyy-mm-dd
+	End     string  `json:"end"`   // yyyy-mm-dd
 	Program Program `json:"program"`
 	// Prefereces can be used to weight employees during scheduling.
 	// They key is the preference type and the value is the current setting.

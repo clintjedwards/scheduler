@@ -22,7 +22,7 @@ type Employee struct {
 	ID        string         `json:"id"`
 	Name      string         `json:"name"`
 	Notes     string         `json:"notes"`
-	StartDate string         `json:"start_date"` //format: yy-mm-dd
+	StartDate string         `json:"start_date"` //format: yyyy-mm-dd
 	Status    EmployeeStatus `json:"status"`
 	// Unavailabilities represents time periods that an employee cannot work expressed as cron expressions
 	Unavailabilities []string `json:"unavailabilities"`
@@ -40,7 +40,7 @@ type Employee struct {
 type AddEmployee struct {
 	Name      string `json:"name"`
 	Notes     string `json:"notes"`
-	StartDate string `json:"start_date"` //format: yy-mm-dd
+	StartDate string `json:"start_date"` //format: yyyy-mm-dd
 	// Unavailabilities represents time periods that an employee cannot work expressed as cron expressions
 	Unavailabilities []string `json:"unavailabilities"`
 	// Positions is a set of positions ids that the employee is allowed to work

@@ -91,8 +91,8 @@ func (info *testHarness) setup() {
 func (info *testHarness) TestGenerateSchedule(t *testing.T) {
 	t.Run("GenerateSchedule", func(t *testing.T) {
 		sch := model.Schedule{
-			Start:          "06-19-1990",
-			End:            "06-22-1990",
+			Start:          "1990-06-19",
+			End:            "1990-06-22",
 			EmployeeFilter: []string{},
 			Program: model.Program{
 				Monday: []model.Shift{

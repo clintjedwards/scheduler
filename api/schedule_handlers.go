@@ -40,12 +40,12 @@ func (api *API) generateSchedule(sch *model.Schedule) error {
 // getDates returns a list of consecutive dates as time.Time objects given a start date and an end date in format mm-dd-yyy
 func getDates(start, end string) ([]time.Time, error) {
 
-	currentDate, err := time.Parse("01-02-2006", start)
+	currentDate, err := time.Parse("2006-01-02", start)
 	if err != nil {
 		return nil, fmt.Errorf("could not parse start date; should be in format mm-dd-yyyy: %v", err)
 	}
 
-	endDate, err := time.Parse("01-02-2006", end)
+	endDate, err := time.Parse("2006-01-02", end)
 	if err != nil {
 		return nil, fmt.Errorf("could not parse end date; should be in format mm-dd-yyyy: %v", err)
 	}
