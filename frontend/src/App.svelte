@@ -8,19 +8,21 @@
 
 <main>
   <div id="mainContent">
-    <h1>Scheduler</h1>
-    <Router>
-      <nav>
-        <a href="employees" use:link>Employees</a>
-        <a href="positions" use:link>Positions</a>
-        <a href="schedules" use:link>Schedules</a>
-      </nav>
-      <div>
-        <Route path="employees" component={Employees} />
-        <Route path="positions" component={Positions} />
-        <Route path="schedules" component={Schedules} />
-      </div>
-    </Router>
+    <div id="bodyContent">
+      <h1>Scheduler</h1>
+      <Router>
+        <nav>
+          <a href="employees" use:link>Employees</a>
+          <a href="positions" use:link>Positions</a>
+          <a href="schedules" use:link>Schedules</a>
+        </nav>
+        <div>
+          <Route path="employees" component={Employees} />
+          <Route path="positions" component={Positions} />
+          <Route path="schedules" component={Schedules} />
+        </div>
+      </Router>
+    </div>
   </div>
   <div>
     <Footer />
@@ -30,6 +32,11 @@
 <style>
   #mainContent {
     height: 95%;
+  }
+
+  #bodyContent {
+    width: 65%;
+    margin: 0 auto;
   }
 
   main {
