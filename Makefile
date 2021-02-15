@@ -13,7 +13,7 @@ VERSION = ${SEMVER}_${EPOCH_TIME}_${GIT_COMMIT}
 ## build: run tests and compile application
 build: check-path-included
 	go test ./utils
-	cd ./frontend && npx tailwindcss-cli@latest build ./src/main.src.css -o public/css/main.css && cd ..
+	npm run --prefix ./frontend build
 	go generate
 	go mod tidy
 	go build -ldflags $(GO_LDFLAGS) -o $(path)

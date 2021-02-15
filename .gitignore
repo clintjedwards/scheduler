@@ -15,6 +15,7 @@
 #frontend
 frontend/node_modules/
 frontend/public/build/
+frontend/public/global.css
 
 #ignore frontend static import
 frontend/assets.go

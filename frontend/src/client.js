@@ -30,4 +30,4 @@ class SchedulerClient {
   }
 }
 
-export default SchedulerClient;
+export let client = new SchedulerClient();
