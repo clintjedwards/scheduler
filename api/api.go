@@ -25,7 +25,6 @@ func NewAPI(config *config.Config, storage storage.Engine) *API {
 
 func unimplementedhandler(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, http.StatusText(http.StatusNotImplemented), http.StatusNotImplemented)
-	return
 }
 
 // RegisterEmployeeRoutes registers /employees with a given router

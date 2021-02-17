@@ -18,7 +18,7 @@
 
   <ul>
     {#each Object.entries($EmployeesStore) as [id, employee] (id)}
-      <li>{employee.name}</li>
+      <a href="/employees/{id}"><li>{employee.name}</li></a>
     {/each}
   </ul>
 </employees>
@@ -39,6 +39,11 @@
     padding-left: 1em;
     border-bottom: 1px solid #6c757d;
     cursor: pointer;
+  }
+
+  ul a {
+    color: inherit;
+    text-decoration: none;
   }
 
   li:hover {

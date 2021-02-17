@@ -4,6 +4,7 @@
   import AddEmployee from "./components/AddEmployee.svelte";
   import Employees from "./components/Employees.svelte";
   import Footer from "./components/Footer.svelte";
+  import ManageEmployee from "./components/ManageEmployee.svelte";
   import Positions from "./components/Positions.svelte";
   import Schedules from "./components/Schedules.svelte";
 
@@ -40,6 +41,7 @@
         <div>
           <Route path="employees" component={Employees} />
           <Route path="employees/add" component={AddEmployee} />
+          <Route path="employees/:id" component={ManageEmployee} />
           <Route path="positions" component={Positions} />
           <Route path="schedules" component={Schedules} />
         </div>
