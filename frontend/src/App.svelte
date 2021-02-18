@@ -76,6 +76,7 @@
 
   .selected {
     border-bottom: 1px solid #ff3e00;
+    color: black;
   }
 
   h1 {
@@ -88,8 +89,8 @@
   nav a {
     font-size: 1.5em;
     text-decoration: none;
-    font-weight: 100;
-    color: black;
+    font-weight: 300;
+    color: rgb(136 136 136);
     margin-right: 1em;
     margin-left: 1em;
   }

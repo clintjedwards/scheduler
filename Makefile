@@ -21,7 +21,7 @@ build: check-path-included
 ## run: build application and run server
 run: export DEBUG=true
 run:
-	npm run --prefix ./frontend build
+	npm run --prefix ./frontend dev
 	go generate
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 
