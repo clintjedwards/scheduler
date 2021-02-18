@@ -60,10 +60,9 @@ Year           1970-2100
       </pre>
     {#each new_employee.unavailabilities as unavailability, index (index)}
       <div class="time">
-        <span
-          class="fa fa-trash-alt"
-          on:click={() => removeUnavailInput(index)}
-        />
+        <span class="remove_icon" on:click={() => removeUnavailInput(index)}>
+          <img src="/images/trash-alt-regular.svg" alt="remove" />
+        </span>
         <input class="unavail_input" type="text" bind:value={unavailability} />
       </div>
     {/each}
@@ -77,7 +76,7 @@ Year           1970-2100
   </div>
   <div class="full">
     <label for="positions">Positions:</label>
-    <select id="positions" multiple>
+    <select id="positions" bind:value={new_employee.positions} multiple>
       {#each Object.entries($PositionsStore) as [id, position] (id)}
         <option value={id}>
           {position.primary_name}
@@ -119,7 +118,7 @@ Year           1970-2100
     margin-bottom: 2px;
   }
 
-  .time .fa-trash-alt {
+  .time .remove_icon {
     position: absolute;
     top: 10px;
     left: auto;

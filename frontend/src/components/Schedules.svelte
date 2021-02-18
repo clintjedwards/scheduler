@@ -36,7 +36,21 @@
     text-align: left;
   }
   li {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    font-size: 1.5em;
+    font-weight: 300;
+    padding-bottom: 1em;
+    padding-top: 1em;
+    padding-left: 1em;
+    border-bottom: 1px solid #6c757d;
+    cursor: pointer;
+  }
+
+  /* ul a {
+    color: inherit;
+    text-decoration: none;
+  } */
+
+  li:hover {
+    background-color: #dfe6e9;
   }
 </style>

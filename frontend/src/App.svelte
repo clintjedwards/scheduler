@@ -24,7 +24,7 @@
 <main>
   <div id="mainContent">
     <div id="bodyContent">
-      <img id="logo" src="/schedule.svg" alt="Scheduler Logo" />
+      <img id="logo" src="/images/schedule.svg" alt="Scheduler Logo" />
       <h1>Scheduler</h1>
       <Router>
         <nav>
@@ -54,6 +54,10 @@
 </main>
 
 <style>
+  :global(html) {
+    overflow-y: scroll;
+  }
+
   #mainContent {
     height: 95%;
   }
