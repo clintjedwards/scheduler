@@ -33,6 +33,7 @@
   {/if}
 
   <Button>Delete</Button>
+  <Button>Clear</Button>
   <Button on:click={switchViewMode}>View</Button>
   <Button on:click={switchEditMode}>Edit</Button>
 </div>

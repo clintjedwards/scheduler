@@ -60,10 +60,13 @@ Year           1970-2100
       </pre>
     {#each new_employee.unavailabilities as unavailability, index (index)}
       <div class="time">
-        <span class="remove_icon" on:click={() => removeUnavailInput(index)}>
-          <img src="/images/trash-alt-regular.svg" alt="remove" />
-        </span>
-        <input class="unavail_input" type="text" bind:value={unavailability} />
+        <input type="text" bind:value={unavailability} />
+        <img
+          src="/images/trash-icon.svg"
+          alt="remove"
+          class="remove_icon"
+          on:click={() => removeUnavailInput(index)}
+        />
       </div>
     {/each}
     <button id="addButton" on:click={addUnavailInput}>Add Time</button>
@@ -99,6 +102,7 @@ Year           1970-2100
     display: grid;
     grid-template-columns: 1fr 1fr;
     row-gap: 2em;
+    column-gap: 5em;
     justify-items: start;
   }
 
@@ -106,12 +110,12 @@ Year           1970-2100
     margin-top: 1em;
   }
 
-  .time {
-    display: inline-block;
-    position: relative;
+  div .time {
+    display: flex;
   }
 
-  .unavail_input {
+  .time input {
+    flex: 1;
     font-size: 1.5em;
     text-align: center;
     margin-top: 2px;
@@ -119,11 +123,10 @@ Year           1970-2100
   }
 
   .time .remove_icon {
-    position: absolute;
-    top: 10px;
-    left: auto;
-    right: 10px;
-    cursor: pointer;
+    flex: 0 0 30px;
+    height: 30px;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   button {
@@ -136,15 +139,10 @@ Year           1970-2100
     background: white;
   }
 
-  input,
   label {
     display: block;
-  }
-
-  label {
     margin-bottom: 2px;
     color: #6c757d;
-    text-align: left;
   }
 
   pre {
@@ -188,5 +186,6 @@ Year           1970-2100
   .full {
     grid-column: 1/3;
     width: 100%;
+    text-align: left;
   }
 </style>
