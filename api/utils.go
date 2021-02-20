@@ -42,13 +42,3 @@ func parseJSON(rc io.Reader, object interface{}) error {
 	}
 	return nil
 }
-
-//DefaultHeaders is a wrapper function setting the reponse headers
-// func DefaultHeaders(next http.Handler) http.Handler {
-// 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-// 		w.Header().Set("Content-Type", "application/json")
-// 		w.Header().Set("Access-Control-Allow-Origin", "*")
-
-// 		next.ServeHTTP(w, r)
-// 	})
-// }

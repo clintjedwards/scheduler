@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/clintjedwards/scheduler/avail"
+	"github.com/clintjedwards/avail"
 )
 
 // Schedule represents a generated timetable mapping of positions => shift => employee
@@ -56,7 +56,7 @@ func (sch *Schedule) ScheduleDay(dateTime time.Time, employees map[string]*Emplo
 
 	// Figure out which program we should have on any given day. We might be able to turn
 	// this into an enum and drop all of this code someday.
-	program := []Shift{}
+	var program []Shift
 	switch weekday := dateTime.Weekday(); weekday {
 	case time.Monday:
 		program = sch.Program.Monday
