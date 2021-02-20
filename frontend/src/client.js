@@ -19,6 +19,12 @@ class SchedulerClient {
     });
   }
 
+  deleteEmployee(id) {
+    return fetch(`${this.url}/api/employees/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   getEmployee(id) {
     return fetch(`${this.url}/api/employees/${id}`).then((res) => res.json());
   }

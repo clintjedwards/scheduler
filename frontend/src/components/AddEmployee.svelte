@@ -13,6 +13,17 @@
   };
 
   let addEmployee = () => {
+    new_employee.unavailabilities.forEach((time, index) => {
+      time = time.trim();
+
+      if (time === "") {
+        new_employee.unavailabilities.splice(index, 1);
+        return;
+      }
+
+      new_employee.unavailabilities[index] = time;
+    });
+
     client
       .addEmployee(new_employee)
       .then((response) => {

@@ -79,16 +79,20 @@ Year           1970-2100
   </div>
   <div class="full">
     <label for="positions">Positions:</label>
-    <select id="positions" bind:value={new_employee.positions} multiple>
-      {#each Object.entries($PositionsStore) as [id, position] (id)}
-        <option value={id}>
-          {position.primary_name}
-          {#if position.secondary_name}
-            | {position.secondary_name}
-          {/if}
-        </option>
-      {/each}
-    </select>
+    {#if Object.keys($PositionsStore).length > 0}
+      <select id="positions" bind:value={new_employee.positions} multiple>
+        {#each Object.entries($PositionsStore) as [id, position] (id)}
+          <option value={id}>
+            {position.primary_name}
+            {#if position.secondary_name}
+              | {position.secondary_name}
+            {/if}
+          </option>
+        {/each}
+      </select>
+    {:else}
+      <div>No positions available</div>
+    {/if}
   </div>
   <div class="full">
     <label for="notes">Notes:</label>
@@ -181,6 +185,10 @@ Year           1970-2100
   #notes {
     width: 80%;
     height: 100%;
+  }
+
+  textarea {
+    resize: vertical;
   }
 
   .full {

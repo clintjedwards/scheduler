@@ -21,16 +21,20 @@
   {#if employee.id}
     <div class="full-column">
       <h1>{employee.name}</h1>
-      <span>Started {buildTimeDate(employee.start_date)}</span>
+      {#if employee.start_date}
+        <span>Started {buildTimeDate(employee.start_date)}</span>
+      {/if}
     </div>
     <div>
       <h3>Unavailable</h3>
       <ul>
-        {#each employee.unavailabilities as time (time)}
-          <li>
-            {time}
-          </li>
-        {/each}
+        {#if employee.unavailabilities}
+          {#each employee.unavailabilities as time (time)}
+            <li>
+              {time}
+            </li>
+          {/each}
+        {/if}
       </ul>
     </div>
     <div>

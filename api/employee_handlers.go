@@ -80,3 +80,22 @@ func (api *API) GetEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 
 	sendResponse(w, http.StatusOK, employee)
 }
+
+// DeleteEmployeeHandler removes an employee by id
+func (api *API) DeleteEmployeeHandler(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	err := api.storage.DeleteEmployee(vars["id"])
+	if err != nil {
+		if errors.Is(err, utils.ErrEntityNotFound) {
+			http.Error(w, "employee not found", http.StatusNotFound)
+			return
+		}
+		log.Error().Err(err).Msg("could not delete employee")
+		sendErrResponse(w, http.StatusBadGateway, err)
+		return
+	}
+
+	sendResponse(w, http.StatusOK, nil)
+}

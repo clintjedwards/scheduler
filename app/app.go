@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -103,12 +104,11 @@ func startHTTPService(config *config.Config, storage storage.Engine) {
 	go func() {
 		if err := server.ListenAndServe(); err != nil {
 			log.Fatal().Err(err).Msg("server exited abnormally")
-
 		}
 	}()
 
 	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt)
+	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT)
 	<-c
 
 	// shutdown gracefully with a timeout
@@ -116,6 +116,6 @@ func startHTTPService(config *config.Config, storage storage.Engine) {
 	defer cancel()
 	// Doesn't block if no connections, but will otherwise wait
 	// until the timeout deadline.
-	server.Shutdown(ctx)
+	_ = server.Shutdown(ctx)
 	os.Exit(0)
 }

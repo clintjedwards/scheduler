@@ -36,7 +36,7 @@ func (api *API) RegisterEmployeeRoutes(router *mux.Router) {
 
 	router.Handle("/api/employees/{id}", handlers.MethodHandler{
 		"GET":    http.HandlerFunc(api.GetEmployeeHandler),
-		"DELETE": http.HandlerFunc(unimplementedhandler),
+		"DELETE": http.HandlerFunc(api.DeleteEmployeeHandler),
 	})
 }
 

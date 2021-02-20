@@ -29,9 +29,15 @@
   });
 </script>
 
-<footer>{systemInfo}</footer>
+<footer>
+  <hr />
+  <div>{systemInfo}</div>
+</footer>
 
 <style>
+  hr {
+    width: 60%;
+  }
   footer {
     width: 100%;
     margin-top: 4em;

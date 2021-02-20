@@ -22,31 +22,29 @@
 </script>
 
 <main>
-  <div id="mainContent">
-    <div id="bodyContent">
-      <img id="logo" src="/images/schedule.svg" alt="Scheduler Logo" />
-      <h1>Scheduler</h1>
-      <Router>
-        <nav>
-          {#each routes as route}
-            <a
-              class:selected={route.path === pathname}
-              href={route.path}
-              use:link
-            >
-              {route.text}
-            </a>
-          {/each}
-        </nav>
-        <div>
-          <Route path="employees" component={Employees} />
-          <Route path="employees/add" component={AddEmployee} />
-          <Route path="employees/:id" component={ManageEmployee} />
-          <Route path="positions" component={Positions} />
-          <Route path="schedules" component={Schedules} />
-        </div>
-      </Router>
-    </div>
+  <div id="content">
+    <img id="logo" src="/images/schedule.svg" alt="Scheduler Logo" />
+    <h1>Scheduler</h1>
+    <Router>
+      <nav>
+        {#each routes as route}
+          <a
+            class:selected={route.path === pathname}
+            href={route.path}
+            use:link
+          >
+            {route.text}
+          </a>
+        {/each}
+      </nav>
+      <div>
+        <Route path="employees" component={Employees} />
+        <Route path="employees/add" component={AddEmployee} />
+        <Route path="employees/:id" component={ManageEmployee} />
+        <Route path="positions" component={Positions} />
+        <Route path="schedules" component={Schedules} />
+      </div>
+    </Router>
   </div>
   <div>
     <Footer />
@@ -58,13 +56,16 @@
     overflow-y: scroll;
   }
 
-  #mainContent {
-    height: 95%;
+  main {
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
   }
 
-  #bodyContent {
+  #content {
     width: 65%;
     margin: 0 auto;
+    flex: 1;
   }
 
   main {
