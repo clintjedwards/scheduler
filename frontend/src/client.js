@@ -19,6 +19,16 @@ class SchedulerClient {
     });
   }
 
+  updateEmployee(id, employee) {
+    return fetch(`${this.url}/api/employees/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(employee),
+    });
+  }
+
   deleteEmployee(id) {
     return fetch(`${this.url}/api/employees/${id}`, {
       method: "DELETE",

@@ -14,6 +14,9 @@
     .getEmployee(id)
     .then((response) => {
       employee = response;
+      if (!employee.unavailabilities) {
+        employee.unavailabilities = [];
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -29,6 +32,24 @@
   let deleteEmployee = () => {
     client
       .deleteEmployee(id)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `incorrect error code returned: ${response.status} ${response.statusText}`
+          );
+        }
+      })
+      .then(() => {
+        navigate("/employees", { replace: true });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  let saveEmployee = () => {
+    client
+      .updateEmployee(id, employee)
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -60,7 +81,7 @@
         <Button on:click={switchEditMode}>Edit</Button>
       {/if}
       {#if mode === "edit"}
-        <Button>Save</Button>
+        <Button on:click={saveEmployee}>Save</Button>
       {/if}
     </div>
   </div>
