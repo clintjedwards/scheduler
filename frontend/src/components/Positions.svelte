@@ -18,15 +18,17 @@
 
   <ul>
     {#each Object.entries($PositionsStore) as [id, position] (id)}
-      <li>
-        <div>
-          <span id="primary">{position.primary_name}</span>
-          {#if position.secondary_name}
-            <span id="secondary">{position.secondary_name}</span>
-          {/if}
-        </div>
-        <p />
-      </li>
+      <a href="/positions/{id}">
+        <li>
+          <div>
+            <span id="primary">{position.primary_name}</span>
+            {#if position.secondary_name}
+              <span id="secondary">{position.secondary_name}</span>
+            {/if}
+          </div>
+          <p />
+        </li>
+      </a>
     {/each}
   </ul>
 </positions>
@@ -47,6 +49,15 @@
     padding-left: 1em;
     border-bottom: 1px solid #6c757d;
     cursor: pointer;
+  }
+
+  li:hover {
+    background-color: #dfe6e9;
+  }
+
+  ul a {
+    color: inherit;
+    text-decoration: none;
   }
 
   li:hover {

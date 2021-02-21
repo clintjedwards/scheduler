@@ -50,7 +50,7 @@ func (api *API) RegisterPositionRoutes(router *mux.Router) {
 
 	router.Handle("/api/positions/{id}", handlers.MethodHandler{
 		"GET":    http.HandlerFunc(api.GetPositionHandler),
-		"DELETE": http.HandlerFunc(unimplementedhandler),
+		"DELETE": http.HandlerFunc(api.DeletePositionHandler),
 	})
 }
 

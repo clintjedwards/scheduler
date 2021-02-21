@@ -57,6 +57,22 @@ class SchedulerClient {
     return fetch(`${this.url}/api/positions/${id}`).then((res) => res.json());
   }
 
+  updatePosition(id, position) {
+    return fetch(`${this.url}/api/positions/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(position),
+    });
+  }
+
+  deletePosition(id) {
+    return fetch(`${this.url}/api/positions/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   listSchedules() {
     return fetch(`${this.url}/api/schedules`).then((res) => res.json());
   }

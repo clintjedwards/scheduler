@@ -73,3 +73,22 @@ func (api *API) GetPositionHandler(w http.ResponseWriter, r *http.Request) {
 
 	sendResponse(w, http.StatusOK, position)
 }
+
+// DeletePositionHandler removes an employee by id
+func (api *API) DeletePositionHandler(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+
+	err := api.storage.DeletePosition(vars["id"])
+	if err != nil {
+		if errors.Is(err, utils.ErrEntityNotFound) {
+			http.Error(w, "position not found", http.StatusNotFound)
+			return
+		}
+		log.Error().Err(err).Msg("could not delete position")
+		sendErrResponse(w, http.StatusBadGateway, err)
+		return
+	}
+
+	sendResponse(w, http.StatusOK, nil)
+}
