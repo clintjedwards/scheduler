@@ -39,7 +39,7 @@ type Engine interface {
 	GetAllEmployees() (map[string]*model.Employee, error)
 	GetEmployee(id string) (*model.Employee, error)
 	AddEmployee(id string, employee *model.Employee) error
-	UpdateEmployee(id string, employee *model.Employee) error
+	UpdateEmployee(id string, employee *model.PatchEmployee) error
 	DeleteEmployee(id string) error
 
 	GetAllPositions() (map[string]*model.Position, error)

@@ -2,11 +2,15 @@ package bolt
 
 import (
 	"encoding/json"
+	"fmt"
+	"reflect"
+	"time"
 
 	"github.com/boltdb/bolt"
 	"github.com/clintjedwards/scheduler/model"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/utils"
+	"github.com/fatih/structs"
 	"github.com/rs/zerolog/log"
 )
 
@@ -95,18 +99,31 @@ func (db *Bolt) AddEmployee(id string, employee *model.Employee) error {
 	return nil
 }
 
-// UpdateEmployee alters employee infromation
-func (db *Bolt) UpdateEmployee(id string, employee *model.Employee) error {
+// UpdateEmployee patches employee information
+func (db *Bolt) UpdateEmployee(id string, patchEmployee *model.PatchEmployee) error {
 	err := db.store.Update(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(storage.EmployeesBucket))
 
 		// First check if key exists
-		currentEmployee := bucket.Get([]byte(id))
-		if currentEmployee == nil {
+		currentEmployeeRaw := bucket.Get([]byte(id))
+		if currentEmployeeRaw == nil {
 			return utils.ErrEntityNotFound
 		}
 
-		employeeRaw, err := json.Marshal(employee)
+		var currentEmployee model.Employee
+		err := json.Unmarshal(currentEmployeeRaw, &currentEmployee)
+		if err != nil {
+			return err
+		}
+
+		err = patchStruct(&currentEmployee, patchEmployee)
+		if err != nil {
+			return err
+		}
+
+		currentEmployee.Modified = time.Now().Unix()
+
+		employeeRaw, err := json.Marshal(&currentEmployee)
 		if err != nil {
 			return err
 		}
@@ -120,6 +137,48 @@ func (db *Bolt) UpdateEmployee(id string, employee *model.Employee) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func patchStruct(target, patch interface{}) error {
+
+	var dst = structs.New(target)
+	var fields = structs.New(patch).Fields() // work stack
+
+	for N := len(fields); N > 0; N = len(fields) {
+		var srcField = fields[N-1] // pop the top
+		fields = fields[:N-1]
+
+		if !srcField.IsExported() {
+			continue
+		}
+		if srcField.IsEmbedded() {
+			fields = append(fields, srcField.Fields()...)
+			continue
+		}
+		if srcField.IsZero() {
+			continue
+		}
+
+		var name = srcField.Name()
+
+		var dstField, ok = dst.FieldOk(name)
+		if !ok {
+			continue
+		}
+		var srcValue = reflect.ValueOf(srcField.Value())
+		srcValue = reflect.Indirect(srcValue)
+		if skind, dkind := srcValue.Kind(), dstField.Kind(); skind != dkind {
+			err := fmt.Errorf("field `%v` types mismatch while patching: %v vs %v", name, dkind, skind)
+			return err
+		}
+
+		err := dstField.Set(srcValue.Interface())
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 

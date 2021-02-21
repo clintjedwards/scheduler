@@ -81,6 +81,35 @@ func (api *API) GetEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 	sendResponse(w, http.StatusOK, employee)
 }
 
+// UpdateEmployeeHandler adds a new employee to the scheduler service
+func (api *API) UpdateEmployeeHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	pendingEmployee := model.PatchEmployee{}
+
+	err := parseJSON(r.Body, &pendingEmployee)
+	if err != nil {
+		log.Warn().Err(err).Msg("could not parse json request")
+		sendErrResponse(w, http.StatusBadRequest, err)
+		return
+	}
+	defer r.Body.Close()
+
+	err = api.storage.UpdateEmployee(vars["id"], &pendingEmployee)
+	if err != nil {
+		if errors.Is(err, utils.ErrEntityExists) {
+			sendErrResponse(w, http.StatusConflict, err)
+			return
+		}
+		log.Error().Err(err).Msg("could not update employee")
+		sendErrResponse(w, http.StatusBadGateway, err)
+		return
+	}
+
+	log.Info().Interface("employee", pendingEmployee).Msg("updated employee")
+	sendResponse(w, http.StatusOK, pendingEmployee)
+}
+
 // DeleteEmployeeHandler removes an employee by id
 func (api *API) DeleteEmployeeHandler(w http.ResponseWriter, r *http.Request) {
 

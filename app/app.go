@@ -18,7 +18,6 @@ import (
 	"github.com/clintjedwards/scheduler/frontend"
 	"github.com/clintjedwards/scheduler/storage"
 	"github.com/clintjedwards/scheduler/storage/bolt"
-	"github.com/clintjedwards/scheduler/storage/memory"
 )
 
 // StartServices initializes all required services,the raw GRPC service, and the metrics endpoint
@@ -55,13 +54,6 @@ func InitStorage(engineType storage.EngineType) (storage.Engine, error) {
 		}
 
 		return &boltStorageEngine, nil
-	case storage.MemoryEngine:
-		memoryStorageEngine, err := memory.Init()
-		if err != nil {
-			return nil, err
-		}
-
-		return &memoryStorageEngine, nil
 	default:
 		return nil, fmt.Errorf("storage backend %q not implemented", engineType)
 	}
