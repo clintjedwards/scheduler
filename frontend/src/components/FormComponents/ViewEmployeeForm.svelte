@@ -40,7 +40,7 @@
     <div>
       <h3>Positions</h3>
       <ul>
-        {#each Object.entries(employee.positions) as [id, _] (id)}
+        {#each employee.positions as id (id)}
           {#if $PositionsStore[id]}
             <li>
               {$PositionsStore[id].primary_name} | {$PositionsStore[id]

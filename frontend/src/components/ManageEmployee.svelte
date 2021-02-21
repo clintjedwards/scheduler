@@ -17,6 +17,11 @@
       if (!employee.unavailabilities) {
         employee.unavailabilities = [];
       }
+      if (!employee.positions) {
+        employee.positions = [];
+      } else {
+        employee.positions = Object.keys(employee.positions);
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -48,8 +53,15 @@
   };
 
   let saveEmployee = () => {
+    let changedEmployee = Object.assign({}, employee);
+    changedEmployee.positions = {};
+
+    employee.positions.forEach((position, index) => {
+      changedEmployee.positions[position] = {};
+    });
+
     client
-      .updateEmployee(id, employee)
+      .updateEmployee(id, changedEmployee)
       .then((response) => {
         if (!response.ok) {
           throw new Error(

@@ -1,4 +1,5 @@
 <script>
+  import { link } from "svelte-routing";
   import { client } from "../client.js";
   import { PositionsStore } from "../store.js";
   import Button from "./Button.svelte";
@@ -12,7 +13,7 @@
 
 <positions>
   <div id="actions">
-    <Button>Add Position</Button>
+    <a href="/positions/add" use:link><Button>Add Position</Button></a>
   </div>
 
   <ul>

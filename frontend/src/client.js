@@ -39,6 +39,16 @@ class SchedulerClient {
     return fetch(`${this.url}/api/employees/${id}`).then((res) => res.json());
   }
 
+  addPosition(position) {
+    return fetch(`${this.url}/api/positions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(position),
+    });
+  }
+
   listPositions() {
     return fetch(`${this.url}/api/positions`).then((res) => res.json());
   }

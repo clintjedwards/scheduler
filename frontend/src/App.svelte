@@ -2,6 +2,7 @@
   import { link, Route, Router } from "svelte-routing";
   import { globalHistory } from "svelte-routing/src/history";
   import AddEmployee from "./components/AddEmployee.svelte";
+  import AddPosition from "./components/AddPosition.svelte";
   import Employees from "./components/Employees.svelte";
   import Footer from "./components/Footer.svelte";
   import ManageEmployee from "./components/ManageEmployee.svelte";
@@ -42,6 +43,7 @@
         <Route path="employees/add" component={AddEmployee} />
         <Route path="employees/:id" component={ManageEmployee} />
         <Route path="positions" component={Positions} />
+        <Route path="positions/add" component={AddPosition} />
         <Route path="schedules" component={Schedules} />
       </div>
     </Router>
