@@ -1,0 +1,13 @@
+[Unit]
+Description=scheduler server
+After=network.target
+
+[Service]
+EnvironmentFile=-/etc/default/scheduler
+ExecStart=/usr/local/bin/scheduler server
+KillMode=process
+User=<User>
+Group=<User>
+
+[Install]
+WantedBy=multi-user.target

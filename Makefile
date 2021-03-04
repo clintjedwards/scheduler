@@ -11,6 +11,7 @@ SHELL = /bin/bash
 VERSION = ${SEMVER}_${EPOCH_TIME}_${GIT_COMMIT}
 
 ## build: run tests and compile application
+build: export CGO_ENABLED=0
 build: check-path-included
 	go test ./utils
 	npm run --prefix ./frontend build
