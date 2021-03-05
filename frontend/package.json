@@ -2,8 +2,9 @@
   "name": "scheduler",
   "version": "1.0.0",
   "scripts": {
+    "dev-css": "tailwindcss-cli build ./src/tailwind.css -o ./public/build/tailwind.css",
     "dev": "node build.js",
-    "build": "node build.js prod"
+    "build": "node build.js prod && NODE_ENV=production tailwindcss-cli build ./src/tailwind.css -o ./public/build/tailwind.css"
   },
   "devDependencies": {
     "esbuild": "^0.8.46",
@@ -13,5 +14,7 @@
     "sirv-cli": "^1.0.0",
     "svelte-routing": "^1.5.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tailwindcss-cli": "^0.1.2"
+  }
 }

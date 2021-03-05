@@ -25,8 +25,13 @@
 
 <main>
   <div id="content">
-    <img id="logo" src="/images/schedule.svg" alt="Scheduler Logo" />
-    <h1>Scheduler</h1>
+    <img
+      class="mx-auto"
+      id="logo"
+      src="/images/schedule.svg"
+      alt="Scheduler Logo"
+    />
+    <h1 class="font-heading text-6xl text-center text-orange">Scheduler</h1>
     <Router>
       <nav>
         {#each routes as route}
@@ -60,7 +65,11 @@
     overflow-y: scroll;
   }
 
-  main {
+  #logo {
+    max-width: 180px;
+  }
+
+  /* main {
     display: flex;
     flex-direction: column;
     min-height: 95vh;
@@ -77,13 +86,9 @@
     padding: 1em;
     max-width: 240px;
     margin: 0 auto;
-  }
+  } */
 
-  #logo {
-    max-width: 180px;
-  }
-
-  .selected {
+  /* .selected {
     border-bottom: 1px solid #ff3e00;
     color: black;
   }
@@ -108,7 +113,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 5em;
-  }
+  } */
 
   @media (min-width: 640px) {
     main {

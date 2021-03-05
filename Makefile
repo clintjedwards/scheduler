@@ -26,6 +26,10 @@ run:
 	go generate
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 
+## dev-css: build dev css if it isn't in place
+dev-css:
+	npm run --prefix ./frontend dev-css
+
 ## help: prints this help message
 help:
 	@echo "Usage: "
