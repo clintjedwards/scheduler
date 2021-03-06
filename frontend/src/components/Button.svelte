@@ -1,29 +1,13 @@
 <script>
-  export let type = "primary";
+  export let color = "blue";
 </script>
 
-<button class={type} on:click>
+<button
+  type="button"
+  class="focus:outline-none text-{color}-600 py-1.5 px-3
+  rounded-md hover:bg-{color}-600 hover:shadow-lg hover:bg-opacity-25
+  flex items-center"
+  on:click
+>
   <slot />
 </button>
-
-<style>
-  button {
-    border: 0;
-    cursor: pointer;
-    padding: 8px 12px;
-    font-size: 1.2em;
-    box-shadow: none;
-  }
-  .primary {
-    color: #2574a9;
-    background: white;
-  }
-  .success {
-    background: #45c496;
-    color: white;
-  }
-  .danger {
-    color: #d91b42;
-    background: white;
-  }
-</style>

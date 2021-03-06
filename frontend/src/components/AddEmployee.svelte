@@ -46,7 +46,7 @@
   <h1 class="font-heading text-4xl text-orange mb-10">Add New Employee</h1>
 
   <ManageEmployeeForm {new_employee}>
-    <div id="submit" class="full mt-10" on:click={addEmployee}>
+    <div id="submit" class="full mt-10 text-xl" on:click={addEmployee}>
       <Button>Add Employee</Button>
     </div>
   </ManageEmployeeForm>

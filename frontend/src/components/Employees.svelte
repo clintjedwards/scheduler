@@ -12,7 +12,7 @@
 </script>
 
 <employees>
-  <div id="actions" class="text-right">
+  <div id="actions" class="flex justify-end text-xl mr-10">
     <a href="/employees/add" use:link><Button>Add Employee</Button></a>
   </div>
 

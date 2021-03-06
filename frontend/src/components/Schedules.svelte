@@ -12,7 +12,7 @@
 </script>
 
 <schedules>
-  <div id="actions" class="text-right">
+  <div id="actions" class="flex justify-end text-xl mr-10">
     <a href="/schedules/add" use:link><Button>Add Schedule</Button></a>
   </div>
   <ul class="text-left w-3/4 mx-auto">

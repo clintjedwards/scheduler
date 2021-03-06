@@ -55,7 +55,7 @@
 </script>
 
 <div id="main">
-  <div id="actions">
+  <div id="actions" class="flex justify-between mb-10 text-xl">
     <Button type="danger" on:click={deletePosition}>Delete</Button>
   </div>
 
@@ -63,11 +63,3 @@
     <ViewPositionForm {position} />
   </div>
 </div>
-
-<style>
-  #actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
-  }
-</style>

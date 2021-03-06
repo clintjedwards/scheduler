@@ -31,28 +31,16 @@
 </script>
 
 <div>
-  <h1>Add Position</h1>
+  <h1 class="font-heading text-4xl text-orange mb-10">Add New Position</h1>
 
   <ManagePositionForm {new_position}>
-    <div id="submit" class="full" on:click={addPosition}>
+    <div id="submit" class="full mt-10 text-xl" on:click={addPosition}>
       <Button>Add Position</Button>
     </div>
   </ManagePositionForm>
 </div>
 
 <style>
-  #submit {
-    margin-top: 20px;
-  }
-
-  h1 {
-    color: #ff3e00;
-    font-size: 2.5em;
-    text-align: left;
-    margin: 0 0 30px 0;
-    font-weight: 200;
-  }
-
   .full {
     grid-column: 1/3;
     width: 100%;

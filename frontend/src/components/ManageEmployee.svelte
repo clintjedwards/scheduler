@@ -79,7 +79,7 @@
 </script>
 
 <div id="main">
-  <div id="actions">
+  <div id="actions" class="flex justify-between mb-10 text-xl">
     <div>
       {#if mode === "edit"}
         <Button type="danger" on:click={deleteEmployee}>Delete</Button>
@@ -106,11 +106,3 @@
     {/if}
   </div>
 </div>
-
-<style>
-  #actions {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
-  }
-</style>

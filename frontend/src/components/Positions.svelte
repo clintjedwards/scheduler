@@ -12,7 +12,7 @@
 </script>
 
 <positions>
-  <div id="actions" class="text-right">
+  <div id="actions" class="flex justify-end text-xl mr-10">
     <a href="/positions/add" use:link><Button>Add Position</Button></a>
   </div>
 
