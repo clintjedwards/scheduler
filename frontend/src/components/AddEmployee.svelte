@@ -42,11 +42,11 @@
   };
 </script>
 
-<div>
-  <h1>Add New Employee</h1>
+<div class="w-3/4 mx-auto">
+  <h1 class="font-heading text-4xl text-orange mb-10">Add New Employee</h1>
 
   <ManageEmployeeForm {new_employee}>
-    <div id="submit" class="full" on:click={addEmployee}>
+    <div id="submit" class="full mt-10" on:click={addEmployee}>
       <Button>Add Employee</Button>
     </div>
   </ManageEmployeeForm>
@@ -55,14 +55,6 @@
 <style>
   #submit {
     margin-top: 20px;
-  }
-
-  h1 {
-    color: #ff3e00;
-    font-size: 2.5em;
-    text-align: left;
-    margin: 0 0 30px 0;
-    font-weight: 200;
   }
 
   .full {

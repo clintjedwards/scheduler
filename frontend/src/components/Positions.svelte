@@ -12,18 +12,23 @@
 </script>
 
 <positions>
-  <div id="actions">
+  <div id="actions" class="text-right">
     <a href="/positions/add" use:link><Button>Add Position</Button></a>
   </div>
 
-  <ul>
+  <ul class="text-left w-3/4 mx-auto">
     {#each Object.entries($PositionsStore) as [id, position] (id)}
       <a href="/positions/{id}">
-        <li>
+        <li
+          class="font-lg p-4 border-b border-gray-500 cursor-pointer
+          hover:bg-orange hover:bg-opacity-25"
+        >
           <div>
-            <span id="primary">{position.primary_name}</span>
+            <span id="primary" class="text-xl">{position.primary_name}</span>
             {#if position.secondary_name}
-              <span id="secondary">{position.secondary_name}</span>
+              <span id="secondary" class="text-gray-700"
+                >{position.secondary_name}</span
+              >
             {/if}
           </div>
           <p />
@@ -32,46 +37,3 @@
     {/each}
   </ul>
 </positions>
-
-<style>
-  #actions {
-    text-align: right;
-  }
-  ul {
-    list-style-type: none;
-    text-align: left;
-  }
-  li {
-    font-size: 1em;
-    font-weight: 300;
-    padding-bottom: 1em;
-    padding-top: 1em;
-    padding-left: 1em;
-    border-bottom: 1px solid #6c757d;
-    cursor: pointer;
-  }
-
-  li:hover {
-    background-color: #dfe6e9;
-  }
-
-  ul a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  li:hover {
-    background-color: #dfe6e9;
-  }
-
-  #primary {
-    min-width: 3em;
-    font-size: 1.5em;
-    display: inline-block;
-  }
-
-  #secondary {
-    color: #4b5258;
-    /* margin-left: 1em; */
-  }
-</style>

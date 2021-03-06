@@ -29,21 +29,7 @@
   });
 </script>
 
-<footer>
-  <hr />
-  <div>{systemInfo}</div>
+<footer class="mx-auto w-full mt-16 h-10 text-center">
+  <hr class="border-t border-gray-500 mb-5" />
+  <div class="text-gray-500 font-light">{systemInfo}</div>
 </footer>
-
-<style>
-  hr {
-    width: 60%;
-  }
-  footer {
-    width: 100%;
-    margin-top: 4em;
-    height: 2.5rem;
-    text-align: center;
-    font-weight: 300;
-    color: #6c757d;
-  }
-</style>

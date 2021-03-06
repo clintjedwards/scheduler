@@ -12,14 +12,17 @@
 </script>
 
 <schedules>
-  <div id="actions">
+  <div id="actions" class="text-right">
     <a href="/schedules/add" use:link><Button>Add Schedule</Button></a>
   </div>
-  <ul>
+  <ul class="text-left w-3/4 mx-auto">
     {#if $SchedulesStore.order}
       {#each $SchedulesStore.order as id (id)}
         <a href="/schedules/{id}">
-          <li>
+          <li
+            class="font-lg p-4 border-b border-gray-500 cursor-pointer
+            hover:bg-orange hover:bg-opacity-25"
+          >
             {$SchedulesStore.schedules[id].start} - {$SchedulesStore.schedules[
               id
             ].end}
@@ -29,31 +32,3 @@
     {/if}
   </ul>
 </schedules>
-
-<style>
-  #actions {
-    text-align: right;
-  }
-  ul {
-    list-style-type: none;
-    text-align: left;
-  }
-  li {
-    font-size: 1.5em;
-    font-weight: 300;
-    padding-bottom: 1em;
-    padding-top: 1em;
-    padding-left: 1em;
-    border-bottom: 1px solid #6c757d;
-    cursor: pointer;
-  }
-
-  ul a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  li:hover {
-    background-color: #dfe6e9;
-  }
-</style>

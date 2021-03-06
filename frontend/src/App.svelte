@@ -23,20 +23,23 @@
   ];
 </script>
 
-<main>
-  <div id="content">
+<main class="mx-auto w-3/4 flex flex-col font-body">
+  <div id="content" class="flex-1">
     <img
       class="mx-auto"
       id="logo"
       src="/images/schedule.svg"
       alt="Scheduler Logo"
     />
-    <h1 class="font-heading text-6xl text-center text-orange">Scheduler</h1>
+    <h1 class="font-heading text-6xl text-center text-orange mb-10">
+      Scheduler
+    </h1>
     <Router>
-      <nav>
+      <nav class="text-2xl font-sm-heading text-center mb-10">
         {#each routes as route}
           <a
             class:selected={route.path === pathname}
+            class="mr-10"
             href={route.path}
             use:link
           >
@@ -69,55 +72,12 @@
     max-width: 180px;
   }
 
-  /* main {
-    display: flex;
-    flex-direction: column;
+  main {
     min-height: 95vh;
   }
 
-  #content {
-    width: 65%;
-    margin: 0 auto;
-    flex: 1;
-  }
-
-  main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  } */
-
-  /* .selected {
+  .selected {
     border-bottom: 1px solid #ff3e00;
     color: black;
-  }
-
-  h1 {
-    color: #ff3e00;
-    font-size: 3.5em;
-    margin: 0 0 30px 0;
-    font-weight: 100;
-  }
-
-  nav a {
-    font-size: 1.5em;
-    text-decoration: none;
-    font-weight: 300;
-    color: rgb(136 136 136);
-    margin-right: 1em;
-    margin-left: 1em;
-  }
-
-  nav {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 5em;
-  } */
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
   }
 </style>
