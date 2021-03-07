@@ -73,6 +73,20 @@ class SchedulerClient {
     });
   }
 
+  listPrograms() {
+    return fetch(`${this.url}/api/programs`).then((res) => res.json());
+  }
+
+  getProgram(id) {
+    return fetch(`${this.url}/api/programs/${id}`).then((res) => res.json());
+  }
+
+  deleteProgram(id) {
+    return fetch(`${this.url}/api/programs/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   listSchedules() {
     return fetch(`${this.url}/api/schedules`).then((res) => res.json());
   }

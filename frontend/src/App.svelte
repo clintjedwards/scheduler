@@ -3,22 +3,26 @@
   import { globalHistory } from "svelte-routing/src/history";
   import AddEmployee from "./components/AddEmployee.svelte";
   import AddPosition from "./components/AddPosition.svelte";
+  import AddProgram from "./components/AddProgram.svelte";
   import Employees from "./components/Employees.svelte";
   import Footer from "./components/Footer.svelte";
   import ManageEmployee from "./components/ManageEmployee.svelte";
   import ManagePosition from "./components/ManagePosition.svelte";
+  import ManageProgram from "./components/ManageProgram.svelte";
   import Positions from "./components/Positions.svelte";
+  import Programs from "./components/Programs.svelte";
   import Schedules from "./components/Schedules.svelte";
 
   let pathname = window.location.pathname;
 
-  globalHistory.listen(({ location, action }) => {
+  globalHistory.listen(({ location, _ }) => {
     pathname = location.pathname;
   });
 
   let routes = [
     { path: "/employees", text: "Employees" },
     { path: "/positions", text: "Positions" },
+    { path: "/programs", text: "Programs" },
     { path: "/schedules", text: "Schedules" },
   ];
 </script>
@@ -39,7 +43,7 @@
         {#each routes as route}
           <a
             class:selected={route.path === pathname}
-            class="mr-10"
+            class="mr-10 text-gray-500 ease-in-out transition duration-700"
             href={route.path}
             use:link
           >
@@ -54,7 +58,12 @@
         <Route path="positions" component={Positions} />
         <Route path="positions/add" component={AddPosition} />
         <Route path="positions/:id" component={ManagePosition} />
+        <Route path="programs" component={Programs} />
+        <Route path="programs/add" component={AddProgram} />
+        <Route path="programs/:id" component={ManageProgram} />
         <Route path="schedules" component={Schedules} />
+        <Route path="schedules/add" component={Schedules} />
+        <Route path="schedules/:id" component={Schedules} />
       </div>
     </Router>
   </div>

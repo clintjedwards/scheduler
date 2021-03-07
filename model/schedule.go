@@ -14,7 +14,7 @@ type Schedule struct {
 	Start   string  `json:"start"` // yyyy-mm-dd
 	End     string  `json:"end"`   // yyyy-mm-dd
 	Program Program `json:"program"`
-	// Prefereces can be used to weight employees during scheduling.
+	// Preferences can be used to weight employees during scheduling.
 	// They key is the preference type and the value is the current setting.
 	// Example PREFER_MORE_EXPERIENCE => true
 	Preferences map[string]string `json:"preferences"`

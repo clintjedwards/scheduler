@@ -14,6 +14,8 @@ const (
 	SchedulesBucket Bucket = "schedules"
 	// PositionsBucket represents the container that holds employment positions
 	PositionsBucket Bucket = "positions"
+	// ProgramsBucket represents the container that holds employment programs
+	ProgramsBucket Bucket = "programs"
 )
 
 const (
@@ -47,6 +49,11 @@ type Engine interface {
 	AddPosition(id string, Position *model.Position) error
 	UpdatePosition(id string, Position *model.Position) error
 	DeletePosition(id string) error
+
+	GetAllPrograms() (map[string]*model.Program, error)
+	GetProgram(id string) (*model.Program, error)
+	AddProgram(id string, Program *model.Program) error
+	DeleteProgram(id string) error
 
 	// GetAllSchedules returns an unpagined map of all schedules with the order they were added
 	GetAllSchedules() (schedules *ScheduleMap, err error)

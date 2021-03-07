@@ -2,24 +2,24 @@
   import { navigate } from "svelte-routing";
   import { client } from "../client.js";
   import Button from "./Button.svelte";
-  import ViewPositionForm from "./FormComponents/ViewPositionForm.svelte";
+  import ViewProgramForm from "./FormComponents/ViewProgramForm.svelte";
 
   export let id;
 
-  let position;
+  let program;
 
   client
-    .getPosition(id)
+    .getProgram(id)
     .then((response) => {
-      position = response;
+      program = response;
     })
     .catch((error) => {
       console.error(error);
     });
 
-  let deletePosition = () => {
+  let deleteProgram = () => {
     client
-      .deletePosition(id)
+      .deleteProgram(id)
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -28,16 +28,16 @@
         }
       })
       .then(() => {
-        navigate("/positions", { replace: true });
+        navigate("/programs", { replace: true });
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  let savePosition = () => {
+  let saveProgram = () => {
     client
-      .updatePosition(id, position)
+      .updateProgram(id, program)
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -46,7 +46,7 @@
         }
       })
       .then(() => {
-        navigate("/positions", { replace: true });
+        navigate("/programs", { replace: true });
       })
       .catch((error) => {
         console.error(error);
@@ -56,10 +56,10 @@
 
 <div id="main">
   <div id="actions" class="flex justify-between mb-10 text-xl">
-    <Button color="red" on:click={deletePosition}>Delete</Button>
+    <Button color="red" on:click={deleteProgram}>Delete</Button>
   </div>
 
   <div id="content">
-    <ViewPositionForm {position} />
+    <ViewProgramForm {program} />
   </div>
 </div>

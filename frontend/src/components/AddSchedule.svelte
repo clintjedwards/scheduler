@@ -31,9 +31,9 @@
 </script>
 
 <div>
-  <h1>Add Position</h1>
+  <h1 class="font-heading text-4xl text-orange mb-10">Add New Schedule</h1>
 
-  <ManagePositionForm {new_position}>
+  <ManagePositionForm {new_schedule}>
     <div id="submit" class="full" on:click={addPosition}>
       <Button>Add Position</Button>
     </div>

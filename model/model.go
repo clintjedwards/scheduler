@@ -118,6 +118,8 @@ type Shift struct {
 // Program represents a mapping of position to n shifts for certain days.
 // Days left empty will have no potential shifts and therefore not be scheduled.
 type Program struct {
+	ID        string  `json:"id"`
+	Name      string  `json:"name"`
 	Monday    []Shift `json:"monday"`
 	Tuesday   []Shift `json:"tuesday"`
 	Wednesday []Shift `json:"wednesday"`

@@ -82,7 +82,7 @@
   <div id="actions" class="flex justify-between mb-10 text-xl">
     <div>
       {#if mode === "edit"}
-        <Button type="danger" on:click={deleteEmployee}>Delete</Button>
+        <Button color="red" on:click={deleteEmployee}>Delete</Button>
       {/if}
     </div>
     <div>
@@ -93,7 +93,7 @@
         <Button on:click={switchEditMode}>Edit</Button>
       {/if}
       {#if mode === "edit"}
-        <Button on:click={saveEmployee}>Save</Button>
+        <Button color="green" on:click={saveEmployee}>Save</Button>
       {/if}
     </div>
   </div>
