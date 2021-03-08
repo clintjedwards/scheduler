@@ -4,11 +4,13 @@
   import AddEmployee from "./components/AddEmployee.svelte";
   import AddPosition from "./components/AddPosition.svelte";
   import AddProgram from "./components/AddProgram.svelte";
+  import AddSchedule from "./components/AddSchedule.svelte";
   import Employees from "./components/Employees.svelte";
   import Footer from "./components/Footer.svelte";
   import ManageEmployee from "./components/ManageEmployee.svelte";
   import ManagePosition from "./components/ManagePosition.svelte";
   import ManageProgram from "./components/ManageProgram.svelte";
+  import ManageSchedule from "./components/ManageSchedule.svelte";
   import Positions from "./components/Positions.svelte";
   import Programs from "./components/Programs.svelte";
   import Schedules from "./components/Schedules.svelte";
@@ -62,8 +64,8 @@
         <Route path="programs/add" component={AddProgram} />
         <Route path="programs/:id" component={ManageProgram} />
         <Route path="schedules" component={Schedules} />
-        <Route path="schedules/add" component={Schedules} />
-        <Route path="schedules/:id" component={Schedules} />
+        <Route path="schedules/add" component={AddSchedule} />
+        <Route path="schedules/:id" component={ManageSchedule} />
       </div>
     </Router>
   </div>

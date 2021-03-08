@@ -1,19 +1,21 @@
 <script>
   import { navigate } from "svelte-routing";
   import { client } from "../client.js";
+  import { ProgramsStore } from "../store.js";
   import Button from "./Button.svelte";
-  import ManagePositionForm from "./FormComponents/ManagePositionForm.svelte";
+  import ManageScheduleForm from "./FormComponents/ManageScheduleForm.svelte";
 
   let new_schedule = {
-    primary_name: "",
-    secondary_name: "",
-    description: "",
-    metadata: {},
+    start: "",
+    end: "",
+    program: ProgramsStore[0],
   };
 
-  let addPosition = () => {
+  let addSchedule = () => {
+    new_schedule.program = $ProgramsStore[new_schedule.program];
+
     client
-      .addPosition(new_position)
+      .addSchedule(new_schedule)
       .then((response) => {
         if (!response.ok) {
           throw new Error(
@@ -22,7 +24,7 @@
         }
       })
       .then(() => {
-        navigate("/positions", { replace: true });
+        navigate("/schedules", { replace: true });
       })
       .catch((error) => {
         console.error(error);
@@ -33,24 +35,16 @@
 <div>
   <h1 class="font-heading text-4xl text-orange mb-10">Add New Schedule</h1>
 
-  <ManagePositionForm {new_schedule}>
-    <div id="submit" class="full" on:click={addPosition}>
-      <Button>Add Position</Button>
+  <ManageScheduleForm {new_schedule}>
+    <div id="submit" class="full" on:click={addSchedule}>
+      <Button>Add Schedule</Button>
     </div>
-  </ManagePositionForm>
+  </ManageScheduleForm>
 </div>
 
 <style>
   #submit {
     margin-top: 20px;
-  }
-
-  h1 {
-    color: #ff3e00;
-    font-size: 2.5em;
-    text-align: left;
-    margin: 0 0 30px 0;
-    font-weight: 200;
   }
 
   .full {

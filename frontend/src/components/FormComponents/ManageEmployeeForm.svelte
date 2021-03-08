@@ -46,8 +46,8 @@
     />
   </div>
   <div class="full">
-    <label for="start_date" class="block text-sm-heading text-xl"
-      >Start Date:
+    <label for="start_date" class="block text-sm-heading text-xl">
+      Start Date:
     </label>
     <input
       type="date"

@@ -104,6 +104,16 @@ class SchedulerClient {
   getSchedule(id) {
     return fetch(`${this.url}/api/schedules/${id}`).then((res) => res.json());
   }
+
+  addSchedule(schedule) {
+    return fetch(`${this.url}/api/schedules`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(schedule),
+    });
+  }
 }
 
 export let client = new SchedulerClient();
