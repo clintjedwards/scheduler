@@ -61,6 +61,7 @@
                 focus:ring-opacity-50"
                   bind:value={shift.start}
                   autocomplete="off"
+                  pattern="[0-9]{2}:[0-9]{2}"
                 />
               </div>
               <div>
@@ -73,6 +74,7 @@
                 focus:ring-opacity-50"
                   bind:value={shift.end}
                   autocomplete="off"
+                  pattern="[0-9]{2}:[0-9]{2}"
                 />
               </div>
               <div>

@@ -43,6 +43,11 @@ func Init(configuration interface{}) (Bolt, error) {
 		if err != nil {
 			return err
 		}
+
+		_, err = tx.CreateBucketIfNotExists([]byte(storage.ProgramsBucket))
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {

@@ -81,6 +81,16 @@ class SchedulerClient {
     return fetch(`${this.url}/api/programs/${id}`).then((res) => res.json());
   }
 
+  addProgram(program) {
+    return fetch(`${this.url}/api/programs`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(program),
+    });
+  }
+
   deleteProgram(id) {
     return fetch(`${this.url}/api/programs/${id}`, {
       method: "DELETE",

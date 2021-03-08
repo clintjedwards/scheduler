@@ -109,8 +109,8 @@ type Position struct {
 
 // Shift is a unit of time in which an employee can be scheduled for
 type Shift struct {
-	Start      string `json:"start"`
-	End        string `json:"end"`
+	Start      string `json:"start"`       // ex. 0800
+	End        string `json:"end"`         // ex. 1300
 	PositionID string `json:"position_id"` // position id
 	EmployeeID string `json:"employee_id"` // employee id
 }

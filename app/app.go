@@ -65,6 +65,7 @@ func startHTTPService(config *config.Config, storage storage.Engine) {
 
 	api.RegisterEmployeeRoutes(router)
 	api.RegisterPositionRoutes(router)
+	api.RegisterProgramRoutes(router)
 	api.RegisterScheduleRoutes(router)
 	api.RegisterSystemRoutes(router)
 

@@ -54,6 +54,19 @@ func (api *API) RegisterPositionRoutes(router *mux.Router) {
 	})
 }
 
+// RegisterProgramRoutes registers /programs with a given router
+func (api *API) RegisterProgramRoutes(router *mux.Router) {
+	router.Handle("/api/programs", handlers.MethodHandler{
+		"GET":  http.HandlerFunc(api.ListProgramsHandler),
+		"POST": http.HandlerFunc(api.AddProgramHandler),
+	})
+
+	router.Handle("/api/programs/{id}", handlers.MethodHandler{
+		"GET":    http.HandlerFunc(api.GetProgramHandler),
+		"DELETE": http.HandlerFunc(api.DeleteProgramHandler),
+	})
+}
+
 // RegisterScheduleRoutes registers /schedules with a given router
 func (api *API) RegisterScheduleRoutes(router *mux.Router) {
 	router.Handle("/api/schedules", handlers.MethodHandler{

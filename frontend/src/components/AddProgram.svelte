@@ -15,7 +15,24 @@
     sunday: [],
   };
 
+  let normalizeTime = (time) => {
+    return time.replace(":", "");
+  };
+
   let addProgram = () => {
+    for (const [key, shifts] of Object.entries(new_program)) {
+      if (key === "name") {
+        continue;
+      }
+
+      shifts.forEach((shift) => {
+        shift.start = normalizeTime(shift.start);
+        shift.end = normalizeTime(shift.end);
+      });
+
+      new_program[key] = shifts;
+    }
+
     client
       .addProgram(new_program)
       .then((response) => {
