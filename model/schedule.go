@@ -25,7 +25,7 @@ type Schedule struct {
 	// Its used so that we can model a schedule for display purposes.
 	//
 	// Timetable is a multidimentional map where:
-	// The first key is a date in format mm-dd-yyyy.
+	// The first key is a date in format yyyy-mm-dd.
 	// The second key is a listing of all shifts that occur on that day.
 	TimeTable map[string][]Shift `json:"time_table"`
 	Created   int64              `json:"created"`
@@ -52,7 +52,7 @@ func NewSchedule(id string, settings Schedule) *Schedule {
 // ScheduleDay will insert employees into roles they are best suited for per day; this alters the
 // schedule datastructure.
 func (sch *Schedule) ScheduleDay(dateTime time.Time, employees map[string]*Employee) error {
-	date := dateTime.Format("01-02-2006")
+	date := dateTime.Format("2006-01-02")
 
 	// Figure out which program we should have on any given day. We might be able to turn
 	// this into an enum and drop all of this code someday.

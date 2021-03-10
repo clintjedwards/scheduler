@@ -1,42 +1,44 @@
 <script>
+  import { format, parse } from "date-fns";
   import { client } from "../../client.js";
-  import { PositionsStore } from "../../store.js";
+  import { EmployeesStore, PositionsStore } from "../../store.js";
 
-  export let program = {};
+  export let schedule = {};
 
-  client.listPositions().then((positions) => {
+  function humanizeDate(datetime) {
+    let date = format(parse(datetime, "yyyy-MM-dd", new Date()), "MMMM do, y");
+    return date;
+  }
+
+  let loadEmployee = client.listEmployees().then((employees) => {
+    EmployeesStore.update(() => {
+      return employees;
+    });
+  });
+
+  let loadPosition = client.listPositions().then((positions) => {
     PositionsStore.update(() => {
       return positions;
     });
   });
-
-  let humanizeTime = (time) => {};
 </script>
 
 <div>
-  {#if program.id}
-    {#each Object.entries(program) as [key, value] (key)}
-      {#if ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"].indexOf(key) >= 0}
-        <div class="mb-5">
-          <h2 class="capitalize text-sm-heading text-2xl">{key}</h2>
-          {#each value as shift, index (index)}
-            <div
-              class="flex ml-10 space-x-10 hover:bg-orange hover:bg-opacity-25"
-            >
-              <div>Shift {index + 1}</div>
-              <div>{shift.start} to {shift.end}</div>
-              {#if $PositionsStore[shift.position_id]}
-                <div>
-                  {$PositionsStore[shift.position_id].primary_name}
-                  <span class="text-gray-600">
-                    {$PositionsStore[shift.position_id].secondary_name}
-                  </span>
-                </div>
-              {/if}
-            </div>
-          {/each}
-        </div>
-      {/if}
-    {/each}
-  {/if}
+  {#await loadPosition then _}
+    {#if schedule.id}
+      <h1 class="font-heading text-4xl text-orange mb-4">
+        {humanizeDate(schedule.start)} - {humanizeDate(schedule.end)}
+      </h1>
+      {#each Object.entries(schedule.time_table) as [date, shifts] (date)}
+        <h2>{humanizeDate(date)}</h2>
+        {#each shifts as shift (shift)}
+          <div>
+            {shift.start} - {shift.end}
+            Position: {$PositionsStore[shift.position_id].primary_name}
+            Employee: {$EmployeesStore[shift.employee_id].name}
+          </div>
+        {/each}
+      {/each}
+    {/if}
+  {/await}
 </div>
