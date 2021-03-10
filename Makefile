@@ -15,7 +15,6 @@ build: export CGO_ENABLED=0
 build: check-path-included
 	go test ./utils
 	npm run --prefix ./frontend build
-	go generate
 	go mod tidy
 	go build -ldflags $(GO_LDFLAGS) -o $(path)
 
@@ -23,7 +22,6 @@ build: check-path-included
 run: export DEBUG=true
 run:
 	npm run --prefix ./frontend dev
-	go generate
 	go build -ldflags $(GO_LDFLAGS) -o /tmp/${APP_NAME} && /tmp/${APP_NAME} server
 
 ## dev-css: build dev css if it isn't in place

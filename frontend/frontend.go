@@ -1,6 +1,8 @@
 package frontend
 
 import (
+	"embed"
+	"io/fs"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -9,6 +11,13 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/shurcooL/httpgzip"
 )
+
+// We bake frontend files directly into the binary
+// embeddedAssets is an implementation of an http.filesystem
+// that points to the public folder
+//
+//go:embed public
+var embeddedAssets embed.FS
 
 //Frontend represents an instance of the frontend application
 type Frontend struct{}
@@ -41,13 +50,14 @@ func historyModeHandler(fileServerHandler http.Handler, indexFile []byte) http.H
 // RegisterUIRoutes registers the endpoints needed for the frontend
 // with an already established http router.
 func (ui *Frontend) RegisterUIRoutes(router *mux.Router) {
+	fsys, err := fs.Sub(embeddedAssets, "public")
+	if err != nil {
+		log.Fatal().Err(err).Msg("could not get embedded filesystem")
+	}
 
-	// We bake frontend files directly into the binary
-	// assets is an implementation of an http.filesystem created by
-	// github.com/shurcooL/vfsgen that points to the "public" folder
-	fileServerHandler := httpgzip.FileServer(assets, httpgzip.FileServerOptions{IndexHTML: true})
+	fileServerHandler := httpgzip.FileServer(http.FS(fsys), httpgzip.FileServerOptions{IndexHTML: true})
 
-	file, err := assets.Open("index.html")
+	file, err := fsys.Open("index.html")
 	if err != nil {
 		log.Fatal().Err(err).Msg("could not find index.html file")
 	}
