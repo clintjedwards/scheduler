@@ -1,18 +1,44 @@
 package api
 
 import (
+	"errors"
 	"net/http"
+	"strings"
 
-	"github.com/clintjedwards/toolkit/version"
 	"github.com/rs/zerolog/log"
 )
 
 var appVersion = "v0.0.dev_<build_time>_<commit>"
 
+// Info represents application information gleaned from the version string
+type info struct {
+	semver string
+	epoch  string
+	hash   string
+}
+
+// Parse takes a very specific version string format:
+// <semver>_<epoch_time>_<git_hash>
+// and returns its individual parts
+func parse(version string) (info, error) {
+	versionTuple := strings.Split(version, "_")
+
+	if len(versionTuple) != 3 {
+		return info{},
+			errors.New("version not in correct format: <semver>_<epoch_time>_<git_hash>")
+	}
+
+	return info{
+		semver: versionTuple[0],
+		epoch:  versionTuple[1],
+		hash:   versionTuple[2],
+	}, nil
+}
+
 // GetSystemInfoHandler returns system information and health
 func (api *API) GetSystemInfoHandler(w http.ResponseWriter, r *http.Request) {
 
-	info, err := version.Parse(appVersion)
+	info, err := parse(appVersion)
 	if err != nil {
 		log.Error().Err(err).Msg("could not parse version string")
 		sendErrResponse(w, http.StatusBadGateway, err)
@@ -26,11 +52,11 @@ func (api *API) GetSystemInfoHandler(w http.ResponseWriter, r *http.Request) {
 		FrontendEnabled bool   `json:"frontend_enabled"`
 		Semver          string `json:"semver"`
 	}{
-		BuildTime:       info.Epoch,
-		Commit:          info.Hash,
+		BuildTime:       info.epoch,
+		Commit:          info.hash,
 		DebugEnabled:    api.config.Debug,
 		FrontendEnabled: api.config.Frontend,
-		Semver:          info.Semver,
+		Semver:          info.semver,
 	}
 
 	sendResponse(w, http.StatusOK, systemInfo)
